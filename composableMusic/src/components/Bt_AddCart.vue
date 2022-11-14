@@ -4,7 +4,7 @@
       <v-btn
         :loading="loading[2]"
         :disabled="loading[2]"
-        color="green"
+        color=#00E676
         prepend-icon="mdi-cart-minus"
         @click="load(2)"
       >
@@ -31,7 +31,7 @@
   </script>
   
   <style>
-   .d-flex justify-center align-baseline{
+   /*.d-flex justify-center align-baseline{
     color: aqua;
-   }
+   }*/
   </style>

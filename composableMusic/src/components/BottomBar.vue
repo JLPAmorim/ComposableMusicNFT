@@ -1,5 +1,5 @@
 <template>
-    <v-footer class="bg-grey-lighten-1">
+    <v-footer :style="style_btbar">
       <v-row justify="center" no-gutters>
         <v-btn
           v-for="link in links"
@@ -21,6 +21,9 @@
 <script>
   export default {
     data: () => ({
+      style_btbar:{
+            backgroundColor: "#232424" 
+      },
       links: [
         'Home',
         'About Us',
@@ -31,7 +34,9 @@
   }
 </script>
 
-<style scoped></style>
-.bg-grey-lighten-1{
-    
-}
+
+<style>
+  /*.style_btbar{
+    background-color: aqua;
+  }*/
+</style>

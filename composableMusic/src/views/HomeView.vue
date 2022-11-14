@@ -1,8 +1,28 @@
 <template>
-  <TopBar/>
-  <Bt_AddCart/>
-  <Style_MetaData/>
-  <BottomBar/>
+  <div v-bind:style="{ backgroundColor: '#1A2326'}">
+    <TopBar/>
+    
+    <!--<v-card-text style="style_description">
+      This is content
+    </v-card-text>-->
+    
+    <v-card-text class="d-flex justify-center align-baseline">
+      <p :style="style_description">
+        Composable music NFTs is a new AI system that can create original, realistic musics from your music creations. It can combine ______, ______ and ______
+      </p>
+    </v-card-text>
+    
+    
+    <Bt_AddCart/>
+    <Style_MetaData/>
+    <BottomBar/>
+  </div>
+  
+  <!--<v-container fluid>
+      <v-row class = "first_row" style="style_rows" rows="2.5">
+        
+      </v-row> 
+  </v-container> -->  
 </template>
 
 <script>
@@ -23,6 +43,24 @@ export default defineComponent({
     BottomBar,
     Bt_AddCart,
     Style_MetaData
-},
-});
+  },
+  data: () => ({
+        style_description:{
+          color: "#67FFC9",
+          fontFamily: 'Poppins',
+          fontWeight: "800",
+        }
+        /*style_rows:{
+            backgroundColor: "#1A2326" 
+        }*/
+  })
+})
 </script>
+
+<style>
+/*.first_row{
+  background-color: black;
+  color: black;
+}*/
+
+</style>
