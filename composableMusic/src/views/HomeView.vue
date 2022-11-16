@@ -1,10 +1,22 @@
 <template>
   <div v-bind:style="{ backgroundColor: '#1A2326'}">
+    <!--<v-navigation-drawer
+        v-model="drawer"
+        temporary
+      >
+      <v-list-item
+          prepend-avatar="https://randomuser.me/api/portraits/men/78.jpg"
+          title="John Leider"
+        ></v-list-item>
+
+        <v-divider></v-divider>
+
+        <v-list density="compact" nav>
+          <v-list-item prepend-icon="mdi-view-dashboard" title="Home" value="home"></v-list-item>
+          <v-list-item prepend-icon="mdi-forum" title="About" value="about"></v-list-item>
+        </v-list>
+    </v-navigation-drawer>-->
     <TopBar/>
-    
-    <!--<v-card-text style="style_description">
-      This is content
-    </v-card-text>-->
     
     <v-card-text class="d-flex justify-center align-baseline">
       <p :style="style_description">
@@ -13,8 +25,9 @@
     </v-card-text>
     
     
-    <Bt_AddCart/>
+    
     <Style_MetaData/>
+    <Bt_AddCart/>
     <BottomBar/>
   </div>
   
