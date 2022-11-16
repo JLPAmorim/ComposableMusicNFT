@@ -1,41 +1,66 @@
 <template>
-  <div v-bind:style="{ backgroundColor: '#1A2326'}">
-    <!--<v-navigation-drawer
-        v-model="drawer"
-        temporary
-      >
-      <v-list-item
-          prepend-avatar="https://randomuser.me/api/portraits/men/78.jpg"
-          title="John Leider"
-        ></v-list-item>
-
-        <v-divider></v-divider>
-
-        <v-list density="compact" nav>
-          <v-list-item prepend-icon="mdi-view-dashboard" title="Home" value="home"></v-list-item>
-          <v-list-item prepend-icon="mdi-forum" title="About" value="about"></v-list-item>
-        </v-list>
-    </v-navigation-drawer>-->
+  <div>
     <TopBar/>
-    
-    <v-card-text class="d-flex justify-center align-baseline">
-      <p :style="style_description">
-        Composable music NFTs is a new AI system that can create original, realistic musics from your music creations. It can combine ______, ______ and ______
-      </p>
-    </v-card-text>
-    
-    
-    
-    <Style_MetaData/>
-    <Bt_AddCart/>
-    <BottomBar/>
-  </div>
-  
-  <!--<v-container fluid>
-      <v-row class = "first_row" style="style_rows" rows="2.5">
+    <!--------------------------------------------------------------->
+    <div :style = "style_rows1">
+      <v-container :style = "style_rows">
+        <v-row
+          align="start"
+          no-gutters
+          style="height: 760px; "
+        >
         
-      </v-row> 
-  </v-container> -->  
+        <v-card-text class="d-flex justify-center align-baseline">
+          <p :style="style_description">
+            Composable music NFTs is a new AI system that can create original, realistic musics from your music creations. It can combine ______, ______ and ______
+          </p>
+        </v-card-text>
+
+        </v-row>
+      </v-container>
+    </div>  
+  <!--------------------------------------------------------------->  
+
+    <div :style = "style_rows2">
+        <v-container>
+          <v-row
+            align="start"
+            no-gutters
+            style="height: 760px; "
+          >
+          <Style_MetaData/>
+          
+          <v-container class="d-flex justify-center align-baseline">
+            <v-btn 
+              color=#00E676
+              :width=400
+              :height=55>
+              <p> Create Your Own </p>
+            </v-btn>
+          </v-container>  
+
+          </v-row>
+        </v-container>
+    </div>
+  <!--------------------------------------------------------------->    
+    <div :style = "style_rows1">
+        <v-container>
+          <v-row
+            align="start"
+            no-gutters
+            style="height: 760px; "
+          >
+          <v-card-text class="d-flex justify-center align-baseline">
+            <p :style="style_description">
+              Your NFT journey starts here
+            </p>
+          </v-card-text>
+          </v-row>
+        </v-container>
+    </div>
+  <!--------------------------------------------------------------->   
+  <BottomBar/>
+  </div>
 </template>
 
 <script>
@@ -62,10 +87,13 @@ export default defineComponent({
           color: "#67FFC9",
           fontFamily: 'Poppins',
           fontWeight: "800",
-        }
-        /*style_rows:{
+        },
+        style_rows1:{
             backgroundColor: "#1A2326" 
-        }*/
+        },
+        style_rows2:{
+            backgroundColor: "#232424" 
+        }
   })
 })
 </script>

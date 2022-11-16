@@ -56,10 +56,27 @@
                             required
                         ></v-text-field>
                     </v-list-item>
+                    <v-column>
+                        <v-list-item class="d-flex justify-center align-baseline">
+                            <v-btn 
+                            color=#00E676>
+                            <p> Login </p>
+                            </v-btn>
+                            
+                            <v-btn 
+                            color="#242121">
+                            <p class="font-weight-medium text-white bg-dark"> Forgot your password? </p>
+                            </v-btn>
+                        </v-list-item>
+                    </v-column>
+                    <v-list-item>
+                        <p class="font-weight-medium text-white bg-dark">Not Registered yet?:</p>
+                    </v-list-item>
                     <v-list-item class="d-flex justify-center align-baseline">
                         <v-btn 
-                        color=#00E676>
-                         <p> Login </p>
+                        color=#00E676
+                        :width=200>
+                         <p> Sign Up </p>
                         </v-btn>
                     </v-list-item>
 
