@@ -7,7 +7,7 @@
         <v-row
           align="start"
           no-gutters
-          style="height: 760px; "
+          style="height: 650px; "
         >
         
         <v-card-text class="d-flex justify-center align-baseline">
@@ -15,6 +15,8 @@
             Composable music NFTs is a new AI system that can create original, realistic musics from your music creations. It can combine ______, ______ and ______
           </p>
         </v-card-text>
+        <!---------->
+        <MusicPlayer/>
 
         </v-row>
       </v-container>
@@ -26,10 +28,10 @@
           <v-row
             align="start"
             no-gutters
-            style="height: 760px; "
+            style="height: 650px; "
           >
           <Style_MetaData/>
-          
+          <!---------->
           <v-container class="d-flex justify-center align-baseline">
             <v-btn 
               color=#00E676
@@ -48,12 +50,12 @@
           <v-row
             align="start"
             no-gutters
-            style="height: 760px; "
+            style="height: 650px; "
           >
           <v-card-text class="d-flex justify-center align-baseline">
             <p :style="style_description">
               Your NFT journey starts here
-            </p>
+            </p>  
           </v-card-text>
           </v-row>
         </v-container>
@@ -69,6 +71,7 @@ import TopBar from '../components/TopBar.vue';
 import BottomBar from '../components/BottomBar.vue';
 import Bt_AddCart from '../components/Bt_AddCart.vue';
 import Style_MetaData from '../components/Style_MetaData.vue';
+import MusicPlayer from '../components/MusicPlayer.vue';
 
 // Components
 //import HelloWorld from '../components/HelloWorld.vue';
@@ -80,7 +83,8 @@ export default defineComponent({
     TopBar,
     BottomBar,
     Bt_AddCart,
-    Style_MetaData
+    Style_MetaData,
+    MusicPlayer,
   },
   data: () => ({
         style_description:{
@@ -93,7 +97,31 @@ export default defineComponent({
         },
         style_rows2:{
             backgroundColor: "#232424" 
-        }
+        },
+
+        icons: ['mdi-rewind', 'mdi-play', 'mdi-fast-forward'],
+      items: [
+        {
+          title: 'New Releases',
+          text: `It's New Release Friday`,
+          subtext: 'Newly released songs. Updated daily.',
+          img: 'https://images.unsplash.com/photo-1429514513361-8fa32282fd5f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3264&q=80',
+        },
+        {
+          title: 'Rock',
+          text: 'Greatest Rock Hits',
+          subtext: 'Lose yourself in rock tunes.',
+          img: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80',
+        },
+        {
+          title: 'Mellow Moods',
+          text: 'Ambient Bass',
+          subtext: 'Chill beats to mellow you out.',
+          img: 'https://images.unsplash.com/photo-1542320868-f4d80389e1c4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3750&q=80',
+        },
+      ],
+      transparent: 'rgba(255, 255, 255, 0)',
+        
   })
 })
 </script>
@@ -103,5 +131,18 @@ export default defineComponent({
   background-color: black;
   color: black;
 }*/
+
+
+.v-card {
+    transition: opacity .4s ease-in-out;
+  }
+
+  .v-card:not(.on-hover) {
+    opacity: 0.6;
+  }
+
+  .show-btns {
+    color: rgba(255, 255, 255, 1) !important;
+  }
 
 </style>
