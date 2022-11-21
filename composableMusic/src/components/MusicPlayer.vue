@@ -1,55 +1,59 @@
 <template>
-    <!--<audio controls>
-        <source src="https://www.mboxdrive.com/Tinatic%20en%20flauta%20FAIL%20-%20Desgracias%20de%20la%20vida.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>-->
+    <v-container fluid >
 
-    <audio id="audio-player">
-        <source src="https://www.mboxdrive.com/Tinatic%20en%20flauta%20FAIL%20-%20Desgracias%20de%20la%20vida.mp3" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
-    <v-btn 
-        id="bt_play" 
-        @click="toggleAudio(); 
-        isDisabled = !isDisabled" 
-        :color="isDisabled ? '#00E676' : '#a3d6ab'
-        "> 
-        {{ isDisabled ? 'Play' : 'Pause' }} 
-    </v-btn>
+            <v-card width="400" height="100" color="#232424"  >
+                
+            <audio id="audio-player">
+                <source src="https://www.mboxdrive.com/Tinatic%20en%20flauta%20FAIL%20-%20Desgracias%20de%20la%20vida.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <v-row justify="space-around" >
+                <!--botão play:-->
+                <v-container >
+                    <v-btn 
+                        id="bt_play" 
+                        @click="toggleAudio(); 
+                        isDisabled = !isDisabled" 
+                        :color="isDisabled ? '#00E676' : '#a3d6ab'"
+                        > 
+                        {{ isDisabled ? 'Play' : 'Pause' }} 
+                    </v-btn>
 
-    <!--<div class="text-caption">Media volume</div>-->
+                    <!--progresso de play da música:-->
+                    <div class="slider-wrapper">
+                    <input
+                        type="range"
+                        :min="0"
+                        :max="duration"
+                        v-model="currentTime"
+                        @input="updateTime"
+                        color='#00E676'
+                    >
+                    </div>
+                    <!--tempo atual da música:-->
+                    <div class="font-weight-medium text-white bg-dark " style="display:inline">
+                        {{ timeLabel }}
+                    </div>
+            </v-container>
+            </v-row>
 
-    <v-slider
-      id = "volume-slider"
-      v-model="playerVolume"
-      prepend-icon="mdi-volume-high"
-      @mouseup="setPosition()"
-      max="1" 
-      step="0.01" 
-      min="0"
-      :class="style_slider"
-    >
-    </v-slider>
-
-    
-    <p class="font-weight-medium text-white bg-dark">{{ timeLabel }}</p>
-
-
-
-    <div class="slider-wrapper">
-      <input
-        type="range"
-        :min="0"
-        :max="duration"
-        v-model="currentTime"
-        @input="updateTime"
-        color='#00E676'
-      >
-    </div>
-
-    <!--butão volume +:-->
-    <!--<v-btn @click="plusAudio()"> Increase Volume </v-btn>-->
-
+        <!--ajustar volume:-->
+        <v-row >
+            <v-slider 
+            track-color='#40cf89'
+            id = "volume-slider"
+            v-model="playerVolume"
+            prepend-icon="mdi-volume-high"
+            @mouseup="setPosition()"
+            max="1" 
+            step="0.01" 
+            min="0"
+            class="mx-4"
+            >
+            </v-slider>
+        </v-row>
+    </v-card>
+    </v-container>
 </template>
 
 <script>
@@ -67,16 +71,13 @@
         toggleAudio() {
             var audio = document.getElementById("audio-player");
             audio.addEventListener('timeupdate', this.timeupdate, false);
-
             if (audio.paused) {
                 audio.play();
                 this.duration = audio.duration;
-
             } else {
                 audio.pause();
             }
         },
-
         updateTime() {
             var audio = document.getElementById("audio-player");
             audio.currentTime = this.currentTime;
@@ -93,58 +94,28 @@
             .padStart(2, '0')}`;
         
         //dar reset no final da música:
-        if(audio.ended){
+        if(audio.ended || audio.timeLabel === '00:00:00'){
             this.currentTime = 0;
             this.timeLabel= '00:00:00';
-            this.isDisabled = !this.isDisabled;
+            this.isDisabled = true;
         }
         },
-
         setPosition(){
             var audio = document.getElementById("audio-player");
-            //audio.volume = media;
             audio.volume = this.playerVolume
         
         },
-        
-        //butão volume +:
-        /*plusAudio(){
-            var audio = document.getElementById("audio-player");
-            audio.volume -= 0.05;
-        }*/
-        
-        /*_handlePlayingUI: function (e) {
-                this.audio.volume = this.playerVolume
-        }*/ 
     }
         
     }
 </script>
 
 <style>
-    .style_slider{
-        width: 5%;
-    }
-
-
-
-    .style_timeLabel{
-        color: aliceblue;
-    }
-
-    .style_range{
-        background: firebrick;
-        cursor: pointer;
-    }
-
     .slider-wrapper {
         display: inline-block;
-        width: 20px;
-        height: 80px;
-        padding: 0;
-        /*appearance: none;*/
+        height: 50px;
+        padding: 20px;
     }
-
     input[type="range"]::-moz-range-progress {
     background-color: #00E676; 
     }
