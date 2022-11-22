@@ -2,7 +2,7 @@
     <v-container fluid >
 
             <v-card width="400" height="100" color="#232424"  >
-                
+
             <audio id="audio-player">
                 <source src="https://www.mboxdrive.com/Tinatic%20en%20flauta%20FAIL%20-%20Desgracias%20de%20la%20vida.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
@@ -48,7 +48,7 @@
             max="1" 
             step="0.01" 
             min="0"
-            class="mx-4"
+            class="mx-10"
             >
             </v-slider>
         </v-row>

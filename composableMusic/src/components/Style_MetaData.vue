@@ -65,7 +65,12 @@
       </v-col>
       <!-------------------------------------------------->
       <v-col cols="2.5">
+
         <p class="title"> Instruments included:</p>
+        <v-responsive
+          class="overflow-y-auto"
+        max-height="450"
+        >
         <v-checkbox class="style_boxs"
           v-model="selected"
           label="Piano"
@@ -96,6 +101,27 @@
           label="Violin"
           value="Violin"
         ></v-checkbox>
+        <v-checkbox class="style_boxs"
+          v-model="selected"
+          label="Trumpet"
+          value="Trumpet"
+        ></v-checkbox>
+        <v-checkbox class="style_boxs"
+          v-model="selected"
+          label="Saxophone"
+          value="Saxophone"
+        ></v-checkbox>
+        <v-checkbox class="style_boxs"
+          v-model="selected"
+          label="Harmonica"
+          value="Harmonica"
+        ></v-checkbox>
+        <v-checkbox class="style_boxs"
+          v-model="selected"
+          label="Trombone"
+          value="Trombone"
+        ></v-checkbox>
+      </v-responsive>
       </v-col>
       <!-------------------------------------------------->
       <!-------------------Vídeo:------------------------------->

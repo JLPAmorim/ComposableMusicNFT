@@ -3,7 +3,7 @@
     <TopBar/>
     <!--------------------------------------------------------------->
     <div :style = "style_rows1">
-      <v-container :style = "style_rows">
+      <v-container>
         <v-row
           align="start"
           no-gutters
@@ -16,8 +16,28 @@
           </p>
         </v-card-text>
         <!---------->
-        <MusicPlayer/>
-
+        <v-container>
+          <p :style="style_latestSales">
+            Latest Sales
+          </p>
+          <v-row>
+            <v-col cols="2.5">
+              <MusicPlayerHome/>
+              <MusicPlayerHome/>
+              <MusicPlayerHome/>
+            </v-col>
+            <v-col cols="2.5">
+              <MusicPlayerHome/>
+              <MusicPlayerHome/>
+              <MusicPlayerHome/>
+            </v-col>
+          </v-row>  
+        
+        
+        
+        
+        
+        </v-container>
         </v-row>
       </v-container>
     </div>  
@@ -57,6 +77,13 @@
               Your NFT journey starts here
             </p>  
           </v-card-text>
+
+          <v-container>
+            <p :style="style_latestSales">
+            (Temporariamente aqui, vai ser usado no upload e create music:)
+            </p>
+            <MusicPlayer/>
+          </v-container>
           </v-row>
         </v-container>
     </div>
@@ -72,6 +99,7 @@ import BottomBar from '../components/BottomBar.vue';
 import Bt_AddCart from '../components/Bt_AddCart.vue';
 import Style_MetaData from '../components/Style_MetaData.vue';
 import MusicPlayer from '../components/MusicPlayer.vue';
+import MusicPlayerHome from '../components/MusicPlayerHome.vue';
 
 // Components
 //import HelloWorld from '../components/HelloWorld.vue';
@@ -85,7 +113,8 @@ export default defineComponent({
     Bt_AddCart,
     Style_MetaData,
     MusicPlayer,
-  },
+    MusicPlayerHome
+},
   data: () => ({
         style_description:{
           color: "#67FFC9",
@@ -97,6 +126,11 @@ export default defineComponent({
         },
         style_rows2:{
             backgroundColor: "#232424" 
+        },
+        style_latestSales:{
+          color: "#EEEBD9",
+          fontFamily: 'Poppins',
+          fontWeight: "800",
         },
 
         icons: ['mdi-rewind', 'mdi-play', 'mdi-fast-forward'],
