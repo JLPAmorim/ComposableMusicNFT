@@ -9,8 +9,6 @@ import "./@openzeppelin/contracts/utils/Counters.sol";
 import "./@openzeppelin/contracts/utils/Strings.sol";
 
 
-import "hardhat/console.sol";
-
 
 //Function Modifiers are used to modify the behaviour of a function. For example to add a prerequisite to a function.
 contract Composable is Ownable, ERC721, ReentrancyGuard{
