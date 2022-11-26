@@ -19,7 +19,7 @@ contract Composable is Ownable, ERC721, ReentrancyGuard{
     Counters.Counter private _tokenIdCounter; //counter de mint
     mapping(uint => Sample) public nfts; //registo de nfts/samples? idToken => Sample 
     uint256 taxArtist = 5000000000000000;
-    address public algorithmOwner; 
+    address public algorithmOwner;
     
     struct Sample { 
         uint idToken;
@@ -40,10 +40,10 @@ contract Composable is Ownable, ERC721, ReentrancyGuard{
     //variáveis publicas tem getters e setters implementadas na network
 
 
- /*
- Frontend methods:
- -Ver restantes funcionalidades no figma para saber que functions necessitamos para o frontend 
-*/
+    /*
+    Frontend methods:
+    -Ver restantes funcionalidades no figma para saber que functions necessitamos para o frontend 
+    */
     function getMusicas() public view returns (uint[] memory){
             uint[] memory n;
             uint i=0;           
@@ -53,12 +53,12 @@ contract Composable is Ownable, ERC721, ReentrancyGuard{
             return (n);
     }
   
-/*
-Artist methods:
-    -fazer mint do token incrementado para o addr do autor - lista de samples vazia
-    -preciso do valor que o artista quer dar à sample 
-    -criar a Sample 
-*/
+    /*
+    Artist methods:
+        -fazer mint do token incrementado para o addr do autor - lista de samples vazia
+        -preciso do valor que o artista quer dar à sample 
+        -criar a Sample 
+    */
     function generateNFTArtist(address to, uint value, string calldata nameSample) public payable virtual{
         // valor de dinheiro na wallet de artista tem de ser acima ou igual ao estipulado para a taxa de mint  
         require(msg.value >= taxArtist, "Not enough ETH sent; check price!");
@@ -74,6 +74,11 @@ Artist methods:
         sample.idToken = newSampleId;
         sample.samples = samplesEmpty;
 
+        //J adiciono ao registo
+        //nfts[newSampleId]=sample;
+        //incremento o tokenId
+        //_tokenIdCounter.increment();
+
         _safeMint(to, newSampleId);
 
         //adiciono ao registo
@@ -87,14 +92,14 @@ Artist methods:
 
     }
 
-/*
-Buyer/Content Provider methods:
-    -fazer mint do token incrementado para o addr do buyer - preciso de uma lista de samples para as royalties
-    -valor total da musica - somatorio das samples
-    -crio o nft para o buyer
-*/
+    /*
+    Buyer/Content Provider methods:
+        -fazer mint do token incrementado para o addr do buyer - preciso de uma lista de samples para as royalties
+        -valor total da musica - somatorio das samples
+        -crio o nft para o buyer
+    */
 
-function generateNFTMusic(address to, uint[] memory samplesA) public payable virtual{ //public payable virtual means that you are allowed to pay the contract to execute this function. 
+    function generateNFTMusic(address to, uint[] memory samplesA) public payable virtual{ //public payable virtual means that you are allowed to pay the contract to execute this function. 
 
         
 
@@ -129,6 +134,11 @@ function generateNFTMusic(address to, uint[] memory samplesA) public payable vir
 
         }
 
+        //J adiciono ao Registo;
+        //nfts[newSampleId] = sample;
+        //incremento o tokenId
+        // _tokenIdCounter.increment();
+
         //Devo dar mint direto ao comprador ou dou mint para nós, o algorithmOwner e dps _transfer para o to
         //_safeMint(algorithmOwner, newSampleId);
         //_transfer(algorithmOwner, to, newSampleId);
@@ -149,6 +159,12 @@ function generateNFTMusic(address to, uint[] memory samplesA) public payable vir
 /*
 Equipa methods:
 */
+    /* J
+    bool public isMintEnabled;
+    function setIsMintEnabled(bool isMintEnabled_) external onlyOwner{
+        isMintEnabled = isMintEnabled_;
+    }*/
+
     //Método para alterar taxa de pagamento para mint de sample
     function setTaxArtist(uint256 _taxArtist) public onlyOwner {
         taxArtist = _taxArtist;
@@ -160,7 +176,19 @@ Equipa methods:
         return _tokenIdCounter.current();
     }
 
+    /*J metadata URI
+    string private _baseTokenURI;
+    function _baseURI() internal view virtual override returns (string memory) {
+        return _baseTokenURI;
+    }
+    function setBaseURI(string calldata baseURI) external onlyOwner {
+        _baseTokenURI = baseURI;
+    }*/
+
     //Método que permite retornar e 'ver' o NFT
+    //Em principio vamos precisar deste tokenURI e passa-lo na função de mint, uma vez que 
+    //so recebemos a metadata do frontend quando for para efetuar o mint. 
+    //Fazer callback caso transação de mint falhe para o upload da metadata????
     function tokenURI(uint256 tokenId) public view virtual override returns (string memory){
         require(_exists(tokenId),"ERC721Metadata: URI query for nonexistent token");
         string memory baseURI = _baseURI();
