@@ -106,6 +106,12 @@ export default defineComponent({
         },
       }
     },
+
+    methods: {
+      mint(){
+        
+      }
+    }
   })
   </script>
 
