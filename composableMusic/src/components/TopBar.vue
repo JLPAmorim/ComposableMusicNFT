@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-app-bar class="top_bar" :style="style_header">
+        <v-app-bar class="top_bar" style="backgroundColor: #1a2326 ;"> 
 
         <v-app-bar-title class="top_bar_title" :style="style_title">Composable Music NFTs </v-app-bar-title>
         <!--<v-column>
@@ -13,15 +13,15 @@
         <v-spacer></v-spacer>
         <v-column>
             <v-btn icon>
-                <v-icon :style="style_icons">mdi-magnify</v-icon>
+                <v-icon style="color: #FDFDFD">mdi-magnify</v-icon>
             </v-btn>
                 
             <v-btn icon>
-                <v-icon :style="style_icons">mdi-credit-card-outline</v-icon>
+                <v-icon style="color: #FDFDFD">mdi-credit-card-outline</v-icon>
             </v-btn>
 
             <v-btn icon>
-                <v-icon :style="style_icons">mdi-bell</v-icon>
+                <v-icon style="color: #FDFDFD">mdi-bell</v-icon>
             </v-btn>
 
             <v-menu
@@ -30,11 +30,11 @@
                 >
                 <template v-slot:activator="{ props }">
                 <v-btn v-bind="props">
-                    <v-icon :style="style_icons">mdi-account</v-icon>
+                    <v-icon style="color: #FDFDFD">mdi-account</v-icon>
                 </v-btn>
                 </template>
                 
-                <v-list :style = "style_poplogin">
+                <v-list style=" backgroundColor: #242121">
                     <v-list-item>
                         <p class="font-weight-medium text-white bg-dark">Login/Sign up:</p>
                     </v-list-item>
@@ -84,7 +84,7 @@
             </v-menu>
 
             <v-btn icon>
-                <v-icon :style="style_icons">mdi-cart-minus</v-icon>
+                <v-icon style="color: #FDFDFD">mdi-cart-minus</v-icon>
             </v-btn>
         </v-column>
         </v-app-bar>
@@ -94,15 +94,6 @@
 <script>
   export default {
     data: () => ({
-        style_header:{
-            backgroundColor: "#1A2326" 
-        },
-        style_icons:{
-            color: "#FDFDFD"
-        },
-        style_poplogin:{
-            backgroundColor: "#242121"
-        }
     }),
   }
 </script>

@@ -2,7 +2,7 @@
   <div>
     <TopBar/>
     <!--------------------------------------------------------------->
-    <div :style = "style_rows1">
+    <div style="backgroundColor: #1A2326">
       <v-container>
         <v-row
           align="start"
@@ -11,13 +11,17 @@
         >
         
         <v-card-text class="d-flex justify-center align-baseline">
-          <p :style="style_description">
+          <p  style="color: #67FFC9;
+              fontFamily: Poppins;
+              fontWeight: 800;">
             Composable music NFTs is a new AI system that can create original, realistic musics from your music creations. It can combine ______, ______ and ______
           </p>
         </v-card-text>
         <!---------->
         <v-container>
-          <p :style="style_latestSales">
+          <p style="color: #EEEBD9;
+              fontFamily: Poppins;
+              fontWeight: 800;">
             Latest Sales
           </p>
           <v-row>
@@ -43,7 +47,7 @@
     </div>  
   <!--------------------------------------------------------------->  
 
-    <div :style = "style_rows2">
+    <div style="backgroundColor: #232424">
         <v-container>
           <v-row
             align="start"
@@ -65,7 +69,7 @@
         </v-container>
     </div>
   <!--------------------------------------------------------------->    
-    <div :style = "style_rows1">
+    <div style="backgroundColor: #1A2326">
         <v-container>
           <v-row
             align="start"
@@ -79,7 +83,9 @@
           </v-card-text>
 
           <v-container>
-            <p :style="style_latestSales">
+            <p style="color: #EEEBD9;
+              fontFamily: Poppins;
+              fontWeight: 800;">
             (Temporariamente aqui, vai ser usado no upload e create music:)
             </p>
             <MusicPlayer/>
@@ -116,22 +122,6 @@ export default defineComponent({
     MusicPlayerHome
 },
   data: () => ({
-        style_description:{
-          color: "#67FFC9",
-          fontFamily: 'Poppins',
-          fontWeight: "800",
-        },
-        style_rows1:{
-            backgroundColor: "#1A2326" 
-        },
-        style_rows2:{
-            backgroundColor: "#232424" 
-        },
-        style_latestSales:{
-          color: "#EEEBD9",
-          fontFamily: 'Poppins',
-          fontWeight: "800",
-        },
 
         icons: ['mdi-rewind', 'mdi-play', 'mdi-fast-forward'],
       items: [
