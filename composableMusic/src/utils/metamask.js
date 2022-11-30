@@ -1,20 +1,16 @@
 import {pinJSONToIPFS} from './pinata.js'
-//import {createAlchemyWeb3} from "@alch/alchemy-web3"
+import {createAlchemyWeb3} from "@alch/alchemy-web3"
+import contractABI from './contract-abi.json'
 
-//const  alchemyKey= "https://eth-goerli.g.alchemy.com/v2/wi8nnp6eBKZRWBqFOmbnqpodZWDoJ2fY"
-//const web3 = createAlchemyWeb3('https://eth-mainnet.alchemyapi.io/<api-key>');
+const alchemyKey = import.meta.env.VITE_API_ALCHEMY_KEY
+const web3 = createAlchemyWeb3(alchemyKey);
+const contractAddress = "0xFa636262a29f3b1C60b8E62c9A5E740aA17a51d8";
 
-
-//const alchemyKey = process.env.APP_ALCHEMY_KEY;
-
-//const web3 = createAlchemyWeb3(alchemyKey);
-
-import contractABI from '../contract-abi.json'
-const contractAddress = "0x2E77B92900fB07162ad2F10642CB00c9aFD44690";
 
 export const connectWallet = async () => {
   if (window.ethereum) {
     try {
+      
       const addressArray = await window.ethereum.request({
         method: "eth_requestAccounts",
       });
@@ -40,7 +36,8 @@ export const connectWallet = async () => {
 export const getCurrentWalletConnected = async () => {
   if (window.ethereum) {
     try {
-      
+      console.log(alchemyKey)
+      console.log(import.meta.env.VITE_API_PINATA_SECRET)
       const addressArray = await window.ethereum.request({
         method: "eth_accounts",
       });
@@ -70,16 +67,16 @@ export const getCurrentWalletConnected = async () => {
   }
 };
 
-export const mintNFT = async(value, nameSample) => {
+export const mintNFT = async() => {
 
-  //make metadata
+  /*//make metadata
   const metadata = new Object();
   metadata.style = "Jazz";
   metadata.description = "Jazz Music";
   metadata.image = "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr";
   metadata.name = nameSample;
   metadata.value = value;
-  metadata.address = address;
+
 
   //pinata pin request
   const pinataResponse = await pinJSONToIPFS(metadata);
@@ -89,7 +86,9 @@ export const mintNFT = async(value, nameSample) => {
           status: "😢 Something went wrong while uploading your tokenURI.",
       }
   } 
-  const tokenURI = pinataResponse.pinataUrl;  
+  const tokenURI = pinataResponse.pinataUrl;  */
+  
+  const tokenURI = "https://gateway.pinata.cloud/ipfs/QmfNbehKNVHW888uvFN5ybxtKmmbKRvz3FEw8am5VCTu32"
 
   //load smart contract
   window.contract = await new web3.eth.Contract(contractABI, contractAddress);//loadContract();

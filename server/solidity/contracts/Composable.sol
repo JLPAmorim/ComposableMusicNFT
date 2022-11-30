@@ -191,10 +191,9 @@ Equipa methods:
 
     function mintNFT(address recipient, string memory tokenURI)
         public
-        payable
         returns (uint256)
     {
-        require(msg.value >= taxArtist, "Not enough ETH sent; check price!");
+        
         // Increment _tokenIDCounter
         _tokenIdCounter.increment();
         uint256 newSampleId = _tokenIdCounter.current();
@@ -203,7 +202,6 @@ Equipa methods:
         Sample memory sample;
         uint[] memory samplesEmpty;
         
-        sample.valueSample = msg.value;
         sample.walletOwner = msg.sender;
         sample.idToken = newSampleId;
         sample.samples = samplesEmpty;
@@ -219,6 +217,4 @@ Equipa methods:
 
         return newItemId;
     }
-
-
 }

@@ -1,14 +1,7 @@
-//require('dotenv').config();
-
 import axios from 'axios'
-//require('dotenv').config();
-import dotenv from 'dotenv'
-//const key = "70a0c83a59ac603787d4"
-//const secret = "84c2cff1c6aeb5193aa41aa17640f39012c16a241ab44b356bfebe656e616c11"
-const key = dotenv.APP_PINATA_KEY;
-const secret = dotenv.APP_PINATA_SECRET;
 
-
+const key = import.meta.env.VITE_API_PINATA_KEY
+const secret = import.meta.env.VITE_API_PINATA_SECRET
 
 
 export const pinJSONToIPFS = async(JSONBody) => {

@@ -31,9 +31,6 @@
                     <p>
                         {{this.status}}
                     </p>
-                    <v-btn @click="clicamos()">
-                        CLICK
-                    </v-btn>
                 </div>
             </v-card>
             
@@ -44,7 +41,6 @@
 
 <script>
 import {connectWallet, getCurrentWalletConnected, mintNFT} from "../utils/metamask.js"
-import dotenv from 'dotenv'
 export default {
      data(){
         return{
@@ -58,7 +54,6 @@ export default {
             metadata: {
                 loudness: "",
             },
-            env: ""
         }
     },
 
@@ -70,9 +65,6 @@ export default {
         const {address, status} = await getCurrentWalletConnected()
         this.walletAddress = address
         this.status = status
-        console.log("Address: " + this.walletAddress + " Status: " + this.status)
-        this.env = process.env.APP_ALCHEMY_KEY
-
     },
 
     /*watch: {
@@ -86,20 +78,10 @@ export default {
 
     methods:{
 
-        clicamos(){
-            console.log(this.env)
-        },
-        
         async connectWalletPressed(){
             const walletResponse = await connectWallet();
             this.status = walletResponse.status
             this.walletAddress = walletResponse.address
-            console.log("Status:" + this.status)
-            console.log("Wallet: " + this.walletAddress)
-            const key = dotenv.APP_PINATA_KEY;
-            const secret = dotenv.APP_PINATA_SECRET;
-            console.log("Key: " + key)
-            console.log("Secret: " + secret)
         },
         
         /*addWalletListener() {
@@ -121,9 +103,10 @@ export default {
         
             async onMintPressed() {
                 //Try CATCH verificar mintNFT com sucesso
-                const { status } = await mintNFT(this.value, this.nameSample, this.metadata);
+                const { status } = await mintNFT()
+                        
                 //TODO Mandar pra BD
-                setStatus(status);
+                this.status = status
             }
         
         
