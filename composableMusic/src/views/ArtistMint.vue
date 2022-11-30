@@ -119,12 +119,29 @@ export default {
                 }
             },*/
         
-            async onMintPressed() {
+        async onMintPressed() {
                 //Try CATCH verificar mintNFT com sucesso
-                const { status } = await mintNFT(this.value, this.nameSample, this.metadata);
-                //TODO Mandar pra BD
-                setStatus(status);
-            }
+                try {
+                    //o botão commit 
+                    const { status } = await mintNFT(this.value, this.nameSample, this.metadata);
+                    
+                    /**
+                     *  TODO:  
+                     *      - Verificar wallet loggada
+                     *      - Se estiver fazemos mint 
+                     */
+                    //setStatus(status);
+                    
+                    
+
+
+                } catch (error) {
+                    console.log("Not Minted!");
+                }
+                
+
+                
+        }
         
         
     }
