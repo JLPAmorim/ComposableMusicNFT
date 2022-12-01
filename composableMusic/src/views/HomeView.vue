@@ -7,13 +7,13 @@
         <v-row
           align="start"
           no-gutters
-          style="height: 650px; "
+          style="height: pageHeight; "
         >
         
         <v-card-text class="d-flex justify-center align-baseline">
-          <p  style="color: #67FFC9;
-              fontFamily: Poppins;
-              fontWeight: 800;">
+          <p style="color: #67FFC9;
+             fontFamily: Poppins;
+             fontWeight: 800;">
             Composable music NFTs is a new AI system that can create original, realistic musics from your music creations. It can combine ______, ______ and ______
           </p>
         </v-card-text>
@@ -24,19 +24,24 @@
               fontWeight: 800;">
             Latest Sales
           </p>
+          <v-container fluid>
           <v-row>
-            <v-col cols="2.5">
+            <v-col 
+                cols="12"
+                sm="6">
               <MusicPlayerHome/>
               <MusicPlayerHome/>
               <MusicPlayerHome/>
             </v-col>
-            <v-col cols="2.5">
+            <v-col 
+                cols="12"
+                sm="6">
               <MusicPlayerHome/>
               <MusicPlayerHome/>
               <MusicPlayerHome/>
             </v-col>
           </v-row>  
-        
+        </v-container>
         
         
         
@@ -52,7 +57,7 @@
           <v-row
             align="start"
             no-gutters
-            style="height: 650px; "
+            style="height: pageHeight; "
           >
           <Style_MetaData/>
           <!---------->
@@ -74,7 +79,77 @@
           <v-row
             align="start"
             no-gutters
-            style="height: 650px; "
+            style="height: pageHeight; "
+          >
+          <v-card-text class="d-flex justify-center align-baseline">
+            <p :style="style_description">
+              Your NFT journey starts here
+            </p>  
+          </v-card-text>
+
+          <!----->
+          <v-container>
+            <v-row>
+              <v-col
+                cols="12"
+                sm="6"
+              >
+                <v-hover
+                  v-slot="{ isHovering, props }"
+                  open-delay="200"
+                >
+                  <v-card
+                    :elevation="isHovering ? 16 : 2"
+                    :class="{ 'on-hover': isHovering }"
+                    class="mx-auto"
+                    height="350"
+                    max-width="350"
+                    v-bind="props"
+                    color="#00E676"
+                  >
+                    <v-card-text class="font-weight-medium mt-12 text-center text-h5 text-white">
+                      How to Conect Your Wallet
+                    </v-card-text>
+                  </v-card>
+                </v-hover>
+              </v-col>
+
+              <v-col
+                cols="12"
+                sm="6"
+              >
+                <v-hover
+                  v-slot="{ isHovering, props }"
+                  close-delay="200"
+                >
+                  <v-card
+                    :elevation="isHovering ? 16 : 2"
+                    :class="{ 'on-hover': isHovering }"
+                    class="mx-auto"
+                    height="350"
+                    max-width="350"
+                    v-bind="props"
+                    color="#00E676"
+                  >
+                    <v-card-text class="font-weight-medium mt-12 text-center text-h5 text-white">
+                      How to Sell Your Music
+                    </v-card-text>
+                  </v-card>
+                </v-hover>
+              </v-col>
+            </v-row>
+          </v-container>
+
+          </v-row>
+        </v-container>
+    </div>
+  <!--------------------------------------------------------------->   
+  <div style="backgroundColor: #232424">
+        <v-container>
+          <v-row
+            align="start"
+            no-gutters
+            style="height: pageHeight; "
           >
           <v-card-text class="d-flex justify-center align-baseline">
             <p :style="style_description">
@@ -93,7 +168,7 @@
           </v-row>
         </v-container>
     </div>
-  <!--------------------------------------------------------------->   
+     <!---------------------------------------------------------------> 
   <BottomBar/>
   </div>
 </template>
@@ -107,8 +182,8 @@ import Style_MetaData from '../components/Style_MetaData.vue';
 import MusicPlayer from '../components/MusicPlayer.vue';
 import MusicPlayerHome from '../components/MusicPlayerHome.vue';
 
+
 // Components
-//import HelloWorld from '../components/HelloWorld.vue';
 
 export default defineComponent({
   name: 'HomeView',
@@ -121,8 +196,7 @@ export default defineComponent({
     MusicPlayer,
     MusicPlayerHome
 },
-  data: () => ({
-
+  data: () => ({        
         icons: ['mdi-rewind', 'mdi-play', 'mdi-fast-forward'],
       items: [
         {
@@ -146,7 +220,28 @@ export default defineComponent({
       ],
       transparent: 'rgba(255, 255, 255, 0)',
         
-  })
+  }),
+
+  setupPageHeight() {
+      const { name } = useDisplay()
+
+      const pageHeight = computed(() => {
+        // name is reactive and
+        // must use .value
+        switch (name.value) {
+          case 'xs': return 1250
+          case 'sm': return 1000
+          case 'md': return 800
+          case 'lg': return 650
+          case 'xl': return 500
+          case 'xxl': return 450
+        }
+
+        return undefined
+      })
+
+      return { pageHeight }
+    },
 })
 </script>
 
@@ -169,4 +264,5 @@ export default defineComponent({
     color: rgba(255, 255, 255, 1) !important;
   }
 
+  
 </style>

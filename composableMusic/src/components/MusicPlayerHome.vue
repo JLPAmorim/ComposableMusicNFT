@@ -14,30 +14,35 @@
                     v-slot="{ isHovering, props }"
                     open-delay="200"
                     >
-                    <v-btn 
-                        id="bt_play"
-                        @click="toggleAudio(); 
-                        isDisabled = !isDisabled" 
-                        :color="isDisabled ? '#00E676' : '#a3d6ab'"  
-                        :elevation="isHovering ? 16 : 2"
-                        :class="{ 'on-hover': isHovering }"
-                        v-bind="props"
-                        > 
-                        {{ isDisabled ? 'Play' : 'Pause' }} 
-                    </v-btn>
-                </v-hover>
+                        <v-btn 
+                            id="bt_play"
+                            @click="toggleAudio(); 
+                            isDisabled = !isDisabled" 
+                            :color="isDisabled ? '#00E676' : '#a3d6ab'"  
+                            :elevation="isHovering ? 16 : 2"
+                            :class="{ 'on-hover': isHovering }"
+                            v-bind="props"
+                            > 
+                            {{ isDisabled ? 'Play' : 'Pause' }} 
+                        </v-btn>
+                    </v-hover>
                     
                     <!--progresso de play da música:-->
-                    <div class="slider-wrapper">
-                    <input
-                        type="range"
-                        :min="0"
-                        :max="duration"
-                        v-model="currentTime"
-                        @input="updateTime"
-                        color='#00E676'
-                    >
+                    <div style="display: inline-block; width: 220px; padding-left: 10px;">
+                        <v-slider 
+                            type="range"
+                            min= "0"
+                            :max= "duration"
+                            id = "volume-slider"
+                            v-model="currentTime"
+                            @input="updateTime"
+                            @mouseup="setTime()"
+                            color='#00E676'  
+                            thumb-color = '#FAFAFA'  
+                            >
+                        </v-slider>
                     </div>
+
                     <!--preço da música-->
                     <div class="font-weight-medium text-white bg-dark " style="display:inline">
                         Price: {{ musicPrice }} ETH
@@ -102,6 +107,11 @@
             audio.volume = this.playerVolume
         
         },
+        //alterar tempo atual da música:
+        setTime(){
+            var audio = document.getElementById("audio-player");
+            audio.currentTime = this.currentTime 
+        }
     },
     setupMPWidth () {
       const { name } = useDisplay()

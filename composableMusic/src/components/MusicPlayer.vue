@@ -20,7 +20,7 @@
                     </v-btn>
 
                     <!--progresso de play da música:-->
-                    <div class="slider-wrapper">
+                    <!--<div class="slider-wrapper">
                     <input
                         type="range"
                         :min="0"
@@ -29,7 +29,21 @@
                         @input="updateTime"
                         color='#00E676'
                     >
+                    </div>-->
+                    <div style="display: inline-block; width: 220px; padding-left: 5px;">
+                        <v-slider 
+                            type="range"
+                            min= "0"
+                            :max= "duration"
+                            id = "volume-slider"
+                            v-model="currentTime"
+                            @input="updateTime"
+                            @mouseup="setTime()"
+                            color='#00E676'    
+                            >
+                        </v-slider>
                     </div>
+
                     <!--tempo atual da música:-->
                     <div class="font-weight-medium text-white bg-dark " style="display:inline">
                         {{ timeLabel }}
@@ -83,28 +97,34 @@
             audio.currentTime = this.currentTime;
         },
         timeupdate() {
-        var audio = document.getElementById("audio-player");
-        this.currentTime = audio.currentTime;
-        const hr = Math.floor(this.currentTime / 3600);
-        const min = Math.floor((this.currentTime - (hr * 3600)) / 60);
-        const sec = Math.floor(this.currentTime - (hr * 3600) - (min * 60));
-        this.timeLabel = `${hr.toString()
-            .padStart(2, '0')}:${min.toString()
-            .padStart(2, '0')}:${sec.toString()
-            .padStart(2, '0')}`;
-        
-        //dar reset no final da música:
-        if(audio.ended || audio.timeLabel === '00:00:00'){
-            this.currentTime = 0;
-            this.timeLabel= '00:00:00';
-            this.isDisabled = true;
-        }
+            var audio = document.getElementById("audio-player");
+            this.currentTime = audio.currentTime;
+            const hr = Math.floor(this.currentTime / 3600);
+            const min = Math.floor((this.currentTime - (hr * 3600)) / 60);
+            const sec = Math.floor(this.currentTime - (hr * 3600) - (min * 60));
+            this.timeLabel = `${hr.toString()
+                .padStart(2, '0')}:${min.toString()
+                .padStart(2, '0')}:${sec.toString()
+                .padStart(2, '0')}`;
+            
+            //dar reset no final da música:
+            if(audio.ended || audio.timeLabel === '00:00:00'){
+                this.currentTime = 0;
+                this.timeLabel= '00:00:00';
+                this.isDisabled = true;
+            }
         },
+        //alterar volume da musica:
         setPosition(){
             var audio = document.getElementById("audio-player");
             audio.volume = this.playerVolume
         
         },
+        //alterar tempo atual da música:
+        setTime(){
+            var audio = document.getElementById("audio-player");
+            audio.currentTime = this.currentTime 
+        }
     }
         
     }
@@ -113,8 +133,6 @@
 <style>
     .slider-wrapper {
         display: inline-block;
-        height: 50px;
-        padding: 20px;
     }
     input[type="range"]::-moz-range-progress {
     background-color: #00E676; 
