@@ -62,12 +62,13 @@
           <Style_MetaData/>
           <!---------->
           <v-container class="d-flex justify-center align-baseline">
-            <v-btn 
-              color=#00E676
-              :width=400
-              :height=55>
-              <p> Create Your Own </p>
-            </v-btn>
+            
+                <v-btn 
+                  color=#00E676
+                  :width=400
+                  :height=55>
+                  <p> Create Your Own </p>
+                </v-btn>
           </v-container>  
 
           </v-row>
@@ -108,7 +109,7 @@
                     color="#00E676"
                   >
                     <v-card-text class="font-weight-medium mt-12 text-center text-h5 text-white">
-                      How to Conect Your Wallet
+                      Conect Your Wallet
                     </v-card-text>
                   </v-card>
                 </v-hover>
@@ -122,19 +123,25 @@
                   v-slot="{ isHovering, props }"
                   close-delay="200"
                 >
-                  <v-card
-                    :elevation="isHovering ? 16 : 2"
-                    :class="{ 'on-hover': isHovering }"
-                    class="mx-auto"
-                    height="350"
-                    max-width="350"
-                    v-bind="props"
-                    color="#00E676"
-                  >
-                    <v-card-text class="font-weight-medium mt-12 text-center text-h5 text-white">
-                      How to Sell Your Music
-                    </v-card-text>
-                  </v-card>
+                <nav>
+                  <RouterLink 
+                    style="text-decoration: none; color: inherit;"
+                    to="/artistmint">
+                      <v-card
+                        :elevation="isHovering ? 16 : 2"
+                        :class="{ 'on-hover': isHovering }"
+                        class="mx-auto"
+                        height="350"
+                        max-width="350"
+                        v-bind="props"
+                        color="#00E676"
+                      >
+                        <v-card-text class="font-weight-medium mt-12 text-center text-h5 text-white">
+                          Sell Your Music
+                        </v-card-text>
+                      </v-card>
+                  </RouterLink>
+                </nav>  
                 </v-hover>
               </v-col>
             </v-row>
@@ -219,9 +226,8 @@ export default defineComponent({
         },
       ],
       transparent: 'rgba(255, 255, 255, 0)',
-        
   }),
-
+  
   setupPageHeight() {
       const { name } = useDisplay()
 
@@ -251,8 +257,7 @@ export default defineComponent({
   color: black;
 }*/
 
-
-.v-card {
+  .v-card {
     transition: opacity .4s ease-in-out;
   }
 
