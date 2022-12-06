@@ -26,19 +26,21 @@
           </p>
           <v-container fluid>
           <v-row>
-            <v-col 
+            <v-col   
                 cols="12"
                 sm="6">
-              <MusicPlayerHome/>
-              <MusicPlayerHome/>
-              <MusicPlayerHome/>
+              <!--<MusicPlayerHome musicLink = "./music/doraemon.mp3"></MusicPlayerHome>
+              <MusicPlayerHome musicLink = "./music/doraemon.mp3"></MusicPlayerHome>-->
+              <MusicPlayerHome playerid="audio-player1" priceParent=0.025  musicLink = "https://assets.mixkit.co/music/preview/mixkit-secret-garden-595.mp3"></MusicPlayerHome>
+              <MusicPlayerHome playerid="audio-player2" priceParent=0.035  musicLink = "https:\/\/files.freemusicarchive.org\/storage-freemusicarchive-org\/tracks\/Jjo9UAzIZMO6ln67OwObKSAEFlp98yCdhK6XxYL0.mp3"></MusicPlayerHome>
+              <MusicPlayerHome playerid="audio-player3" priceParent=0.045  musicLink = "https:\/\/files.freemusicarchive.org\/storage-freemusicarchive-org\/tracks\/4xfPGu79rqI17kEhcFz9cD04qgVIYgrR4FiaRXdr.mp3"></MusicPlayerHome>
             </v-col>
             <v-col 
                 cols="12"
                 sm="6">
-              <MusicPlayerHome/>
-              <MusicPlayerHome/>
-              <MusicPlayerHome/>
+              <MusicPlayerHome playerid="audio-player4" priceParent=0.027  musicLink = "https:\/\/files.freemusicarchive.org\/storage-freemusicarchive-org\/tracks\/giZC28nLjrxcCp2VJu3WWvsUOdlDUZ32HDUBio3b.mp3"></MusicPlayerHome>
+              <MusicPlayerHome playerid="audio-player5" priceParent=0.017  musicLink = "https://assets.mixkit.co/music/preview/mixkit-hip-hop-02-738.mp3"></MusicPlayerHome>
+              <MusicPlayerHome playerid="audio-player6" priceParent=0.026  musicLink = "https://assets.mixkit.co/music/preview/mixkit-a-love-theme-542.mp3"></MusicPlayerHome>
             </v-col>
           </v-row>  
         </v-container>
@@ -205,6 +207,7 @@ export default defineComponent({
 },
   data: () => ({        
         icons: ['mdi-rewind', 'mdi-play', 'mdi-fast-forward'],
+        //music1Props: {priceParent:0.03, musicLink: "./music/doraemon.mp3"},
       items: [
         {
           title: 'New Releases',
