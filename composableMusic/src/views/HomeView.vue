@@ -61,14 +61,17 @@
             no-gutters
             style="height: pageHeight; "
           >
-          <Style_MetaData/>
+          <!--<Style_MetaData/>-->
+          <Style_MetaData ref="Style_MetaData_Ref" @event_SendStyle="getStyles"/>
           <!---------->
           <v-container class="d-flex justify-center align-baseline">
             
                 <v-btn 
                   color=#00E676
                   :width=400
-                  :height=55>
+                  :height=55
+                  @click="$refs.Style_MetaData_Ref.sendStyle()" 
+                  >
                   <p> Create Your Own </p>
                 </v-btn>
           </v-container>  
@@ -191,6 +194,7 @@ import Style_MetaData from '../components/Style_MetaData.vue';
 import MusicPlayer from '../components/MusicPlayer.vue';
 import MusicPlayerHome from '../components/MusicPlayerHome.vue';
 
+import { ref } from 'vue'
 
 // Components
 
@@ -204,32 +208,21 @@ export default defineComponent({
     Style_MetaData,
     MusicPlayer,
     MusicPlayerHome
-},
+  },
+
   data: () => ({        
         icons: ['mdi-rewind', 'mdi-play', 'mdi-fast-forward'],
         //music1Props: {priceParent:0.03, musicLink: "./music/doraemon.mp3"},
-      items: [
-        {
-          title: 'New Releases',
-          text: `It's New Release Friday`,
-          subtext: 'Newly released songs. Updated daily.',
-          img: 'https://images.unsplash.com/photo-1429514513361-8fa32282fd5f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=3264&q=80',
-        },
-        {
-          title: 'Rock',
-          text: 'Greatest Rock Hits',
-          subtext: 'Lose yourself in rock tunes.',
-          img: 'https://images.unsplash.com/photo-1498038432885-c6f3f1b912ee?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2100&q=80',
-        },
-        {
-          title: 'Mellow Moods',
-          text: 'Ambient Bass',
-          subtext: 'Chill beats to mellow you out.',
-          img: 'https://images.unsplash.com/photo-1542320868-f4d80389e1c4?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=3750&q=80',
-        },
-      ],
-      transparent: 'rgba(255, 255, 255, 0)',
+        
+        
+        transparent: 'rgba(255, 255, 255, 0)',
   }),
+  methods:{
+    //recebe styles do filho:
+    getStyles(value){
+      console.log(value);
+    }
+  },
   
   setupPageHeight() {
       const { name } = useDisplay()

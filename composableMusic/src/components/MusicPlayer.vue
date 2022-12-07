@@ -3,13 +3,13 @@
 
             <v-card width="400" height="100" color="#232424"  >
 
-            <audio id="audio-player">
+            <audio :id="playerid" style="display:none" ref="player">
                 <source src="https://www.mboxdrive.com/Tinatic%20en%20flauta%20FAIL%20-%20Desgracias%20de%20la%20vida.mp3" type="audio/mpeg">
                 Your browser does not support the audio element.
             </audio>
             <v-row justify="space-around" >
-                <!--botão play:-->
                 <v-container >
+                    <!--botão play:-->
                     <v-btn 
                         id="bt_play" 
                         @click="toggleAudio(); 
@@ -19,27 +19,18 @@
                         {{ isDisabled ? 'Play' : 'Pause' }} 
                     </v-btn>
 
-                    <!--progresso de play da música:-->
-                    <!--<div class="slider-wrapper">
-                    <input
-                        type="range"
-                        :min="0"
-                        :max="duration"
-                        v-model="currentTime"
-                        @input="updateTime"
-                        color='#00E676'
-                    >
-                    </div>-->
-                    <div style="display: inline-block; width: 220px; padding-left: 5px;">
+                    <!--barra de progresso da música:-->
+                    <div id="progress-bar" style="display: inline-block; width: 220px; padding-left: 5px;">
                         <v-slider 
-                            type="range"
+                        type="range"
                             min= "0"
-                            :max= "duration"
+                            :max= "audioDuration"
                             id = "volume-slider"
-                            v-model="currentTime"
+                            v-model="playbackTime"
                             @input="updateTime"
                             @mouseup="setTime()"
-                            color='#00E676'    
+                            color='#00E676'  
+                            thumb-color = '#FAFAFA'  
                             >
                         </v-slider>
                     </div>
@@ -73,61 +64,133 @@
 <script>
  export default {
     data (){
-        
         return {
             isDisabled: true,
             playerVolume: 0.5,
+            audioDuration: 100,
+            isPlaying: false, 
+            playbackTime: 0,
+            audioLoaded: false,
             timeLabel: '00:00:00',
-            currentTime: 0,
         }
     },
     methods:{
-        toggleAudio() {
-            var audio = document.getElementById("audio-player");
-            audio.addEventListener('timeupdate', this.timeupdate, false);
-            if (audio.paused) {
-                audio.play();
-                this.duration = audio.duration;
-            } else {
-                audio.pause();
+        //Set the range slider max value equal to audio duration
+        initSlider() {
+            var audio = this.$refs.player;
+            if (audio) {
+                this.audioDuration = Math.round(audio.duration);
             }
         },
-        updateTime() {
-            var audio = document.getElementById("audio-player");
-            audio.currentTime = this.currentTime;
-        },
-        timeupdate() {
-            var audio = document.getElementById("audio-player");
-            this.currentTime = audio.currentTime;
-            const hr = Math.floor(this.currentTime / 3600);
-            const min = Math.floor((this.currentTime - (hr * 3600)) / 60);
-            const sec = Math.floor(this.currentTime - (hr * 3600) - (min * 60));
+        //Playback listener function runs every 100ms while audio is playing
+        playbackListener(e) {
+            var audio = this.$refs.player;
+            //Sync local 'playbackTime' var to audio.currentTime and update global state
+            this.playbackTime = audio.currentTime;
+            const hr = Math.floor(this.playbackTime / 3600);
+            const min = Math.floor((this.playbackTime - (hr * 3600)) / 60);
+            const sec = Math.floor(this.playbackTime - (hr * 3600) - (min * 60));
             this.timeLabel = `${hr.toString()
                 .padStart(2, '0')}:${min.toString()
                 .padStart(2, '0')}:${sec.toString()
                 .padStart(2, '0')}`;
             
-            //dar reset no final da música:
-            if(audio.ended || audio.timeLabel === '00:00:00'){
-                this.currentTime = 0;
-                this.timeLabel= '00:00:00';
-                this.isDisabled = true;
+            //console.log("update: " + audio.currentTime);
+            //Add listeners for audio pause and audio end events
+            audio.addEventListener("ended", this.endListener);
+            audio.addEventListener("pause", this.pauseListener);
+        },
+        //Function to run when audio is paused by user
+        pauseListener() {
+            this.isPlaying = false;
+            this.listenerActive = false;
+            this.cleanupListeners();
+        },
+        //Function to run when audio play reaches the end of file
+        endListener() {
+            this.isPlaying = false;
+            this.listenerActive = false;
+            this.playbackTime = 0;
+            this.isDisabled = true;  //dar reset ao botão de play
+            this.cleanupListeners();
+        },
+        //Remove listeners after audio play stops
+        cleanupListeners() {
+            var audio = this.document.getElementById("audio-player");
+            audio.removeEventListener("timeupdate", this.playbackListener);
+            audio.removeEventListener("ended", this.endListener);
+            audio.removeEventListener("pause", this.pauseListener);
+            //console.log("All cleaned up!");
+        },
+
+        //Método chamado quando o botão de play é pressionado:
+        toggleAudio() {
+            var audio = this.$refs.player;
+            if (audio.paused) {
+                audio.play();
+                this.duration = audio.duration;
+                this.isPlaying = true;
+            } else {
+                audio.pause();
+                this.isPlaying = false;
             }
         },
         //alterar volume da musica:
         setPosition(){
-            var audio = document.getElementById("audio-player");
+            var audio = this.$refs.player;
             audio.volume = this.playerVolume
         
         },
-        //alterar tempo atual da música:
-        setTime(){
-            var audio = document.getElementById("audio-player");
-            audio.currentTime = this.currentTime 
-        }
-    }
+
+    },
+    mounted: function() {
+      // nextTick code will run only after the entire view has been rendered
+      this.$nextTick(function() {
+        
+        var audio=this.$refs.player;
+        //Wait for audio to load, then run initSlider() to get audio duration and set the max value of our slider 
+        // "loademetadata" Event https://www.w3schools.com/tags/av_event_loadedmetadata.asp
+        audio.addEventListener(
+          "loadedmetadata",
+          function(e) {
+            this.initSlider();
+          }.bind(this)
+        );
+        // "canplay" HTML Event lets us know audio is ready for play https://www.w3schools.com/tags/av_event_canplay.asp
+        audio.addEventListener(
+          "canplay",
+          function(e) {
+            this.audioLoaded=true;
+          }.bind(this)
+        );
+        //Wait for audio to begin play, then start playback listener function
+        this.$watch("isPlaying",function() {
+          if(this.isPlaying) {
+            var audio=this.$refs.player;
+            this.initSlider();
+            //console.log("Audio playback started.");
+            //prevent starting multiple listeners at the same time
+            if(!this.listenerActive) {
+              this.listenerActive=true;
+              //for a more consistent timeupdate, include freqtimeupdate.js and replace both instances of 'timeupdate' with 'freqtimeupdate'
+              audio.addEventListener("timeupdate",this.playbackListener);
+            }
+          }
+        });
+        //Update current audio position when user drags progress slider
+        this.$watch("playbackTime",function() {
+            var audio=this.$refs.player;
+        var diff=Math.abs(this.playbackTime-this.$refs.player.currentTime);
+        
+          //Throttle synchronization to prevent infinite loop between playback listener and this watcher
+          if(diff>0.01) {
+            this.$refs.player.currentTime=this.playbackTime;
+          }
+        });
+      });
         
     }
+}
 </script>
 
 <style>

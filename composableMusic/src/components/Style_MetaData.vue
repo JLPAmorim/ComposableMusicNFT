@@ -4,32 +4,32 @@
         <v-col cols="2.5">
         <p class="title"> Choose your music style:</p>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="Jazz"
           value="Jazz"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="Rock"
           value="Rock"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="Ambient"
           value="Ambient"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="Classic"
           value="Classic"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="R&B"
           value="R&B"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="Rap"
           value="Rap"
         ></v-checkbox>
@@ -160,9 +160,25 @@
     export default {
       data () {
         return {
-          selected: ['John'],
+          //selected: ['John'],
+          /*selected_style_jazz: [],
+          selected_style_rock: [],
+          selected_style_ambient: [],
+          selected_style_classic: [],
+          selected_style_rb: [],
+          selected_style_rap: [],*/
+          selected_styles: [],
         }
       },
+      methods: {
+
+        sendStyle(){
+          this.$emit('event_SendStyle', this.selected_styles)
+          //console.log(this.selected_styles)
+          console.log("testeStyle")
+        }
+
+      }
     }
 </script>
 

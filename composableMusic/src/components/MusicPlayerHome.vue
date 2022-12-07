@@ -4,13 +4,12 @@
             <v-card :width="widthMP" height="100" color="#232424">
 
             <audio :id="playerid" style="display:none" ref="player">
-                <!--<source src="https://www.mboxdrive.com/Tinatic%20en%20flauta%20FAIL%20-%20Desgracias%20de%20la%20vida.mp3" type="audio/mpeg">-->
-                <!--<source src="./music/doraemon.mp3" type="audio/mpeg">-->
                 <source :src="musicLink" type="audio/mpeg" >
                 Your browser does not support the audio element.
             </audio>
-            <v-row justify="space-around">
-                <v-container>
+            <v-row justify="space-around" >
+                <!--<v-container style="padding-left: 7.5%; padding-top: 7.5%;"></v-container>-->
+                <v-container style="padding-left: 7.5%; padding-top: 7.5%;"> <!--padding bonito, mas quando minimizo estraga!!!-->
                     <!--botão play:-->
                     <v-hover
                     v-slot="{ isHovering, props }"
@@ -51,8 +50,7 @@
                         Price: {{priceParent}} ETH
                     </div>
             </v-container>
-            </v-row>
-            
+            </v-row>       
     </v-card>
     </v-container>
 </template>
@@ -64,8 +62,7 @@
  import { useCounterStore } from '../stores/counter'
 
  export default {
-    //preço que vem da HomeView
-    //props: ['musicLink', 'priceParent'],
+    //preço e link da música vindos da HomeView:
     props: [ "playerid", "priceParent", "musicLink"],
 
     data (){
@@ -73,12 +70,9 @@
         return {
             isDisabled: true,
             playerVolume: 0.5,
-            //timeLabel: '00:00:00',
-            //currentTime: 0,
-            musicPrice: 0.03,
-            
-            audioDuration: 100, //(Net)
-            isPlaying: false,  //(Net)
+            musicPrice: 0.03,      
+            audioDuration: 100,
+            isPlaying: false,
             playbackTime: 0,
             audioLoaded: false,
             
@@ -94,14 +88,14 @@
     },*/ 
 
     methods:{
-        //(Net) Set the range slider max value equal to audio duration
+        //Set the range slider max value equal to audio duration
         initSlider() {
             var audio = this.$refs.player;
             if (audio) {
                 this.audioDuration = Math.round(audio.duration);
             }
         },
-        //(Net)Playback listener function runs every 100ms while audio is playing
+        //Playback listener function runs every 100ms while audio is playing
         playbackListener(e) {
             var audio = this.$refs.player;
             //Sync local 'playbackTime' var to audio.currentTime and update global state
@@ -112,13 +106,13 @@
             audio.addEventListener("ended", this.endListener);
             audio.addEventListener("pause", this.pauseListener);
         },
-        //(Net)Function to run when audio is paused by user
+        //Function to run when audio is paused by user
         pauseListener() {
             this.isPlaying = false;
             this.listenerActive = false;
             this.cleanupListeners();
         },
-        //(Net)Function to run when audio play reaches the end of file
+        //Function to run when audio play reaches the end of file
         endListener() {
             this.isPlaying = false;
             this.listenerActive = false;
@@ -126,7 +120,7 @@
             this.isDisabled = true;  //dar reset ao botão
             this.cleanupListeners();
         },
-        //(Net) Remove listeners after audio play stops
+        //Remove listeners after audio play stops
         cleanupListeners() {
             var audio = this.document.getElementById("audio-player");
             audio.removeEventListener("timeupdate", this.playbackListener);
@@ -135,7 +129,7 @@
             //console.log("All cleaned up!");
         },
 
-
+        //Método chamado quando o botão de play é pressionado:
         toggleAudio() {
             //var audio = document.getElementById("audio-player");
             //audio.addEventListener('timeupdate', this.timeupdate, false);
@@ -149,38 +143,6 @@
                 this.isPlaying = false;
             }
         },
-        updateTime() {
-            var audio = document.getElementById("audio-player");
-            audio.currentTime = this.currentTime;
-        },
-        /*timeupdate() {
-        var audio = document.getElementById("audio-player");
-        this.currentTime = audio.currentTime;
-        const hr = Math.floor(this.currentTime / 3600);
-        const min = Math.floor((this.currentTime - (hr * 3600)) / 60);
-        const sec = Math.floor(this.currentTime - (hr * 3600) - (min * 60));
-        this.timeLabel = `${hr.toString()
-            .padStart(2, '0')}:${min.toString()
-            .padStart(2, '0')}:${sec.toString()
-            .padStart(2, '0')}`;
-        
-        //dar reset no final da música:
-        if(audio.ended || audio.timeLabel === '00:00:00'){
-            this.currentTime = 0;
-            this.timeLabel= '00:00:00';
-            this.isDisabled = true;
-        }
-        },
-        setPosition(){
-            var audio = document.getElementById("audio-player");
-            audio.volume = this.playerVolume
-        
-        },
-        //alterar tempo atual da música:
-        setTime(){
-            var audio = document.getElementById("audio-player");
-            audio.currentTime = this.currentTime 
-        }*/
     },
     mounted: function() {
       // nextTick code will run only after the entire view has been rendered
