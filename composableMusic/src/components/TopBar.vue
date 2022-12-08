@@ -11,19 +11,26 @@
         </v-column>-->
 
         <v-spacer></v-spacer>
-        <v-column>
+        <v-column style="padding-right: 2.5%;">
             <!--Icone search-->
             <v-btn icon>
                 <v-icon style="color: #FDFDFD">mdi-magnify</v-icon>
             </v-btn>
             
             <!--Icone e menu wallet-->
+            <!--<v-menu
+                :close-on-content-click="false"
+                v-model="showMenu"
+            >-->
             <v-menu
                 :close-on-content-click="false"
+                v-model="showMenu"
             >
                 <template v-slot:activator="{ props }">
-                <v-btn v-bind="props">
-                    <v-icon style="color: #FDFDFD">mdi-credit-card-outline</v-icon>
+                <v-btn 
+                    v-bind="props"
+                    >
+                    <v-icon style="color: #FDFDFD">mdi-wallet-outline</v-icon>
                 </v-btn>
                 </template>
                 
@@ -37,7 +44,7 @@
                     <!--Connect Wallet:-->
                     <v-list-item>
                         <v-container fill-height fluid>
-                            <v-card>
+                            
                                 <!----<v-card-text class="text-prop mt-10" style="font-size: 3vh">
                                     <v-row align="center" justify="center">
                                         <p>Connect Metamask</p>
@@ -48,17 +55,35 @@
                                     <v-btn v-else @click="mint()">Mint NFT</v-btn>
                                 </v-row>-->
 
-                                <div className="Minter">
+                                <div className="Minter" >
                                     <!--botão para conectar carteira:-->
-                                    <v-btn 
-                                        color=#00E676
-                                        :width=200
-                                        v-if="walletAddress==''" 
-                                        id="walletButton" 
-                                        @click="connectWalletPressed()">
-                                        
-                                        <span>Connect Wallet</span>
-                                    </v-btn>
+                                    <div v-if="walletAddress==''" >
+                                            <v-list
+                                            
+                                            v-if="walletAddress==''" 
+                                            style=" backgroundColor: #242121"
+                                            >
+                                            <v-list-item>
+                                                <v-btn 
+                                                    color=#00E676
+                                                    :width=200
+                                                    id="walletButton" 
+                                                    @click="connectWalletPressed()">
+                                                    
+                                                    <span>Connect Wallet</span>
+                                                </v-btn>
+                                            </v-list-item>
+                                            
+                                            <v-list-item>
+                                                <v-btn 
+                                                    color=#EEEBD9
+                                                    :width=200>
+                                                    
+                                                    <span>Help </span>   <!--ToDo: Dialog component com video!!!-->
+                                                </v-btn>
+                                            </v-list-item>
+                                            </v-list>
+                                    </div>
                                     <!--botão carteira já conectada:-->
                                     <v-btn 
                                         color=#00E676
@@ -71,10 +96,7 @@
                                     <p>
                                         {{this.status}}
                                     </p>
-                                </div>
-                            </v-card>
-                            
-                            
+                                </div>   
                         </v-container>
                     </v-list-item>
 
@@ -84,7 +106,7 @@
 
             <!--Icone notificacoes:-->
             <v-btn icon>
-                <v-icon style="color: #FDFDFD">mdi-bell</v-icon>
+                <v-icon style="color: #FDFDFD">mdi-bell-outline</v-icon>
             </v-btn>
 
             <!--Icone e menu login:-->
@@ -94,7 +116,7 @@
                 >
                 <template v-slot:activator="{ props }">
                 <v-btn v-bind="props">
-                    <v-icon style="color: #FDFDFD">mdi-account</v-icon>
+                    <v-icon style="color: #FDFDFD">mdi-account-outline</v-icon>
                 </v-btn>
                 </template>
                 
@@ -172,6 +194,7 @@
             metadata: {
                 loudness: "",
             },*/
+            showMenu : false,
         }
     },
 
@@ -191,6 +214,19 @@
             //this.status = walletResponse.status
             this.walletAddress = walletResponse.address
         },
+
+        //acionado evento no top bar, para conectar wallet:
+        showMenuWallet(){
+            //this.showMenu = true;
+            
+            if(!this.showMenu ){
+                this.showMenu = true;
+            }
+            else {
+                this.showMenu = false;
+            }
+        }
+
     }
 }
 </script>

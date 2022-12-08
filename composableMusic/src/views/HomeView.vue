@@ -1,6 +1,6 @@
 <template>
   <div>
-    <TopBar/>
+    <TopBar ref="TopBar_Ref"/>
     <!--------------------------------------------------------------->
     <div style="backgroundColor: #1A2326">
       <v-container>
@@ -63,7 +63,7 @@
           >
           <!--<Style_MetaData/>-->
           <Style_MetaData ref="Style_MetaData_Ref" @event_SendStyle="getStyles"/>
-          <!---------->
+          <!-----Botão Create Your Own:----->
           <v-container class="d-flex justify-center align-baseline">
             
                 <v-btn 
@@ -100,6 +100,7 @@
                 cols="12"
                 sm="6"
               >
+                <!--Botão Conect Wallet:--->
                 <v-hover
                   v-slot="{ isHovering, props }"
                   open-delay="200"
@@ -112,6 +113,7 @@
                     max-width="350"
                     v-bind="props"
                     color="#00E676"
+                    @click="$refs.TopBar_Ref.showMenuWallet()" 
                   >
                     <v-card-text class="font-weight-medium mt-12 text-center text-h5 text-white">
                       Conect Your Wallet
@@ -124,6 +126,7 @@
                 cols="12"
                 sm="6"
               >
+                <!--Botão Sell your Music:--->
                 <v-hover
                   v-slot="{ isHovering, props }"
                   close-delay="200"
@@ -131,7 +134,7 @@
                 <nav>
                   <RouterLink 
                     style="text-decoration: none; color: inherit;"
-                    to="/artistmint">
+                    to="/UploadSample">
                       <v-card
                         :elevation="isHovering ? 16 : 2"
                         :class="{ 'on-hover': isHovering }"
