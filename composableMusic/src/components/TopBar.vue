@@ -35,8 +35,16 @@
                 <template v-slot:activator="{ props }">
                 <v-btn 
                     v-bind="props"
+                    v-if="walletAddress==''"
                     >
                     <v-icon style="color: #FDFDFD">mdi-wallet-outline</v-icon>
+                </v-btn>
+
+                <v-btn 
+                    v-bind="props"
+                    v-else id="walletButton" 
+                    >
+                    <v-icon style="color: #00E676">mdi-wallet-outline</v-icon>
                 </v-btn>
                 </template>
                 
