@@ -88,7 +88,7 @@
             style="height: pageHeight; "
           >
           <v-card-text class="d-flex justify-center align-baseline">
-            <p :style="style_description">
+            <p style="color: #EEEBD9; font-family: 'Poppins'; font-style: normal; font-weight: 700; font-size: 20px;">
               Your NFT journey starts here
             </p>  
           </v-card-text>

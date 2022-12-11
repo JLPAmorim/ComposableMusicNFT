@@ -14,7 +14,9 @@
         {{ link }}
       </v-btn>
       <v-col class="text-center mt-4" cols="12">
-        {{ new Date().getFullYear() }} — <strong>Invisible Lab</strong>
+        <a href="https://www.invisiblelab.dev/" 
+          style="color: inherit; text-decoration: none;"
+          target="_blank">{{ new Date().getFullYear() }} — <strong>Invisible Lab</strong></a>
       </v-col>
     </v-row>
   </v-footer>

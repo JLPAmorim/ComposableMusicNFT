@@ -1,8 +1,14 @@
 <template>
     <div>
         <v-app-bar class="top_bar" style="backgroundColor: #1a2326 ;"> 
-
-        <v-app-bar-title class="top_bar_title" :style="style_title">Composable Music NFTs </v-app-bar-title>
+        
+        <nav>
+            <RouterLink 
+                style="text-decoration: none; color: inherit;"
+                to="/">      
+                <v-app-bar-title class="top_bar_title" :style="style_title">Composable Music NFTs </v-app-bar-title>
+            </RouterLink>
+        </nav>
         <!--<v-column>
         <v-app-bar-title class="top_bar_title" :style="style_title">
             <v-row weight=0>Composable</v-row>
@@ -74,15 +80,47 @@
                                                 </v-btn>
                                             </v-list-item>
                                             
+                                            <!--Botão Help:-->
                                             <v-list-item>
-                                                <v-btn 
-                                                    color=#EEEBD9
-                                                    :width=200>
+                                                
+                                                <div class="text-center" >
+                                                    <v-dialog
+                                                    v-model="dialogHelp"
                                                     
-                                                    <span>Help </span>   <!--ToDo: Dialog component com video!!!-->
-                                                </v-btn>
+                                                    >
+                                                    <template v-slot:activator="{ props}">
+                                                    
+                                                        <v-btn 
+                                                            v-bind="props"
+                                                            color=#EEEBD9
+                                                            :width=200
+                                                            >
+                                                            <span>Help </span> 
+                                                        </v-btn>
+                                                    </template>
+                                                    
+                                                    <!--Dialog menu Help Metamask:-->
+                                                    <v-card style="opacity: 1.0">
+                                                        <v-card-text>
+                                                            <a style="color=#0b0f0e; fontFamily: Poppins; fontWeight: 800; background-color: transparent; "
+                                                                target="_blank" 
+                                                                href="https://metamask.io/download/">Install Metamask for your browser </a>
+                                                            <p align="center" >
+                                                                <iframe width="560" height="315" src="https://www.youtube.com/embed/YVgfHZMFFFQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                                            </p>
+
+                                                        </v-card-text>
+                                                        <v-card-actions>
+                                                            <v-btn color="#0b0f0e" block @click="dialogHelp = false">Close Dialog</v-btn>
+                                                        </v-card-actions>
+                                                    </v-card>
+                                                    </v-dialog>
+                                                </div>
+                                                
+                                            
+                                            
                                             </v-list-item>
-                                            </v-list>
+                                        </v-list>
                                     </div>
                                     <!--botão carteira já conectada:-->
                                     <v-btn 
@@ -195,6 +233,8 @@
                 loudness: "",
             },*/
             showMenu : false,
+            dialogHelp: false,
+
         }
     },
 
@@ -225,23 +265,24 @@
             else {
                 this.showMenu = false;
             }
-        }
-
+        },
     }
 }
 </script>
 
 <style scoped>
 .top_bar_title{
-font-family: 'Poppins';
-font-style: normal;
-font-weight: 700;
-font-size: 30px;
-line-height: 62px;
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 62px;
 
-color: rgba(2, 228, 148, 0.9);
+    color: rgba(2, 228, 148, 0.9);
 
-text-shadow: 0px 2.76827px 2.76827px rgba(0, 0, 0, 0.25);
+    text-shadow: 0px 2.76827px 2.76827px rgba(0, 0, 0, 0.25);
+
+    padding-left: 15px;
 }
 
 </style>
