@@ -11,3 +11,11 @@ module.exports.inserir = q => {
 module.exports.remover = function(id){
     return User.deleteOne({id: id})
 }
+
+
+// Devolve a lista de users
+module.exports.listar = () => {
+    return User
+        .find()
+        .exec()
+}

@@ -37,6 +37,20 @@ module.exports = router;
   });
 
 
+
+
+  /**
+   * Listar todos os Users
+   */
+
+  router.get('/allUsers', (req, res, next) => {
+    User.listar()
+    .then(dados => res.status(201).jsonp({dados: dados}))
+    .catch(e => res.status(500).jsonp({error: 'Wallet already in use'}))
+
+});
+
+
 /**
  * GET de wallet de Owner por id de NFT(Sample)
  */
@@ -69,6 +83,7 @@ module.exports = router;
     const newUser = {
         name: req.body.name,
         walletAddress: req.body.walletAddress
+
     }
 
     //Inserimos na base de dados
@@ -89,7 +104,8 @@ module.exports = router;
                 title: 'Server error',
                 error: err
               })
-              if(!user) {
+
+            if(!user) {
                 return res.status(401).json({
                   title: 'User not found',
                   error: 'Invalid Credentials'
@@ -101,12 +117,16 @@ module.exports = router;
                   title: 'Login failed',
                   error: 'Invalid Credentials'
                 })
-              }*/
-              let token = jwt.sign({userId: user._id}, 'secretkey');
+              
+              //let token = jwt.sign({userId: user._id}, 'secretkey');
               return res.status(201).json({
                 title: 'Login successful',
                 token: token
-              })
+              })}*/
+            return res.status(201).json({
+                title: 'Login successful',
+                walletAddress: req.body.walletAddress  
+            })     
         })  
   });
 
