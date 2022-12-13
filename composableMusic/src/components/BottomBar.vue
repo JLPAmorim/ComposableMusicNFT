@@ -33,16 +33,6 @@ export default {
     ],
   }),
 }
-export default {
-  data: () => ({
-    links: [
-      'Home',
-      'About Us',
-      'Team',
-      'Contact Us',
-    ],
-  }),
-}
 </script>
 
 
