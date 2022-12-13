@@ -13,8 +13,9 @@
             @click="loader = 'loading3'"
           >
             Upload
-            <v-icon right dark> mdi-cloud-upload </v-icon>
+            <v-icon right dark class="ml-1 mb-1"> mdi-cloud-upload </v-icon>
           </v-btn>
+          <v-file-input></v-file-input>
         </div>
       </v-col>
     </v-row>

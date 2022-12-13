@@ -1,8 +1,8 @@
 <template >
   
   <!--<v-footer class="bg-grey-darken-4" >-->
-  <v-footer style="background-color: #232424;">
-    <v-row justify="center" no-gutters>
+  <v-footer style="background-color: #232424;" height="100%">
+    <v-row justify="center" no-gutters >
       <v-btn
         v-for="link in links"
         :key="link"

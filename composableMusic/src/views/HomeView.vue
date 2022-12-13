@@ -2,13 +2,14 @@
   <div>
     <TopBar ref="TopBar_Ref"/>
     <!--------------------------------------------------------------->
-    <div style="backgroundColor: #1A2326">
+    <div style="backgroundColor: #1A2326" >
       <v-container>
         <v-row
           align="start"
           no-gutters
-          style="height: pageHeight; "
+          :height = "pageHeight"
         >
+        
         
         <v-card-text class="d-flex justify-center align-baseline">
           <p style="color: #67FFC9;
@@ -55,11 +56,11 @@
   <!--------------------------------------------------------------->  
 
     <div style="backgroundColor: #232424">
-        <v-container>
+        <v-container >
           <v-row
             align="start"
             no-gutters
-            style="height: pageHeight; "
+            :height = "pageHeight"
           >
           <!--<Style_MetaData/>-->
           <Style_MetaData ref="Style_MetaData_Ref" @event_SendStyle="getStyles"/>
@@ -81,11 +82,11 @@
     </div>
   <!--------------------------------------------------------------->    
     <div style="backgroundColor: #1A2326">
-        <v-container>
+        <v-container >
           <v-row
             align="start"
             no-gutters
-            style="height: pageHeight; "
+            :height = "pageHeight"
           >
           <v-card-text class="d-flex justify-center align-baseline">
             <p style="color: #EEEBD9; font-family: 'Poppins'; font-style: normal; font-weight: 700; font-size: 20px;">
@@ -158,32 +159,7 @@
           </v-row>
         </v-container>
     </div>
-  <!--------------------------------------------------------------->   
-  <div style="backgroundColor: #232424">
-        <v-container>
-          <v-row
-            align="start"
-            no-gutters
-            style="height: pageHeight; "
-          >
-          <v-card-text class="d-flex justify-center align-baseline">
-            <p :style="style_description">
-              Your NFT journey starts here
-            </p>  
-          </v-card-text>
-
-          <v-container>
-            <p style="color: #EEEBD9;
-              fontFamily: Poppins;
-              fontWeight: 800;">
-            (Temporariamente aqui, vai ser usado no upload e create music:)
-            </p>
-            <MusicPlayer/>
-          </v-container>
-          </v-row>
-        </v-container>
-    </div>
-     <!---------------------------------------------------------------> 
+  
   <BottomBar/>
   </div>
 </template>
@@ -210,7 +186,7 @@ export default defineComponent({
     Bt_AddCart,
     Style_MetaData,
     MusicPlayer,
-    MusicPlayerHome
+    MusicPlayerHome,
   },
 
   data: () => ({        
@@ -219,12 +195,19 @@ export default defineComponent({
         
         
         transparent: 'rgba(255, 255, 255, 0)',
+
+        isMobile: false,
+
+
+        
   }),
+  
   methods:{
     //recebe styles do filho:
     getStyles(value){
       console.log(value);
-    }
+    },
+
   },
   
   setupPageHeight() {
@@ -246,6 +229,19 @@ export default defineComponent({
       })
 
       return { pageHeight }
+    },
+
+    computed: {
+      height () {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': return 1250
+          case 'sm': return 1000
+          case 'md': return 800
+          case 'lg': return 650
+          case 'xl': return 1000
+          case 'xxl': return 1000
+        }
+      },
     },
 })
 </script>

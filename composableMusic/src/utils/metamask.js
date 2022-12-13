@@ -22,7 +22,7 @@ export const connectWallet = async () => {
     } catch (err) {
       return {
         address: "",
-        status: err.message,
+        status: "😥 " + err.message,
       };
     }
   } else {
@@ -44,19 +44,19 @@ export const getCurrentWalletConnected = async () => {
       if (addressArray.length > 0) {
         return {
           address: addressArray[0],
-          status: "Write a message in the text-field above.",
+          status: "👆🏽 Write a message in the text-field above.",
           
         };
       } else {
         return {
           address: "",
-          status: "Connect to Metamask using the top right button.",
+          status: "🦊 Connect to Metamask using the top right button.",
         };
       }
     } catch (err) {
       return {
         address: "",
-        status: err.message,
+        status: "😥 " + err.message,
       };
     }
   } else {
@@ -74,7 +74,7 @@ export const mintArtist = async(value,metadata) => {
   if (!pinataResponse.success) {
       return {
           success: false,
-          status: "Something went wrong while uploading your tokenURI.",
+          status: "😢 Something went wrong while uploading your tokenURI.",
       }
   } 
 
@@ -102,12 +102,12 @@ export const mintArtist = async(value,metadata) => {
            axios.put(localhost:8001/sample#idtoken)
                  incrementar para cada token utilizada no mint o countUsed */
           success: true,
-          status: "Check out your transaction on Etherscan: https://goerli.etherscan.io/tx/" + txHash
+          status: "✅ Check out your transaction on Etherscan: https://goerli.etherscan.io/tx/" + txHash
       }
   } catch (error) {
       return {
           success: false,
-          status: "Something went wrong: " + error.message
+          status: "😥 Something went wrong: " + error.message
       }
   }
 }

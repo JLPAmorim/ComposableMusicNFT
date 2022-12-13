@@ -22,11 +22,11 @@ const router = createRouter({
       name: 'artistmint',
       component: ArtistMint
     },
-    /*{
+    {
       path: '/uploadsample',
-      name: 'uploadSample',
+      name: 'uploadsample',
       component: UploadSample
-    }*/
+    }
 
   ]
 })
