@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import Register from '../views/Register.vue'
 import ArtistMint from '../views/ArtistMint.vue'
+import UploadSample from '../views/UploadSample.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -20,7 +21,12 @@ const router = createRouter({
       path: '/artistmint',
       name: 'artistmint',
       component: ArtistMint
-    }
+    },
+    /*{
+      path: '/uploadsample',
+      name: 'uploadSample',
+      component: UploadSample
+    }*/
 
   ]
 })

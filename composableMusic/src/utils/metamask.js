@@ -4,7 +4,7 @@ import contractABI from './contract-abi.json'
 
 const alchemyKey = import.meta.env.VITE_API_ALCHEMY_KEY
 const web3 = createAlchemyWeb3(alchemyKey);
-const contractAddress = "0xFa636262a29f3b1C60b8E62c9A5E740aA17a51d8";
+const contractAddress = "0xb66E84824Aa8aB9499dE1Be24856585F104b5316";
 
 
 export const connectWallet = async () => {
@@ -22,7 +22,7 @@ export const connectWallet = async () => {
     } catch (err) {
       return {
         address: "",
-        status: "😥 " + err.message,
+        status: err.message,
       };
     }
   } else {
@@ -44,19 +44,19 @@ export const getCurrentWalletConnected = async () => {
       if (addressArray.length > 0) {
         return {
           address: addressArray[0],
-          status: "👆🏽 Write a message in the text-field above.",
+          status: "Write a message in the text-field above.",
           
         };
       } else {
         return {
           address: "",
-          status: "🦊 Connect to Metamask using the top right button.",
+          status: "Connect to Metamask using the top right button.",
         };
       }
     } catch (err) {
       return {
         address: "",
-        status: "😥 " + err.message,
+        status: err.message,
       };
     }
   } else {
@@ -67,28 +67,18 @@ export const getCurrentWalletConnected = async () => {
   }
 };
 
-export const mintNFT = async() => {
-
-  /*//make metadata
-  const metadata = new Object();
-  metadata.style = "Jazz";
-  metadata.description = "Jazz Music";
-  metadata.image = "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr";
-  metadata.name = nameSample;
-  metadata.value = value;
-
+export const mintArtist = async(value,metadata) => {
 
   //pinata pin request
   const pinataResponse = await pinJSONToIPFS(metadata);
   if (!pinataResponse.success) {
       return {
           success: false,
-          status: "😢 Something went wrong while uploading your tokenURI.",
+          status: "Something went wrong while uploading your tokenURI.",
       }
   } 
-  const tokenURI = pinataResponse.pinataUrl;  */
-  
-  const tokenURI = "https://gateway.pinata.cloud/ipfs/QmfNbehKNVHW888uvFN5ybxtKmmbKRvz3FEw8am5VCTu32"
+
+  const tokenURI = pinataResponse.pinataUrl;  
 
   //load smart contract
   window.contract = await new web3.eth.Contract(contractABI, contractAddress);//loadContract();
@@ -97,7 +87,7 @@ export const mintNFT = async() => {
   const transactionParameters = {
       to: contractAddress, // Required except during contract publications.
       from: window.ethereum.selectedAddress, // must match user's active address.
-      'data': window.contract.methods.mintNFT(window.ethereum.selectedAddress, tokenURI).encodeABI() //make call to NFT smart contract 
+      'data': window.contract.methods.generateNFTArtist(window.ethereum.selectedAddress, web3.utils.toBN(web3.utils.toWei(value)), metadata.name, tokenURI).encodeABI() //make call to NFT smart contract 
   };
 
   //sign transaction via Metamask
@@ -108,13 +98,16 @@ export const mintNFT = async() => {
               params: [transactionParameters],
           });
       return {
+          /* for para todas as musicas utilizadas
+           axios.put(localhost:8001/sample#idtoken)
+                 incrementar para cada token utilizada no mint o countUsed */
           success: true,
-          status: "✅ Check out your transaction on Etherscan: https://goerli.etherscan.io/tx/" + txHash
+          status: "Check out your transaction on Etherscan: https://goerli.etherscan.io/tx/" + txHash
       }
   } catch (error) {
       return {
           success: false,
-          status: "😥 Something went wrong: " + error.message
+          status: "Something went wrong: " + error.message
       }
   }
 }

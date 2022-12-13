@@ -20,7 +20,9 @@
                     <v-btn v-else id="walletButton" @click="connectWalletPressed()">
                         
                         <span>Connected: {{this.walletAddress}}</span>
-                        <v-btn @click="onMintPressed()">Mint</v-btn>
+                        <v-btn @click="mintArtistPressed()">Mint</v-btn>
+
+                        <v-btn @click="mintGeneratedPressed()">Mint</v-btn>
                     </v-btn>
 
                     <h1 id="title">🧙‍♂️ Alchemy NFT Minter</h1>
@@ -40,20 +42,48 @@
 </template>
 
 <script>
-import {connectWallet, getCurrentWalletConnected, mintNFT} from "../utils/metamask.js"
+import {connectWallet, getCurrentWalletConnected, mintArtist} from "../utils/metamask.js"
 export default {
      data(){
         return{
-            description: "",
-            name: "",
             status: "",
-            url: "",
             walletAddress: "",
-            value: "0.02ETH",
-            nameSample: "Sample Music: Jazz Music",
+            value: "0.2",
+
+            artist: "Quim Barreiros",
+            duration: "3:34",
+            genre: "Jazz",
+            mood: "Happy",
+            instrument: "Piano",
+
             metadata: {
-                loudness: "",
+                description: "",
+                image: "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr",
+                name: "Cabritinha",
+                attributes: [
+                    {
+                        trait_type: "Artist",
+                        value: ""
+                    },
+                    {
+                        trait_type: "Duration",
+                        value: ""
+                    },
+                    {
+                        trait_type: "Genre",
+                        value: ""
+                    },
+                    {
+                        trait_type: "Mood",
+                        value: ""
+                    },
+                    {
+                        trait_type: "Instrument",
+                        value: ""
+                    }
+                ],
             },
+
         }
     },
 
@@ -84,7 +114,7 @@ export default {
             this.walletAddress = walletResponse.address
         },
         
-        /*addWalletListener() {
+            /*addWalletListener() {
                 if (window.ethereum) {
                     window.ethereum.on("accountsChanged", (accounts) =>{
                     if (accounts.length > 0) {
@@ -101,13 +131,29 @@ export default {
                 }
             },*/
         
-            async onMintPressed() {
+            async mintArtistPressed() {
                 //Try CATCH verificar mintNFT com sucesso
-                const { status } = await mintNFT()
+
+                this.metadata.attributes[0].value = this.artist
+                this.metadata.attributes[1].value = this.duration
+                this.metadata.attributes[2].value = this.genre
+                this.metadata.attributes[3].value = this.mood
+                this.metadata.attributes[4].value = this.instrument
+                
+                const { status } = await mintArtist(this.value, this.metadata)
                         
                 //TODO Mandar pra BD
                 this.status = status
-            }
+            },
+
+            /*async mintGeneratedPressed() {
+                //Try CATCH verificar mintNFT com sucesso
+                
+                const { status } = await mintGenerated(this.value, this.metadata)
+                        
+                //TODO Mandar pra BD
+                this.status = status
+            }*/
         
         
     }
@@ -121,3 +167,4 @@ export default {
 <style>
   
 </style>
+

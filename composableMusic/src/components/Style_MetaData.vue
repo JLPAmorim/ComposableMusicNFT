@@ -4,32 +4,32 @@
         <v-col cols="2.5">
         <p class="title"> Choose your music style:</p>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="Jazz"
           value="Jazz"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="Rock"
           value="Rock"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="Ambient"
           value="Ambient"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="Classic"
           value="Classic"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="R&B"
           value="R&B"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_styles"
           label="Rap"
           value="Rap"
         ></v-checkbox>
@@ -38,27 +38,27 @@
       <v-col cols="2.5">
         <p class="title"> Choose your music mood:</p>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_moods"
           label="Chill"
           value="Chill"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_moods"
           label="Love"
           value="Love"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_moods"
           label="Sad"
           value="Sad"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_moods"
           label="Epic"
           value="Epic"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_moods"
           label="Tense"
           value="Tense"
         ></v-checkbox>
@@ -66,53 +66,53 @@
       <!-------------------------------------------------->
       <v-col cols="2.5">
 
-        <p class="title"> Instruments included:</p>
+        <p class="title" style="padding-bottom: 20px"> Instruments included:</p>
         <v-responsive
           class="overflow-y-auto"
-        max-height="450"
+          max-height="450"
         >
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_instruments"
           label="Piano"
           value="Piano"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_instruments"
           label="Drums"
           value="Drums"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_instruments"
           label="Electric Guitar"
           value="Electric Guitar"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_instruments"
           label="Bass"
           value="Bass"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_instruments"
           label="Classical Guitar"
           value="Classical Guitar"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_instruments"
           label="Violin"
           value="Violin"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_instruments"
           label="Trumpet"
           value="Trumpet"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_instruments"
           label="Saxophone"
           value="Saxophone"
         ></v-checkbox>
         <v-checkbox class="style_boxs"
-          v-model="selected"
+          v-model="selected_instruments"
           label="Harmonica"
           value="Harmonica"
         ></v-checkbox>
@@ -160,9 +160,27 @@
     export default {
       data () {
         return {
-          selected: ['John'],
+          //selected: ['John'],
+          /*selected_style_jazz: [],
+          selected_style_rock: [],
+          selected_style_ambient: [],
+          selected_style_classic: [],
+          selected_style_rb: [],
+          selected_style_rap: [],*/
+          selected_styles: [],
+          selected_moods: [],
+          selected_instruments: [],
         }
       },
+      methods: {
+
+        sendStyle(){
+          this.$emit('event_SendStyle', this.selected_styles)
+          //console.log(this.selected_styles)
+          console.log("testeStyle")
+        }
+
+      }
     }
 </script>
 
