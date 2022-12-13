@@ -33,10 +33,23 @@ export default {
     ],
   }),
 }
+export default {
+  data: () => ({
+    links: [
+      'Home',
+      'About Us',
+      'Team',
+      'Contact Us',
+    ],
+  }),
+}
 </script>
 
 
 <style>
+.ft_style{
+  background-color: #232424;
+}
 .ft_style{
   background-color: #232424;
 }
