@@ -20,18 +20,21 @@
                 v-model="genre"
                 label="Rock"
                 value="Rock"
+                :rules="validateGenres"
               ></v-checkbox>
               <v-checkbox
                 class="style_boxs"
                 v-model="genre"
                 label="Pop"
                 value="Pop"
+                :rules="validateGenres"
               ></v-checkbox>
               <v-checkbox
                 class="style_boxs"
                 v-model="genre"
                 label="Classic"
                 value="Classic"
+                :rules="validateGenres"
               ></v-checkbox>
                
             </v-col>
@@ -43,24 +46,28 @@
                 v-model="mood"
                 label="Sad"
                 value="Sad"
+                :rules="validateMoods"
               ></v-checkbox>
               <v-checkbox
                 class="style_boxs"
                 v-model="mood"
                 label="Happy"
                 value="Happy"
+                :rules="validateMoods"
               ></v-checkbox>
               <v-checkbox
                 class="style_boxs"
                 v-model="mood"
                 label="Love"
                 value="Love"
+                :rules="validateMoods"
               ></v-checkbox>
               <v-checkbox
                 class="style_boxs"
                 v-model="mood"
                 label="Epic"
                 value="Epic"
+                :rules="validateMoods"
               ></v-checkbox>
             </v-col>
             <!-------------------------------------------------->
@@ -71,36 +78,42 @@
                   v-model="instruments"
                   label="Piano"
                   value="Piano"
+                  :rules="validateInstruments"
                 ></v-checkbox>
                 <v-checkbox
                   class="style_boxs"
                   v-model="instruments"
                   label="Drums"
                   value="Drums"
+                  :rules="validateInstruments"
                 ></v-checkbox>
                 <v-checkbox
                   class="style_boxs"
                   v-model="instruments"
                   label="Electric Guitar"
                   value="Electric Guitar"
+                  :rules="validateInstruments"
                 ></v-checkbox>
                 <v-checkbox
                   class="style_boxs"
                   v-model="instruments"
                   label="Bass"
                   value="Bass"
+                  :rules="validateInstruments"
                 ></v-checkbox>
                 <v-checkbox
                   class="style_boxs"
                   v-model="instruments"
                   label="Classical Guitar"
                   value="Classical Guitar"
+                  :rules="validateInstruments"
                 ></v-checkbox>
                 <v-checkbox
                   class="style_boxs"
                   v-model="instruments"
                   label="Violin"
                   value="Violin"
+                  :rules="validateInstruments"
                 ></v-checkbox>
             </v-col>
 
@@ -133,15 +146,19 @@
             </v-col>
 
             <v-col cols="1"></v-col>
+
             <v-col cols="4" >
-              <v-text-field
-              v-model="value"
-              :rules="rules.value"
-              label="Sample Value"
-              type="text"
-              class="text--white"
-            />
+              <v-file-input
+                v-model="sampleFile"
+                ref="sampleInput"
+                label="Upload Sample"
+                accept="audio/*"
+                prepend-icon="mdi-cloud-upload"
+                show-size
+                @change="uploadAudio()"
+              ></v-file-input>
             </v-col>
+            
             
           </v-row>
           <v-row>
@@ -155,15 +172,24 @@
             </v-col>
             <v-col cols="1"></v-col>
             
-            <v-col cols="4" >
-              <v-file-input
-                v-model="soundFile"
-                label="Upload Sample"
-                accept="audio/*"
-                prepend-icon="mdi-cloud-upload"
-                show-size
-                counter
-              ></v-file-input>
+            <v-col cols="4">
+            <MusicPlayerHome v-if="sampleUrl!=''" :priceParent="value" :musicLink="sampleUrl"/>
+            
+                  
+
+            </v-col>
+            
+          </v-row>
+
+          <v-row>
+            <v-col cols="5" class="ml-16">
+              <v-text-field
+              v-model="value"
+              :rules="rules.value"
+              label="Sample Value"
+              type="text"
+              class="text--white"
+            />
             </v-col>
           </v-row>
           
@@ -182,10 +208,10 @@
             <v-col cols="1"></v-col>
             <v-col cols="5">
               <v-btn v-if="this.connected" :width="450" :height="55" color="green" 
-                class="mt-6 ml-16 white--text" @click="mintArtistPressed()">
+                class="mb-6 ml-16 white--text" @click="mintArtistPressed()">
                   Mint
                 </v-btn>
-                <v-btn v-else :width="450" :height="55" color="green" class="mt-6 ml-16 white--text" @click="connectWalletPressed()">
+                <v-btn v-else :width="450" :height="55" color="green" class="mb-6 ml-16 white--text" @click="connectWalletPressed()">
                   Connect Wallet
                 </v-btn>
             </v-col>
@@ -203,6 +229,8 @@
 import TopBar from "../components/TopBar.vue";
 import BottomBar from "../components/BottomBar.vue";
 import UploadSample from "../components/UploadSample.vue";
+import MusicPlayer from '../components/MusicPlayerHome.vue';
+import MusicPlayerHome from '../components/MusicPlayerHome.vue';
 import {connectWallet, getCurrentWalletConnected, mintArtist} from "../utils/metamask.js"
 import axios from 'axios'
 
@@ -212,6 +240,8 @@ export default {
     TopBar,
     UploadSample,
     BottomBar,
+    MusicPlayer,
+    MusicPlayerHome,
   },
   data(){
     return{
@@ -241,7 +271,8 @@ export default {
       genre: "",
       mood: "",
       instruments: [],
-      soundFile: undefined,
+      sampleFile: "",
+      sampleUrl: "",
 
       value: "",
 
@@ -300,7 +331,27 @@ export default {
 
     methods:{
 
-        validateField () {
+        uploadAudio() {
+          // Create a new audio element
+          const audio = new Audio()
+
+          const file = this.$refs.sampleInput.files[0]
+          const fileObject = new File([file], file.name)
+          this.sampleUrl = URL.createObjectURL(fileObject)
+
+          // Set the source of the audio file to the selected file
+          audio.src = this.sampleUrl
+
+          // Listen for the "loadedmetadata" event, which is triggered when
+          // the duration of the audio file is available
+          audio.addEventListener("loadedmetadata", () => {
+            // Output the duration of the audio file
+            this.duration = audio.duration
+            console.log(this.duration)
+          })
+        },
+      
+        validateForms () {
           this.$refs.form.validate()
         },
 
@@ -312,49 +363,56 @@ export default {
                 this.connected=true
         },
 
+        
+
         async mintArtistPressed() {
+            
             //Try CATCH verificar mintNFT com sucesso
+            if(this.$refs.form.validate()){
+              this.metadata.attributes[0].value = this.artist
+              this.metadata.attributes[1].value = this.duration
+              this.metadata.attributes[2].value = this.genre
+              this.metadata.attributes[3].value = this.mood
 
-            this.metadata.attributes[0].value = this.artist
-            this.metadata.attributes[1].value = this.duration
-            this.metadata.attributes[2].value = this.genre
-            this.metadata.attributes[3].value = this.mood
+              this.sampleData.walletOwner = this.walletAddress
+              this.sampleData.description = this.metadata.description
+              this.sampleData.name = this.metadata.name
+              this.sampleData.attributes = this.metadata.attributes
+              this.sampleData.value = this.value
+              //this.sampleData.soundFile
 
-            this.sampleData.walletOwner = this.walletAddress
-            this.sampleData.description = this.metadata.description
-            this.sampleData.name = this.metadata.name
-            this.sampleData.attributes = this.metadata.attributes
-            this.sampleData.value = this.value
-            //this.sampleData.soundFile
-
-            var i
-
-            for(i=0; i<this.instruments.length; i++){
-              const newTrait = {
-                trait_type: "Instrument",
-                value: ""
+              let i
+              for(i=0; i<this.instruments.length; i++){
+                const newTrait = {
+                  trait_type: "Instrument",
+                  value: ""
+                }
+                newTrait.value = this.instruments[i]
+                this.metadata.attributes[i+4] = newTrait
               }
-              newTrait.value = this.instruments[i]
-              this.metadata.attributes[i+4] = newTrait
+
+              console.log("Value: " + this.value)
+              console.log(this.metadata)
+              
+              const { success, status } = await mintArtist(this.value, this.metadata)
+              console.log(status)
+              console.log("--------------------")
+              console.log(this.sampleData)
+
+              
+              if(success){
+                axios.post(`http://localhost:8001/mintSample`, this.sampleData)
+                    .then(function(response){
+                        console.log(response)
+                    },(error) =>{
+                        console.log(error);
+                });
+              }
+            }else{
+              console.log("Invalid Fields")
             }
 
-            console.log("Value: " + this.value)
-            console.log(this.metadata)
             
-            const { success, status } = await mintArtist(this.value, this.metadata)
-            console.log(status)
-            console.log("--------------------")
-            console.log(this.sampleData)
-
-            
-            if(success){
-              axios.post(`http://localhost:8001/mintSample`, this.sampleData)
-                  .then(function(response){
-                      console.log(response)
-                  },(error) =>{
-                      console.log(error);
-              });
-            }
         },
 
         log(){
@@ -386,7 +444,24 @@ export default {
             //TODO Mandar pra BD
             this.status = status
         }*/
-    }
+    },
+    computed: {
+      validateGenres () {
+        return [
+          this.genre!= "" || "Select a Genre"
+        ]
+      },
+      validateMoods () {
+        return [
+          this.mood!="" || "Select a Mood"
+        ]
+      },
+      validateInstruments () {
+        return [
+          this.instruments.length > 0 || "Select at least one Instrument"
+        ]
+      }
+    },
 }
 </script>
 
