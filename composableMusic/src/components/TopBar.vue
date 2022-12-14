@@ -18,6 +18,77 @@
 
         <v-spacer></v-spacer>
         <v-column style="padding-right: 2.5%;">
+            
+            <!--Resources:-->
+            <v-menu
+                :close-on-content-click="false"
+                :width=350
+                >
+                <template v-slot:activator="{ props }">
+                <v-btn  v-bind="props">
+                    <p class="style_resources">Explore</p>
+                </v-btn>
+                </template>
+                
+                <v-list style=" backgroundColor: #242121">
+
+                   
+                    <v-list-item>
+                        <v-container fill-height fluid>
+
+                                <div class="text-center"  >
+                                    <!--botão create your own:-->
+                                    <div>
+                                            <v-list
+                                            style=" backgroundColor: #242121"
+                                            >
+                                            <v-list-item
+                                                style=" padding-bottom: 15px">
+                                                <nav>
+                                                    <RouterLink 
+                                                        style="text-decoration: none; color: inherit;"
+                                                        to="/">   
+                                                        <v-btn 
+                                                            color=#EEEBD9
+                                                            :width=250
+                                                            class="noUpperCaseButton"
+                                                            >                                        
+                                                            <span class="style_buttons">Create your own Music</span>
+                                                        </v-btn>
+                                                    </RouterLink>
+                                                </nav>
+
+                                            </v-list-item>
+                                            
+                                            <!--Botão Upload Sample:-->
+                                            <v-list-item
+                                                style=" padding-bottom: 15px">
+                                                <nav>
+                                                    <RouterLink 
+                                                        style="text-decoration: none; color: inherit;"
+                                                        to="/UploadSample/">   
+                                                        <v-btn 
+                                                            color=#EEEBD9
+                                                            :width=250
+                                                            class="noUpperCaseButton">                                        
+                                                            <span class="style_buttons">Upload Your Sample</span>
+                                                        </v-btn>
+                                                    </RouterLink>
+                                                </nav>
+
+                                            </v-list-item>
+                                        </v-list>
+                                    </div>
+                                </div>
+                        </v-container>
+                    </v-list-item>
+
+
+                </v-list>
+            </v-menu>
+
+
+
             <!--Icone search-->
             <v-btn icon>
                 <v-icon style="color: #FDFDFD">mdi-magnify</v-icon>
@@ -291,6 +362,26 @@
     text-shadow: 0px 2.76827px 2.76827px rgba(0, 0, 0, 0.25);
 
     padding-left: 15px;
+}
+
+.style_resources{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 900;
+    font-size: 15px;
+    color: rgba(256, 256, 256, 0.9);
+
+}
+
+.style_buttons{
+    font-family: 'Poppins';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.noUpperCaseButton{
+    text-transform: unset !important;
 }
 
 </style>

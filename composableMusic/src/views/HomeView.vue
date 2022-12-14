@@ -15,7 +15,7 @@
           <p style="color: #67FFC9;
              fontFamily: Poppins;
              fontWeight: 800;">
-            Composable music NFTs is a new AI system that can create original, realistic musics from your music creations. It can combine ______, ______ and ______
+            Composable music NFTs is a new AI assisted platform that can create original music from yours and other featured artists music creations.
           </p>
         </v-card-text>
         <!---------->
@@ -23,7 +23,7 @@
           <p style="color: #EEEBD9;
               fontFamily: Poppins;
               fontWeight: 800;">
-            Latest Sales
+            Latest Sales:
           </p>
           <v-container fluid>
           <v-row>

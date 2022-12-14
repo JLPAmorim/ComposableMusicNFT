@@ -1,12 +1,11 @@
 <template>
-  <div v-bind:style="{ backgroundColor: '#1A2326' }">
+  <div>
     <TopBar />
 
+    <div style="backgroundColor: #1A2326;" >
       <v-card-text class="d-flex justify-center align-baseline">
         <p :style="style_description">
-          Composable music NFTs is a new AI system that can create original,
-          realistic musics from your music creations. It can combine ______,
-          ______ and ______
+          Composable music NFTs is a new AI assisted platform that can create original music from yours and other featured artists music creations.
         </p>
       </v-card-text>
       
@@ -39,7 +38,7 @@
                
             </v-col>
             <!-------------------------------------------------->
-            <v-col cols="2">
+            <v-col cols="2" style="padding-left:30px">
               <p class="title">Choose your music mood:</p>
               <v-checkbox
                 class="style_boxs"
@@ -71,7 +70,7 @@
               ></v-checkbox>
             </v-col>
             <!-------------------------------------------------->
-            <v-col cols="2">
+            <v-col cols="2" style="padding-left:10px">
               <p class="title">Instruments included:</p>
                 <v-checkbox
                   class="style_boxs"
@@ -122,8 +121,8 @@
               <div class="ma-4"></div>
             </v-col>
             <!-------------------------------------------------->
-            <!-------------------Vídeo:------------------------------->
-            <v-col cols="4">
+            <!-------------------Restantes campos:------------------------------->
+            <!--<v-col cols="4">
               <div>
                 <v-img
                   width="500"
@@ -131,19 +130,54 @@
                   src="https://i.imgur.com/L7h7hKd.png"
                 ></v-img>
               </div>
-            </v-col>
-          </v-row>
-
-          <v-row>
-            <v-col cols="5" class="ml-16">
+            </v-col>-->
+            <v-col cols="4" class="ml-0" style="padding-top: 30px;">
               <v-text-field
               v-model="metadata.name"
               :rules=[...rules.required,...rules.length45]
               label="Sample Name"
               type="text"
+              color=#00E676
+              class="custom-label-color"
               required
             />
+
+            <v-text-field
+              v-model="artist"
+              :rules=[...rules.required,...rules.length30]
+              label="What's your Artist Name?"
+              color=#00E676
+              class="custom-label-color"
+              type="text"
+            />
+
+            <v-text-field
+              v-model="value"
+              :rules="rules.value"
+              label="Sample Value"
+              type="text"
+              color=#00E676
+              class="custom-label-color"
+            />
+
+            <v-textarea
+                v-model="metadata.description"
+                :rules=[...rules.required,...rules.length150]
+                auto-grow
+                variant="filled"
+                label="Write a short description about your Sample"
+                rows="2"
+                color=#00E676
+                class="custom-label-color"
+                counter
+              ></v-textarea>
             </v-col>
+          </v-row>
+
+          <!--Linha upload sample, botão mint e preview-->
+
+          <v-row style="padding-top:2%">
+            
 
             <v-col cols="1"></v-col>
 
@@ -155,73 +189,43 @@
                 accept="audio/*"
                 prepend-icon="mdi-cloud-upload"
                 show-size
+                color=#00E676
+                class="custom-label-color"
                 @change="uploadAudio()"
               ></v-file-input>
+            
+              <!--Botão de mint, caso wallet conectada-->
+              <div style="padding-top:8%">
+                <v-btn v-if="this.connected" :width="450" :height="55" color=#00E676
+                  class="mb-6 ml-16 white--text" @click="mintArtistPressed()">
+                    Mint
+                  </v-btn>
+                  <!--Botão conect Wallet, caso não esteja conectada:-->
+                  <v-btn 
+                    v-else :width="450" 
+                    :height="55" 
+                    color=#00E676
+                    class="mb-6 ml-16 white--text" 
+                    @click="connectWalletPressed()">
+                    Connect Wallet
+                  </v-btn>
+              </div>
             </v-col>
             
-            
-          </v-row>
-          <v-row>
-            <v-col cols="5" class="ml-16">
-              <v-text-field
-              v-model="artist"
-              :rules=[...rules.required,...rules.length30]
-              label="What's your Artist Name?"
-              type="text"
-            />
-            </v-col>
-            <v-col cols="1"></v-col>
-            
-            <v-col cols="4">
-            <MusicPlayerHome v-if="sampleUrl!=''" :priceParent="value" :musicLink="sampleUrl"/>
-            
-                  
-
-            </v-col>
-            
-          </v-row>
-
-          <v-row>
-            <v-col cols="5" class="ml-16">
-              <v-text-field
-              v-model="value"
-              :rules="rules.value"
-              label="Sample Value"
-              type="text"
-              class="text--white"
-            />
-            </v-col>
-          </v-row>
           
-          <v-row>
-            <v-col cols="5" class="ml-16">
-              <v-textarea
-                v-model="metadata.description"
-                :rules=[...rules.required,...rules.length150]
-                auto-grow
-                variant="filled"
-                label="Write a short description about your Sample"
-                rows="2"
-                counter
-              ></v-textarea>
-            </v-col>
             <v-col cols="1"></v-col>
             <v-col cols="5">
-              <v-btn v-if="this.connected" :width="450" :height="55" color="green" 
-                class="mb-6 ml-16 white--text" @click="mintArtistPressed()">
-                  Mint
-                </v-btn>
-                <v-btn v-else :width="450" :height="55" color="green" class="mb-6 ml-16 white--text" @click="connectWalletPressed()">
-                  Connect Wallet
-                </v-btn>
+              <div style="padding-left:10%">
+                <MusicPlayer v-if="sampleUrl!=''" :musicLink="sampleUrl"/>
+              </div>
             </v-col>
           </v-row>
+
         </v-container>
       </v-form>
         
-      
-      <BottomBar />
-  
+    </div>
+    <BottomBar />
   </div>
 </template>
 
@@ -229,7 +233,7 @@
 import TopBar from "../components/TopBar.vue";
 import BottomBar from "../components/BottomBar.vue";
 import UploadSample from "../components/UploadSample.vue";
-import MusicPlayer from '../components/MusicPlayerHome.vue';
+import MusicPlayer from '../components/MusicPlayer.vue';
 import MusicPlayerHome from '../components/MusicPlayerHome.vue';
 import {connectWallet, getCurrentWalletConnected, mintArtist} from "../utils/metamask.js"
 import axios from 'axios'
@@ -465,3 +469,9 @@ export default {
 }
 </script>
 
+<style>
+  .custom-label-color .v-label{
+    color: #FAFAFA!important;
+    opacity: 1;
+  }
+</style>

@@ -1,14 +1,18 @@
 <template>
     <v-container fluid >
 
-            <v-card width="400" height="100" color="#232424"  >
+            <v-card width="400" height="115" color="#232424"  >
 
-            <audio :id="playerid" style="display:none" ref="player">
+            <!--<audio :id="playerid" style="display:none" ref="player">
                 <source src="https://www.mboxdrive.com/Tinatic%20en%20flauta%20FAIL%20-%20Desgracias%20de%20la%20vida.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>-->
+            <audio :id="playerid" v-if="musicLink!=''" style="display:none" ref="player">  <!--v-if novo!!!-->
+                <source :src="musicLink" type="audio/mpeg" >
                 Your browser does not support the audio element.
             </audio>
             <v-row justify="space-around" >
-                <v-container >
+                <v-container style="padding-left: 5%; padding-top: 6%;">
                     <!--botão play:-->
                     <v-btn 
                         id="bt_play" 
@@ -20,7 +24,7 @@
                     </v-btn>
 
                     <!--barra de progresso da música:-->
-                    <div id="progress-bar" style="display: inline-block; width: 220px; padding-left: 5px;">
+                    <div id="progress-bar" style="display: inline-block; width: 220px; padding-left: 10px;">
                         <v-slider 
                         type="range"
                             min= "0"
@@ -63,6 +67,8 @@
 
 <script>
  export default {
+    props: [ "playerid", "musicLink"],
+
     data (){
         return {
             isDisabled: true,
