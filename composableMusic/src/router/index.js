@@ -3,6 +3,8 @@ import HomeView from '../views/HomeView.vue'
 import Register from '../views/Register.vue'
 import ArtistMint from '../views/ArtistMint.vue'
 import UploadSample from '../views/UploadSample.vue'
+import Generate from '../views/Generate.vue'
+import Confirmpurchase from '../views/Confirmpurchase.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -26,8 +28,17 @@ const router = createRouter({
       path: '/uploadsample',
       name: 'uploadsample',
       component: UploadSample
+    },
+    {
+      path: '/generate',
+      name: 'Generate',
+      component: Generate
+    },
+    {
+      path: '/confirmpurchase',
+      name: 'Confirmpurchase',
+      component: Confirmpurchase
     }
-
   ]
 })
 
