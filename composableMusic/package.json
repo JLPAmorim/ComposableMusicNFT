@@ -8,6 +8,7 @@
     "dev": "vite",
     "preview": "vite preview"
   },
+
   "dependencies": {
     "@mdi/font": "5.9.55",
     "axios": "^1.1.3",

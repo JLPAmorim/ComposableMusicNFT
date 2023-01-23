@@ -29,3 +29,31 @@ export const pinJSONToIPFS = async(JSONBody) => {
 
     });
 };
+
+export const pinFileToIPFS = async(file) => {
+    const url = `https://api.pinata.cloud/pinning/pinFileToIPFS`;
+    const formData = new FormData();
+    formData.append('file', file);
+    //making axios POST request to Pinata ⬇️
+    return axios 
+        .post(url, formData, {
+            headers: {
+                pinata_api_key: key,
+                pinata_secret_api_key: secret,
+            }
+        })
+        .then(function (response) {
+           return {
+               success: true,
+               pinataUrl: "https://gateway.pinata.cloud/ipfs/" + response.data.IpfsHash
+           };
+        })
+        .catch(function (error) {
+            console.log(error)
+            return {
+                success: false,
+                message: error.message,
+            }
+
+    });
+};

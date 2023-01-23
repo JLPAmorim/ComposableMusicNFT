@@ -9,179 +9,158 @@
         </p>
       </v-card-text>
       
-        <v-form v-model="valid" ref="form">
+        <v-form v-model="valid" ref="form" >
           <v-container fluid>
             <v-row dense="6">
-            <v-col cols="2" class="ml-5">
-              <p class="title">Choose your music genre:</p>
-              <v-checkbox
-                class="style_boxs"
-                v-model="genre"
-                label="Rock"
-                value="Rock"
-                :rules="validateGenres"
-              ></v-checkbox>
-              <v-checkbox
-                class="style_boxs"
-                v-model="genre"
-                label="Pop"
-                value="Pop"
-                :rules="validateGenres"
-              ></v-checkbox>
-              <v-checkbox
-                class="style_boxs"
-                v-model="genre"
-                label="Classic"
-                value="Classic"
-                :rules="validateGenres"
-              ></v-checkbox>
-               
-            </v-col>
-            <!-------------------------------------------------->
-            <v-col cols="2" style="padding-left:30px">
-              <p class="title">Choose your music mood:</p>
-              <v-checkbox
-                class="style_boxs"
-                v-model="mood"
-                label="Sad"
-                value="Sad"
-                :rules="validateMoods"
-              ></v-checkbox>
-              <v-checkbox
-                class="style_boxs"
-                v-model="mood"
-                label="Happy"
-                value="Happy"
-                :rules="validateMoods"
-              ></v-checkbox>
-              <v-checkbox
-                class="style_boxs"
-                v-model="mood"
-                label="Love"
-                value="Love"
-                :rules="validateMoods"
-              ></v-checkbox>
-              <v-checkbox
-                class="style_boxs"
-                v-model="mood"
-                label="Epic"
-                value="Epic"
-                :rules="validateMoods"
-              ></v-checkbox>
-            </v-col>
-            <!-------------------------------------------------->
-            <v-col cols="2" style="padding-left:10px">
-              <p class="title">Instruments included:</p>
-                <v-checkbox
-                  class="style_boxs"
-                  v-model="instruments"
-                  label="Piano"
-                  value="Piano"
-                  :rules="validateInstruments"
-                ></v-checkbox>
-                <v-checkbox
-                  class="style_boxs"
-                  v-model="instruments"
-                  label="Drums"
-                  value="Drums"
-                  :rules="validateInstruments"
-                ></v-checkbox>
-                <v-checkbox
-                  class="style_boxs"
-                  v-model="instruments"
-                  label="Electric Guitar"
-                  value="Electric Guitar"
-                  :rules="validateInstruments"
-                ></v-checkbox>
-                <v-checkbox
-                  class="style_boxs"
-                  v-model="instruments"
-                  label="Bass"
-                  value="Bass"
-                  :rules="validateInstruments"
-                ></v-checkbox>
-                <v-checkbox
-                  class="style_boxs"
-                  v-model="instruments"
-                  label="Classical Guitar"
-                  value="Classical Guitar"
-                  :rules="validateInstruments"
-                ></v-checkbox>
-                <v-checkbox
-                  class="style_boxs"
-                  v-model="instruments"
-                  label="Violin"
-                  value="Violin"
-                  :rules="validateInstruments"
-                ></v-checkbox>
-            </v-col>
+              <v-col cols="6">
+                <v-row>
+                  <!-------------- Music Genre ----------------->
+                  <v-col cols="5" class="mt-16">
+                    <p class="title ml-6">Choose your music genre:</p>
+                    <v-select
+                      v-model="genre"
+                      label="Music Genre"
+                      :items="genreList"
+                      :rules="rules.required"
+                      required
+                      density="comfortable"
+                      class="ml-6 mt-10"
+                    />
+                  </v-col>
+                  <!-------------- Music Mood ----------------->
+                  <v-col cols="5" class="mt-16">
+                    <p class="title ml-6">Choose your music mood:</p>
+                    <v-select
+                      v-model="mood"
+                      label="Music Mood"
+                      :items="moodList"
+                      :rules="rules.required"
+                      required
+                      density="comfortable"
+                      class="ml-6 mt-10"
+                    />
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <p class="title mt-10 ml-9">Instruments included:</p>
+                </v-row>
+                <v-row>
+                  <v-col cols="4">
+                    <v-checkbox
+                      class="style_boxs mt-7 ml-16"
+                      v-model="instruments"
+                      label="Electric Guitar"
+                      value="Electric Guitar"
+                      :rules="validateInstruments"
+                    ></v-checkbox>
+                  </v-col>
 
-            <!------------Espaçamento-->
-            <v-col cols="1">
-              <div class="ma-4"></div>
-            </v-col>
-            <!-------------------------------------------------->
-            <!-------------------Restantes campos:------------------------------->
-            <!--<v-col cols="4">
-              <div>
-                <v-img
-                  width="500"
-                  :aspect-ratio="1"
-                  src="https://i.imgur.com/L7h7hKd.png"
-                ></v-img>
-              </div>
-            </v-col>-->
-            <v-col cols="4" class="ml-0" style="padding-top: 30px;">
-              <v-text-field
-              v-model="metadata.name"
-              :rules=[...rules.required,...rules.length45]
-              label="Sample Name"
-              type="text"
-              color=#00E676
-              class="custom-label-color"
-              required
-            />
+                  <v-col cols="4">
+                    <v-checkbox
+                      class="style_boxs mt-7 ml-16"
+                      v-model="instruments"
+                      label="Classical Guitar"
+                      value="Classical Guitar"
+                      :rules="validateInstruments"
+                    ></v-checkbox>
+                  </v-col>
 
-            <v-text-field
-              v-model="artist"
-              :rules=[...rules.required,...rules.length30]
-              label="What's your Artist Name?"
-              color=#00E676
-              class="custom-label-color"
-              type="text"
-            />
+                  <v-col cols="4">
+                    <v-checkbox
+                      class="style_boxs mt-7 ml-16"
+                      v-model="instruments"
+                      label="Violin"
+                      value="Violin"
+                      :rules="validateInstruments"
+                    ></v-checkbox>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="4">
+                    <v-checkbox
+                      class="style_boxs ml-16"
+                      v-model="instruments"
+                      label="Piano"
+                      value="Piano"
+                      :rules="validateInstruments"
+                    ></v-checkbox>
+                  </v-col>
 
-            <v-text-field
-              v-model="value"
-              :rules="rules.value"
-              label="Sample Value"
-              type="text"
-              color=#00E676
-              class="custom-label-color"
-            />
+                  <v-col cols="4">
+                    <v-checkbox
+                      class="style_boxs ml-16"
+                      v-model="instruments"
+                      label="Drums"
+                      value="Drums"
+                      :rules="validateInstruments"
+                    ></v-checkbox>
+                  </v-col>
 
-            <v-textarea
-                v-model="metadata.description"
-                :rules=[...rules.required,...rules.length150]
-                auto-grow
-                variant="filled"
-                label="Write a short description about your Sample"
-                rows="2"
-                color=#00E676
-                class="custom-label-color"
-                counter
-              ></v-textarea>
-            </v-col>
-          </v-row>
+                  <v-col cols="4">
+                    <v-checkbox
+                      class="style_boxs ml-16"
+                      v-model="instruments"
+                      label="Bass"
+                      value="Bass"
+                      :rules="validateInstruments"
+                    ></v-checkbox>
+                  </v-col>
+                </v-row>
+              </v-col>
+
+              <v-col cols="4" class="mt-16 ml-10">
+                <v-text-field
+                  v-model="metadata.name"
+                  :rules=[...rules.required,...rules.length45]
+                  label="Sample Name"
+                  type="text"
+                  color=#00E676
+                  class="custom-label-color"
+                  required
+                />
+
+                <v-text-field
+                  v-model="artist"
+                  :rules=[...rules.required,...rules.length30]
+                  label="What's your Artist Name?"
+                  color=#00E676
+                  class="custom-label-color"
+                  type="text"
+                />
+
+                <v-text-field
+                  v-model="value"
+                  :rules="rules.value"
+                  label="Sample Value"
+                  type="text"
+                  color=#00E676
+                  class="custom-label-color"
+                />
+
+                <v-textarea
+                  v-model="metadata.description"
+                  :rules=[...rules.required,...rules.length150]
+                  auto-grow
+                  variant="filled"
+                  label="Write a short description about your Sample"
+                  rows="2"
+                  color=#00E676
+                  class="custom-label-color"
+                  counter
+                ></v-textarea>
+              </v-col>
+            </v-row>
 
           <!--Linha upload sample, botão mint e preview-->
 
-          <v-row style="padding-top:2%">
-            
+          <v-row>
+            <p class="title mt-10 ml-9">Upload Sample</p>
+          </v-row>
 
-            <v-col cols="1"></v-col>
+          <v-row style="padding-top:1.45%">
 
-            <v-col cols="4" >
+
+            <v-col cols="5" style="padding-left:4.45%" >
               <v-file-input
                 v-model="sampleFile"
                 ref="sampleInput"
@@ -190,40 +169,45 @@
                 prepend-icon="mdi-cloud-upload"
                 show-size
                 color=#00E676
-                class="custom-label-color"
+                style="padding-right:10%"
+                class="custom-label-color ml-1"
                 @change="uploadAudio()"
-              ></v-file-input>
+              ></v-file-input>       
+            </v-col>
             
+            <v-col cols="1"></v-col>
+
+            <v-col cols="4" style="padding-left:2%">
               <!--Botão de mint, caso wallet conectada-->
-              <div style="padding-top:8%">
-                <v-btn v-if="this.connected" :width="450" :height="55" color=#00E676
-                  class="mb-6 ml-16 white--text" @click="mintArtistPressed()">
+                <v-btn v-if="this.connected" :width="500" :height="55" color=#00E676
+                  class="white--text ml-16" @click="mintArtistPressed()" >
                     Mint
                   </v-btn>
                   <!--Botão conect Wallet, caso não esteja conectada:-->
                   <v-btn 
-                    v-else :width="450" 
+                    v-else :width="550" 
                     :height="55" 
                     color=#00E676
                     class="mb-6 ml-16 white--text" 
                     @click="connectWalletPressed()">
                     Connect Wallet
                   </v-btn>
-              </div>
-            </v-col>
-            
-          
-            <v-col cols="1"></v-col>
-            <v-col cols="5">
-              <div style="padding-left:10%">
-                <MusicPlayer v-if="sampleUrl!=''" :musicLink="sampleUrl"/>
-              </div>
             </v-col>
           </v-row>
 
+          <v-row v-if="!musicUploaded" style="padding-top:4%"/>
+
+          <v-row >
+                <v-col cols="6" style="padding-left:5.45%">
+                  <MusicPlayer v-if="sampleUrl!=''" :musicLink="sampleUrl"/>
+                </v-col>
+          </v-row>
+          <v-dialog v-model="dialogMint">
+            <v-btn>Hello</v-btn>
+          </v-dialog>
+
         </v-container>
       </v-form>
-        
     </div>
     <BottomBar />
   </div>
@@ -237,6 +221,8 @@ import MusicPlayer from '../components/MusicPlayer.vue';
 import MusicPlayerHome from '../components/MusicPlayerHome.vue';
 import {connectWallet, getCurrentWalletConnected, mintArtist} from "../utils/metamask.js"
 import axios from 'axios'
+import {pinFileToIPFS} from '../utils/pinata.js'
+
 
 export default {
 
@@ -256,13 +242,13 @@ export default {
       },
 
       rules: {
-        required: [ v => !!v || 'This field is required!' ],
+        required: [ v => !!v || "This field is required!" ],
         length30: [v => (v && v.length <= 30) || "Field must be less or equal than 30 characters!"],
         length45: [v => (v && v.length <= 45) || "Field must be less or equal than 45 characters!"],
         length150: [v => (v && v.length <= 150) || "Field must be less or equal than 45 characters!"],
-        value: [v => /^[0-9]\d*(\.\d+)?$/.test(v) || 'Value isn\'t valid!'],
+        value: [v => /^[0-9]\d*(\.\d+)?$/.test(v) || "Value isn\'t valid!"],
       },
-      
+
       mintable: true,
       connected: false,
       status: "",
@@ -270,20 +256,23 @@ export default {
       
 
       artist: "",
-      // Arranjar maneira de ir buscar a duração da sample
       duration: "3:34",
+      genreList: ["Rock","Pop","Classic"],
+      moodList: ["Sad", "Happy", "Love", "Epic"],
       genre: "",
       mood: "",
       instruments: [],
       sampleFile: "",
       sampleUrl: "",
-
       value: "",
+      musicUploaded:false,
 
+      //Metadata Object sent to IPFS
       metadata: {
           description: "",
           image: "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr",
           name: "",
+          animation_url: "",
           attributes: [
               {
                   trait_type: "Artist",
@@ -303,6 +292,9 @@ export default {
               }
           ],
       },
+
+      //Sample Object sent to DB
+
       sampleData:{
         walletOwner: "",
         countMinted: "0",
@@ -353,11 +345,10 @@ export default {
             this.duration = audio.duration
             console.log(this.duration)
           })
+          this.musicUploaded=true
         },
       
-        validateForms () {
-          this.$refs.form.validate()
-        },
+
 
         async connectWalletPressed(){
             const walletResponse = await connectWallet()
@@ -367,99 +358,76 @@ export default {
                 this.connected=true
         },
 
-        
 
         async mintArtistPressed() {
-            
-            //Try CATCH verificar mintNFT com sucesso
-            if(this.$refs.form.validate()){
-              this.metadata.attributes[0].value = this.artist
-              this.metadata.attributes[1].value = this.duration
-              this.metadata.attributes[2].value = this.genre
-              this.metadata.attributes[3].value = this.mood
 
-              this.sampleData.walletOwner = this.walletAddress
-              this.sampleData.description = this.metadata.description
-              this.sampleData.name = this.metadata.name
-              this.sampleData.attributes = this.metadata.attributes
-              this.sampleData.value = this.value
-              //this.sampleData.soundFile
-
-              let i
-              for(i=0; i<this.instruments.length; i++){
-                const newTrait = {
-                  trait_type: "Instrument",
-                  value: ""
+          if(this.$refs.form.validate()){
+            const audio = this.$refs.sampleInput.files[0]
+            this.dialogMint=true
+            const pinataAudio = await pinFileToIPFS(audio);
+            if (!pinataAudio.success) {
+                return {
+                    success: false,
+                    status: "😢 Something went wrong while uploading your tokenURI.",
                 }
-                newTrait.value = this.instruments[i]
-                this.metadata.attributes[i+4] = newTrait
-              }
-
-              console.log("Value: " + this.value)
-              console.log(this.metadata)
-              
-              const { success, status } = await mintArtist(this.value, this.metadata)
-              console.log(status)
-              console.log("--------------------")
-              console.log(this.sampleData)
-
-              
-              if(success){
-                axios.post(`http://localhost:8001/mintSample`, this.sampleData)
-                    .then(function(response){
-                        console.log(response)
-                    },(error) =>{
-                        console.log(error);
-                });
-              }
             }else{
-              console.log("Invalid Fields")
-            }
-
+              this.metadata.animation_url = pinataAudio.pinataUrl;
+            }              
             
+            this.metadata.attributes[0].value = this.artist
+            this.metadata.attributes[1].value = this.duration
+            this.metadata.attributes[2].value = this.genre
+            this.metadata.attributes[3].value = this.mood
+            
+            this.sampleData.walletOwner = this.walletAddress
+            this.sampleData.description = this.metadata.description
+            this.sampleData.name = this.metadata.name
+            this.sampleData.attributes = this.metadata.attributes
+            this.sampleData.value = this.value
+            //Falta enviar audio e gravar no backend
+            //this.sampleData.soundFile = this.$refs.sampleInput.files[0]
+
+            let i
+            for(i=0; i<this.instruments.length; i++){
+              const newTrait = {
+                trait_type: "Instrument",
+                value: ""
+              }
+              newTrait.value = this.instruments[i]
+              this.metadata.attributes[i+4] = newTrait
+            }
+            
+            const { success, status } = await mintArtist(this.value, this.metadata)
+            
+            if(success){
+              axios.post(`http://localhost:8001/mintSample`, this.sampleData)
+                  .then(function(response){
+                      console.log(response)
+                  },(error) =>{
+                      console.log(error);
+              });
+            }
+          }else{
+            console.log("Invalid Fields")
+          }
         },
 
-        log(){
-           console.log("Connected: " + this.connected + " Mintable: " + this.mintable)
-        }
-
-        /*addWalletListener() {
-            if (window.ethereum) {
-                window.ethereum.on("accountsChanged", (accounts) =>{
-                if (accounts.length > 0) {
-                    console.log("Foo")
-                    this.walletAddress = accounts[0] 
-                    this.status = "👆🏽 Write a message in the text-field above."
-                } else {
-                    this.walletAddress = ""
-                    this.status = "🦊 Connect to Metamask using the top right button."
-                }
-                });
-            } else {
-                this.status = "You must install Metamask, a virtual Ethereum wallet, in your browser."
-            }
-        },*/
-
-        /*async mintGeneratedPressed() {
-            //Try CATCH verificar mintNFT com sucesso
-            
-            const { status } = await mintGenerated(this.value, this.metadata)
-                    
-            //TODO Mandar pra BD
-            this.status = status
-        }*/
     },
+    
     computed: {
+
       validateGenres () {
         return [
           this.genre!= "" || "Select a Genre"
         ]
       },
+
       validateMoods () {
         return [
           this.mood!="" || "Select a Mood"
         ]
       },
+
       validateInstruments () {
         return [
           this.instruments.length > 0 || "Select at least one Instrument"
@@ -470,8 +438,12 @@ export default {
 </script>
 
 <style>
-  .custom-label-color .v-label{
-    color: #FAFAFA!important;
-    opacity: 1;
+  .custom-label-color {
+    color: #FAFAFA;
   }
+
+
+
+
+    
 </style>

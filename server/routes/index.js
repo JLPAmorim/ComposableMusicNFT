@@ -151,6 +151,7 @@ module.exports = router;
         description: req.body.description,
         image: req.body.image,
         name: req.body.name,
+        animation_url: req.body.animation_url,
         attributes: req.body.attributes,
         value: req.body.value,
         soundFile: "NULL"
@@ -179,21 +180,23 @@ module.exports = router;
    * Mint de um Sample Música
    */
 
-   router.post('/mintMusic', function(req,res){
+   router.post('/generate', function(req,res){
     const today = new Date();
     const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
     const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
     const dateTime = date+' '+time;
 
-
-
     const newSample={
-        name: req.body.name,
+        body: req.body,
         date: dateTime,
     }
+    console.log("Genre: " + newSample.body.genre)
+    console.log("Mood: " + newSample.body.mood)
+    console.log("Instruments: " + newSample.body.instruments)
+    console.log("Date: " + newSample.date)
 
-    Sample.inserir(newSample)
-        .then(dados => res.status(201).jsonp({dados: dados}))
-        .catch(e => res.status(500).jsonp({error: 'erro'}))
-
+    return res.status(200).json({
+      message: 'Music Infos',
+      newSample: newSample
+    })
   });

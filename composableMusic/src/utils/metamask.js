@@ -1,6 +1,7 @@
-import {pinJSONToIPFS} from './pinata.js'
+import {pinJSONToIPFS} from '../utils/pinata.js'
 import {createAlchemyWeb3} from "@alch/alchemy-web3"
 import contractABI from './contract-abi.json'
+
 
 const alchemyKey = import.meta.env.VITE_API_ALCHEMY_KEY
 const web3 = createAlchemyWeb3(alchemyKey);
@@ -36,8 +37,6 @@ export const connectWallet = async () => {
 export const getCurrentWalletConnected = async () => {
   if (window.ethereum) {
     try {
-      console.log(alchemyKey)
-      console.log(import.meta.env.VITE_API_PINATA_SECRET)
       const addressArray = await window.ethereum.request({
         method: "eth_accounts",
       });
@@ -67,18 +66,18 @@ export const getCurrentWalletConnected = async () => {
   }
 };
 
-export const mintArtist = async(value,metadata) => {
+export const mintArtist = async(value, metadata) => {
 
   //pinata pin request
-  const pinataResponse = await pinJSONToIPFS(metadata);
-  if (!pinataResponse.success) {
+  const pinataMetadata = await pinJSONToIPFS(metadata);
+  if (!pinataMetadata.success) {
       return {
           success: false,
           status: "😢 Something went wrong while uploading your tokenURI.",
       }
   } 
-
-  const tokenURI = pinataResponse.pinataUrl;  
+  
+  const tokenURI = pinataMetadata.pinataUrl;  
 
   //load smart contract
   window.contract = await new web3.eth.Contract(contractABI, contractAddress);//loadContract();
@@ -98,13 +97,10 @@ export const mintArtist = async(value,metadata) => {
               params: [transactionParameters],
           });
       return {
-          /* for para todas as musicas utilizadas
-           axios.put(localhost:8001/sample#idtoken)
-                 incrementar para cada token utilizada no mint o countUsed */
           success: true,
           status: "✅ Check out your transaction on Etherscan: https://goerli.etherscan.io/tx/" + txHash
       }
-  } catch (error) {
+  } catch (error) { 
       return {
           success: false,
           status: "😥 Something went wrong: " + error.message
@@ -112,3 +108,33 @@ export const mintArtist = async(value,metadata) => {
   }
 }
 
+export const mintGenerated = async(value, metadata) => {
+
+  //load smart contract
+  window.contract = await new web3.eth.Contract(contractABI, contractAddress);//loadContract();
+
+  //set up your Ethereum transaction
+  const transactionParameters = {
+      to: contractAddress, // Required except during contract publications.
+      from: window.ethereum.selectedAddress, // must match user's active address.
+      'data': window.contract.methods.generateNFTMusic(window.ethereum.selectedAddress, web3.utils.toBN(web3.utils.toWei(value)), metadata.name, tokenURI).encodeABI() //make call to NFT smart contract 
+  };
+
+  //sign transaction via Metamask
+  try {
+    const txHash = await window.ethereum
+        .request({
+            method: 'eth_sendTransaction',
+            params: [transactionParameters],
+        });
+    return {
+        success: true,
+        status: "✅ Check out your transaction on Etherscan: https://goerli.etherscan.io/tx/" + txHash
+    }
+  } catch (error) { 
+      return {
+          success: false,
+          status: "😥 Something went wrong: " + error.message
+      }
+  }
+}

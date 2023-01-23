@@ -47,7 +47,7 @@
                                                 <nav>
                                                     <RouterLink 
                                                         style="text-decoration: none; color: inherit;"
-                                                        to="/">   
+                                                        to="/generate">   
                                                         <v-btn 
                                                             color=#EEEBD9
                                                             :width=250
@@ -66,7 +66,7 @@
                                                 <nav>
                                                     <RouterLink 
                                                         style="text-decoration: none; color: inherit;"
-                                                        to="/UploadSample/">   
+                                                        to="/uploadsample/">   
                                                         <v-btn 
                                                             color=#EEEBD9
                                                             :width=250
