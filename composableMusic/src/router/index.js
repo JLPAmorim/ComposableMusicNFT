@@ -33,7 +33,6 @@ const router = createRouter({
       name: 'Confirmpurchase',
       component: Confirmpurchase
     }
-
   ]
 })
 
