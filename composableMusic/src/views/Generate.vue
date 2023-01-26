@@ -295,184 +295,230 @@ import {connectWallet, getCurrentWalletConnected, mintArtist} from "../utils/met
 import axios from 'axios'
 import {pinFileToIPFS} from '../utils/pinata.js'
   
-  export default {
+export default {
 
-    components: {
-      TopBar,
-      UploadSample,
-      BottomBar,
-      MusicPlayer,
-      MusicPlayerHome,
-    },  
+  components: {
+    TopBar,
+    UploadSample,
+    BottomBar,
+    MusicPlayer,
+    MusicPlayerHome,
+  },  
 
-    data(){
-      return{
+  data(){
+    return{
+      style_description: {
+        color: "#67FFC9",
+        fontFamily: "Poppins",
+        fontWeight: "800",
+      },
 
-        style_description: {
-          color: "#67FFC9",
-          fontFamily: "Poppins",
-          fontWeight: "800",
-        },
+      rules: {
+        required: [ v => !!v || 'This field is required!' ],
+        length30: [v => (v && v.length <= 30) || "Field must be less or equal than 30 characters!"],
+        length45: [v => (v && v.length <= 45) || "Field must be less or equal than 45 characters!"],
+        length150: [v => (v && v.length <= 150) || "Field must be less or equal than 45 characters!"],
+        value: [v => /^[0-9]\d*(\.\d+)?$/.test(v) || 'Value isn\'t valid!'],
+      },
+      props: false,
 
-        rules: {
-          required: [ v => !!v || 'This field is required!' ],
-          length30: [v => (v && v.length <= 30) || "Field must be less or equal than 30 characters!"],
-          length45: [v => (v && v.length <= 45) || "Field must be less or equal than 45 characters!"],
-          length150: [v => (v && v.length <= 150) || "Field must be less or equal than 45 characters!"],
-          value: [v => /^[0-9]\d*(\.\d+)?$/.test(v) || 'Value isn\'t valid!'],
-        },
-        props: false,
+      //Template variables
+      dialogMint: false,
+      dialogHelp: false,
+      generating: false,
+      search:0,
+      
+      //Wallet variables
+      connected: false,
+      status: "",
+      walletAddress: "",
+      mintable: true,
 
-        //Template variables
-        dialogMint: false,
-        dialogHelp: false,
-        generating: false,
-        search:0,
-        
-        //Wallet variables
-        connected: false,
-        status: "",
-        walletAddress: "",
-        mintable: true,
+      //Metadata Variables
+      artist: "",
+      value: "",
+      duration: "25.4",
+      metadata: {
+        description: "",
+        image: "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr",
+        name: "",
+        attributes: [
+            {
+                trait_type: "Artist",
+                value: ""
+            },
+            {
+                trait_type: "Duration",
+                value: ""
+            },
+            {
+                trait_type: "Genre",
+                value: ""
+            },
+            {
+                trait_type: "Mood",
+                value: ""
+            }
+        ],
+    },
 
-        //Metadata Variables
-        artist: "",
+      //Generate variables
+      genreList: ["Rock","Pop","Classic"],
+      moodList: ["Sad", "Happy", "Love", "Epic"],
+      instruments: [],
+      genre: "",
+      mood: "",
+      audio: undefined,
+      mintable: false,
+      generateData: {
+          genre: "",
+          mood: "",
+          instruments: []
+      },
+
+      //Sample Data sent to DB
+      sampleData:{
+        walletOwner: "",
+        countMinted: "0",
+        description: "",
+        image: "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr",
+        name: "",
+        attributes: [],
         value: "",
-        metadata: {
-          description: "",
-          image: "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr",
-          name: "",
-          attributes: [
-              {
-                  trait_type: "Artist",
-                  value: ""
-              },
-              {
-                  trait_type: "Duration",
-                  value: ""
-              },
-              {
-                  trait_type: "Genre",
-                  value: ""
-              },
-              {
-                  trait_type: "Mood",
-                  value: ""
-              }
-          ],
-      },
-
-        //Generate variables
-        genreList: ["Rock","Pop","Classic"],
-        moodList: ["Sad", "Happy", "Love", "Epic"],
-        instruments: [],
-        genre: "",
-        mood: "",
-        audio: undefined,
-        mintable: false,
-        generateData: {
-            genre: "",
-            mood: "",
-            instruments: []
-        }
       }
-    },
+    }
+  },
 
-    async created() {
-      const {address, status} = await getCurrentWalletConnected()
-      this.walletAddress = address
-      this.status = status
-      if(this.walletAddress!="")
-          this.connected=true
-      console.log(this.connected)
-      console.log(this.walletAddress)
-    },
-    
-    methods:{
-
-      async connectWalletPressed(){
-          const walletResponse = await connectWallet()
-          this.status = walletResponse.status
-          this.walletAddress = walletResponse.address
-          if(this.walletAddress!="")
-              this.connected=true
-      },
-
-      generate(){
-        
-        if(this.$refs.form.validate()){
-
-          console.log("Validated: " + this.$refs.form.validate())
-          this.dialogMint = true
-          console.log("Genre: " + this.genre)
-          this.generating = true
-
-          // Adicionar Genre/Mood/Instruments ao objeto a mandar para o Backend
-          this.generateData.genre = this.genre
-          this.generateData.mood = this.mood
-          this.generateData.instruments = this.instruments
-          
-          console.log("generated")
-          //Send POST request to generate Music and handle reply
-          /*axios.post(`http://localhost:8001/generate`, this.generateData)
-              .then(function(response){    
-                //Handle reply  
-                this.mintable = true      
-                console.log(response)
-              },(error) =>{
-                  console.log(error);
-          });*/
-
-          this.mintable = true
-        }
-      },
-
-      async mintGeneratedPressed() {
-
-
-        /*if(this.$refs.form2.validate() && this.mintable == true){
-
-          //Upload audio file to Pinata
-          const pinataAudio = await pinFileToIPFS(audio);
-          if (!pinataAudio.success) {
-              return {
-                  success: false,
-                  status: "😢 Something went wrong while uploading your tokenURI.",
-              }
-          }else{
-            this.metadata.animation_url = pinataAudio.pinataUrl;
-          } 
-
-          // Call metamask mint function
-          const { success, status } = await mintArtist(this.value, this.metadata)
-
-        }else{
-          console.log("Invalid Fields")
-        }*/
-        
-      }
-    },
+  async created() {
+    const {address, status} = await getCurrentWalletConnected()
+    this.walletAddress = address
+    this.status = status
+    if(this.walletAddress!="")
+        this.connected=true
+    console.log(this.connected)
+    console.log(this.walletAddress)
+  },
   
-    computed: {
+  methods:{
 
-      validateGenres () {
-        return [
-          this.genre!= "" || "Select a Genre"
-        ]
-      },
+    async connectWalletPressed(){
+        const walletResponse = await connectWallet()
+        this.status = walletResponse.status
+        this.walletAddress = walletResponse.address
+        if(this.walletAddress!="")
+            this.connected=true
+    },
 
-      validateMoods () {
-        return [
-          this.mood!="" || "Select a Mood"
-        ]
-      },
+    async generate(){
+      const {valid} = await this.$refs.form.validate()
+      if(valid){
+        console.log("Validated: " + this.$refs.form.validate())
+        
+        console.log("Genre: " + this.genre)
+        this.generating = true
 
-      validateInstruments () {
-        return [
-          this.instruments.length > 0 || "Select at least one Instrument"
-        ]
+        // Adicionar Genre/Mood/Instruments ao objeto a mandar para o Backend
+        this.generateData.genre = this.genre
+        this.generateData.mood = this.mood
+        this.generateData.instruments = this.instruments
+        
+        console.log("generated")
+        //Send POST request to generate Music and handle reply
+        /*axios.post(`http://localhost:8001/generate`, this.generateData)
+            .then(function(response){    
+              //Handle reply  
+              this.mintable = true      
+              console.log(response)
+            },(error) =>{
+                console.log(error);
+        });*/
+
+        // Abrir depois do POST feito e resposta recebida
+        this.dialogMint = true
+        this.mintable = true
+
+        //Receber audio do backend e repetir processo do Upload
+
       }
     },
+
+    async mintGeneratedPressed() {
+
+      const {valid} = await this.$refs.form2.validate()
+
+      if(valid && this.mintable == true){
+        
+        //Upload audio file to Pinata
+        /*const pinataAudio = await pinFileToIPFS(audio);
+        if (!pinataAudio.success) {
+            return {
+                success: false,
+                status: "😢 Something went wrong while uploading your tokenURI.",
+            }
+        }else{
+          this.metadata.animation_url = pinataAudio.pinataUrl;
+        } 
+
+        // Metadata to be sent to Mint Function
+        this.metadata.attributes[0].value = this.artist
+        this.metadata.attributes[1].value = this.duration
+        this.metadata.attributes[2].value = this.genre
+        this.metadata.attributes[3].value = this.mood
+        let i
+        for(i=0; i<this.instruments.length; i++){
+          const newTrait = {
+            trait_type: "Instrument",
+            value: ""
+          }
+          newTrait.value = this.instruments[i]
+          this.metadata.attributes[i+4] = newTrait
+        }
+
+        // Sample Data to be sent to DB
+        this.sampleData.walletOwner = this.walletAddress
+        this.sampleData.description = this.metadata.description
+        this.sampleData.name = this.metadata.name
+        this.sampleData.attributes = this.metadata.attributes
+        this.sampleData.value = this.value
+
+        /* // Call metamask mint function
+        const { success, status } = await mintArtist(this.value, this.metadata)
+
+        if(success){
+            axios.post(`http://localhost:8001/mintSample`, this.sampleData)
+                .then(function(response){
+                    console.log(response)
+                },(error) =>{
+                    console.log(error);
+            });
+          }
+        */
+      }else{
+        console.log("Invalid Fields")
+      }
+    }
+  },
+
+  computed: {
+
+    validateGenres () {
+      return [
+        this.genre!= "" || "Select a Genre"
+      ]
+    },
+
+    validateMoods () {
+      return [
+        this.mood!="" || "Select a Mood"
+      ]
+    },
+
+    validateInstruments () {
+      return [
+        this.instruments.length > 0 || "Select at least one Instrument"
+      ]
+    }
+  },
 }
 </script>
   

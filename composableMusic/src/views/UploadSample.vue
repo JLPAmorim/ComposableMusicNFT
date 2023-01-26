@@ -34,7 +34,7 @@
                       v-model="mood"
                       label="Music Mood"
                       :items="moodList"
-                      :rules="rules.required"
+                      :rules="rules.select"
                       required
                       density="comfortable"
                       class="ml-6 mt-10"
@@ -202,9 +202,6 @@
                   <MusicPlayer v-if="sampleUrl!=''" :musicLink="sampleUrl"/>
                 </v-col>
           </v-row>
-          <v-dialog v-model="dialogMint">
-            <v-btn>Hello</v-btn>
-          </v-dialog>
 
         </v-container>
       </v-form>
@@ -243,6 +240,7 @@ export default {
 
       rules: {
         required: [ v => !!v || "This field is required!" ],
+        select: [v => !!v || 'This is required'] ,
         length30: [v => (v && v.length <= 30) || "Field must be less or equal than 30 characters!"],
         length45: [v => (v && v.length <= 45) || "Field must be less or equal than 45 characters!"],
         length150: [v => (v && v.length <= 150) || "Field must be less or equal than 45 characters!"],
@@ -253,6 +251,7 @@ export default {
       connected: false,
       status: "",
       walletAddress: "",
+      validForm: false,
       
 
       artist: "",
@@ -293,7 +292,7 @@ export default {
           ],
       },
 
-      //Sample Object sent to DB
+      //Sample Data sent to DB
 
       sampleData:{
         walletOwner: "",
@@ -303,147 +302,129 @@ export default {
         name: "",
         attributes: [],
         value: "",
-        soundFile: undefined
       }
     }
   },
 
   async created() {
-        const {address, status} = await getCurrentWalletConnected()
-        this.walletAddress = address
-        this.status = status
+      const {address, status} = await getCurrentWalletConnected()
+      this.walletAddress = address
+      this.status = status
+      if(this.walletAddress!="")
+          this.connected=true
+  },
+
+  methods:{
+
+    uploadAudio() {
+      // Create a new audio element
+      const audio = new Audio()
+
+      const file = this.$refs.sampleInput.files[0]
+      const fileObject = new File([file], file.name)
+      this.sampleUrl = URL.createObjectURL(fileObject)
+
+      // Set the source of the audio file to the selected file
+      audio.src = this.sampleUrl
+
+      // Listen for the "loadedmetadata" event, which is triggered when
+      // the duration of the audio file is available
+      audio.addEventListener("loadedmetadata", () => {
+        // Output the duration of the audio file
+        this.duration = audio.duration
+        console.log(this.duration)
+      })
+      this.musicUploaded=true
+    },
+
+    async connectWalletPressed(){
+        const walletResponse = await connectWallet()
+        this.status = walletResponse.status
+        this.walletAddress = walletResponse.address
         if(this.walletAddress!="")
             this.connected=true
     },
 
-    /*watch: {
-        accounts: {
-            handler: function(val, oldVal){
-                this.addWalletListener()
-            },
-            deep: true
-        }
-    },*/
+    async mintArtistPressed() {
+      const {valid} = await this.$refs.form.validate()
 
-    methods:{
+      if(valid && this.musicUploaded){
+        
+        const audio = this.$refs.sampleInput.files[0]
 
-        uploadAudio() {
-          // Create a new audio element
-          const audio = new Audio()
-
-          const file = this.$refs.sampleInput.files[0]
-          const fileObject = new File([file], file.name)
-          this.sampleUrl = URL.createObjectURL(fileObject)
-
-          // Set the source of the audio file to the selected file
-          audio.src = this.sampleUrl
-
-          // Listen for the "loadedmetadata" event, which is triggered when
-          // the duration of the audio file is available
-          audio.addEventListener("loadedmetadata", () => {
-            // Output the duration of the audio file
-            this.duration = audio.duration
-            console.log(this.duration)
-          })
-          this.musicUploaded=true
-        },
-      
-
-
-        async connectWalletPressed(){
-            const walletResponse = await connectWallet()
-            this.status = walletResponse.status
-            this.walletAddress = walletResponse.address
-            if(this.walletAddress!="")
-                this.connected=true
-        },
-
-
-        async mintArtistPressed() {
-
-          if(this.$refs.form.validate()){
-            const audio = this.$refs.sampleInput.files[0]
-            this.dialogMint=true
-            const pinataAudio = await pinFileToIPFS(audio);
-            if (!pinataAudio.success) {
-                return {
-                    success: false,
-                    status: "😢 Something went wrong while uploading your tokenURI.",
-                }
-            }else{
-              this.metadata.animation_url = pinataAudio.pinataUrl;
-            }              
-            
-            this.metadata.attributes[0].value = this.artist
-            this.metadata.attributes[1].value = this.duration
-            this.metadata.attributes[2].value = this.genre
-            this.metadata.attributes[3].value = this.mood
-            
-            this.sampleData.walletOwner = this.walletAddress
-            this.sampleData.description = this.metadata.description
-            this.sampleData.name = this.metadata.name
-            this.sampleData.attributes = this.metadata.attributes
-            this.sampleData.value = this.value
-            //Falta enviar audio e gravar no backend
-            //this.sampleData.soundFile = this.$refs.sampleInput.files[0]
-
-            let i
-            for(i=0; i<this.instruments.length; i++){
-              const newTrait = {
-                trait_type: "Instrument",
-                value: ""
-              }
-              newTrait.value = this.instruments[i]
-              this.metadata.attributes[i+4] = newTrait
+        const pinataAudio = await pinFileToIPFS(audio);
+        if (!pinataAudio.success) {
+            return {
+                success: false,
+                status: "😢 Something went wrong while uploading your tokenURI.",
             }
-            
-            const { success, status } = await mintArtist(this.value, this.metadata)
-            
-            if(success){
-              axios.post(`http://localhost:8001/mintSample`, this.sampleData)
-                  .then(function(response){
-                      console.log(response)
-                  },(error) =>{
-                      console.log(error);
-              });
-            }
-          }else{
-            console.log("Invalid Fields")
+        }else{
+          this.metadata.animation_url = pinataAudio.pinataUrl;
+        }              
+        
+        this.metadata.attributes[0].value = this.artist
+        this.metadata.attributes[1].value = this.duration
+        this.metadata.attributes[2].value = this.genre
+        this.metadata.attributes[3].value = this.mood
+        
+        let i
+        for(i=0; i<this.instruments.length; i++){
+          const newTrait = {
+            trait_type: "Instrument",
+            value: ""
           }
-        },
+          newTrait.value = this.instruments[i]
+          this.metadata.attributes[i+4] = newTrait
+        }
 
-    },
-    
-    computed: {
+        this.sampleData.walletOwner = this.walletAddress
+        this.sampleData.description = this.metadata.description
+        this.sampleData.name = this.metadata.name
+        this.sampleData.attributes = this.metadata.attributes
+        this.sampleData.value = this.value
 
-      validateGenres () {
-        return [
-          this.genre!= "" || "Select a Genre"
-        ]
-      },
-
-      validateMoods () {
-        return [
-          this.mood!="" || "Select a Mood"
-        ]
-      },
-
-      validateInstruments () {
-        return [
-          this.instruments.length > 0 || "Select at least one Instrument"
-        ]
+        /*
+        const { success, status } = await mintArtist(this.value, this.metadata)
+        
+        if(success){
+          axios.post(`http://localhost:8001/mintSample`, this.sampleData)
+              .then(function(response){
+                  console.log(response)
+              },(error) =>{
+                  console.log(error);
+          });
+        }*/
+      }else{
+        console.log("Invalid Fields")
       }
     },
+  },
+  
+  computed: {
+
+    validateGenres () {
+      return [
+        this.genre!="" || "Select a Genre"
+      ]
+    },
+
+    validateMoods () {
+      return [
+        this.mood!="" || "Select a Mood"
+      ]
+    },
+
+    validateInstruments () {
+      return [
+        this.instruments.length > 0 || "Select at least one Instrument"
+      ]
+    }
+  },
 }
 </script>
 
 <style>
   .custom-label-color {
     color: #FAFAFA;
-  }
-
-
-
-
-    
+  } 
 </style>
