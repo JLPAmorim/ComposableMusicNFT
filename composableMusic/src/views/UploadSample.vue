@@ -265,6 +265,7 @@ export default {
       sampleUrl: "",
       value: "",
       musicUploaded:false,
+      newID: 0,
 
       //Metadata Object sent to IPFS
       metadata: {
@@ -314,6 +315,12 @@ export default {
       this.status = status
       if(this.walletAddress!="")
           this.connected=true
+
+      axios.get('http://localhost:8001/getSupply')
+        .then(res => {
+          this.newID = res.data.samples + 1
+          console.log(this.newID)
+      }) 
   },
 
   methods:{

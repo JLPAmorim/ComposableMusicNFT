@@ -374,7 +374,6 @@ export default {
       audioDuration:"",
       audioUploaded:false,
       mintable: false,
-      newID: 0,
       generateData: {
           genre: "",
           mood: "",
@@ -401,12 +400,6 @@ export default {
     this.status = status
     if(this.walletAddress!="")
         this.connected=true
-
-    axios.get('http://localhost:8001/getSupply')
-      .then(res => {
-        this.newID = res.data.samples + 1
-        console.log(this.newID)
-      })   
     
     console.log(this.connected)
     console.log(this.walletAddress)
