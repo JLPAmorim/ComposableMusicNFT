@@ -60,19 +60,6 @@ module.exports = router;
   });
 
 
-
-/**
- * GET de wallet de Owner por id de NFT(Sample)
- */
-
-  router.get('/samplesByWallet', (req,res) => {
-    console.log("Wallet recebida: " + req.headers.wallet)
-    Sample.findByWallet(req.headers.wallet)
-      .then(samples => res.status(201).jsonp({samples: samples}))
-      .catch(e => res.status(500).jsonp({error: 'erro'}))
-  })
-
-
   /**
    * Registro de um User
    */
@@ -250,3 +237,25 @@ module.exports = router;
     });      
     return generatePromise;
   }
+
+  /**
+    * GET para os NFT's de uma wallet em especifico
+    */
+
+  router.get('/samplesByWallet', (req,res) => {
+    console.log("Wallet recebida: " + req.headers.wallet)
+    Sample.findByWallet(req.headers.wallet)
+      .then(samples => res.status(201).jsonp({samples: samples}))
+      .catch(e => res.status(500).jsonp({error: 'erro'}))
+  })
+
+  /**
+    * GET para a supply existente
+    */
+
+  router.get('/getSupply', (req,res) => {
+    
+    Sample.getSupply()
+      .then(samples => res.status(201).jsonp({samples: samples}))
+      .catch(e => res.status(500).jsonp({error: 'erro'}))
+  })

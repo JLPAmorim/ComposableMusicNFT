@@ -29,7 +29,7 @@
                 <v-row >
                     <v-col v-for="gennft in generatedNFTS" :key="gennft._id" cols="4" sm="3" xs="6">
                         <!--Se a wallet conectada:-->
-                        <NFTDisplay v-if="this.connected" :name="gennft.name" :imageUrl="gennft.image" :musicIrl="gennft.animation_url" :price="gennft.value"/>
+                        <NFTDisplay v-if="this.connected" :name="gennft.name" :imageUrl="gennft.image" :musicUrl="gennft.animation_url" :price="gennft.value"/>
                         <!--Se a wallet não conectada:-->
                         <NFTDisplay v-else>name="" imageUrl="" musicUrl="" price=""</NFTDisplay>
                     </v-col>

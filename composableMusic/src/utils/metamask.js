@@ -66,6 +66,7 @@ export const getCurrentWalletConnected = async () => {
   }
 };
 
+
 export const mintArtist = async(value, metadata) => {
 
   //pinata pin request

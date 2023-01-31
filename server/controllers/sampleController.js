@@ -40,3 +40,8 @@ module.exports.remover = function(id){
 module.exports.findByWallet = function(wallet){
     return Sample.find({walletOwner: wallet}).sort({ $natural: -1 })
 }
+
+// Get how many documents are in a collection (Total Supply of NFT's)
+module.exports.getSupply = function(){
+    return Sample.countDocuments()
+}
