@@ -9,12 +9,13 @@ var sampleSchema = new mongoose.Schema(
         description: String,
         image: String,
         name: String,
+        animation_url: String,
         attributes: [{
             trait_type: String,
             value: String,
         }],
         value: String,
-        soundFile: String,
+        samplesUsed: [String]
     });
 
 module.exports = mongoose.model('sample', sampleSchema)

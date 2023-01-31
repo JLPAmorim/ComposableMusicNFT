@@ -300,8 +300,10 @@ export default {
         description: "",
         image: "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr",
         name: "",
+        animation_url: "",
         attributes: [],
         value: "",
+        samplesUsed: ["2932","232","9823","4"]
       }
     }
   },
@@ -349,7 +351,7 @@ export default {
       const {valid} = await this.$refs.form.validate()
 
       if(valid && this.musicUploaded){
-        
+        console.log("im in")
         const audio = this.$refs.sampleInput.files[0]
 
         const pinataAudio = await pinFileToIPFS(audio);
@@ -359,7 +361,8 @@ export default {
                 status: "😢 Something went wrong while uploading your tokenURI.",
             }
         }else{
-          this.metadata.animation_url = pinataAudio.pinataUrl;
+          this.metadata.animation_url = pinataAudio.pinataUrl
+          this.sampleData.animation_url = pinataAudio.pinataUrl
         }              
         
         this.metadata.attributes[0].value = this.artist
@@ -383,7 +386,7 @@ export default {
         this.sampleData.attributes = this.metadata.attributes
         this.sampleData.value = this.value
 
-        /*
+    
         const { success, status } = await mintArtist(this.value, this.metadata)
         
         if(success){
@@ -393,7 +396,7 @@ export default {
               },(error) =>{
                   console.log(error);
           });
-        }*/
+        }
       }else{
         console.log("Invalid Fields")
       }

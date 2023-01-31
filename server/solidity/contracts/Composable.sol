@@ -15,7 +15,7 @@ contract Composable is Ownable, ERC721URIStorage, ReentrancyGuard{
     
     Counters.Counter private _tokenIdCounter; //counter de mint
     mapping(uint => Sample) public nfts; //registo de nfts/samples? idToken => Sample 
-    uint256 taxArtist = 0.02 ether;
+    uint256 taxArtist = 0.025 ether;
     address public algorithmOwner;
     bool public isMintEnabled = true;
     
@@ -52,7 +52,7 @@ contract Composable is Ownable, ERC721URIStorage, ReentrancyGuard{
 
         //New sample
         Sample memory sample;
-        uint[] memory samplesEmpty;
+        uint256[] memory samplesEmpty;
 
         //Populate sample data
         sample.idToken = newSampleId;
@@ -78,16 +78,19 @@ contract Composable is Ownable, ERC721URIStorage, ReentrancyGuard{
         -crio o nft para o buyer
     */
 
-    function generateNFTMusic(address to, uint[] memory samplesA, uint256 value, string memory nameSample_, string memory tokenURI_) public payable virtual{ //public payable virtual means that you are allowed to pay the contract to execute this function. 
+    function generateNFTMusic(address to, uint[] memory samplesUsed, uint256 value, string memory nameSample_, string memory tokenURI_) 
+        public 
+        payable
+        returns (uint256)
+    { //public payable virtual means that you are allowed to pay the contract to execute this function. 
         // Mint value has to be equal or lower than wallet balance 
         require(isMintEnabled, "Mint is not active!");
-        require(msg.value >= taxArtist, "Not enough ETH sent; check price!");
-        
+
         //Increment _tokenIdCounter
         _tokenIdCounter.increment();
-        uint newSampleId = _tokenIdCounter.current();
-    
-        //New Sample
+        uint256 newSampleId = _tokenIdCounter.current();
+
+        //New sample
         Sample memory sample;
 
         //Populate sample data
@@ -95,39 +98,31 @@ contract Composable is Ownable, ERC721URIStorage, ReentrancyGuard{
         sample.walletOwner = to;
         sample.valueSample = value;
         sample.nameSample = nameSample_;
-        sample.samples = samplesA;
-                     
+        sample.samples = samplesUsed;
 
+        
+        //adiciono ao registo
+        nfts[newSampleId]=sample;
+
+        _safeMint(to, newSampleId);
+        _setTokenURI(newSampleId, tokenURI_);
+
+        //emit NewSample(to, newSampleId, nameSample);
+        return newSampleId;
+                     
+        /*
         //transfer de value de sample para cada artista // se falhar numa das iteracoes, falha tudo?
         uint total = 0; //somatorio de 
         for(uint j=0; j<samplesA.length; j++){
                 total += nfts[samplesA[j]].valueSample;
         }
 
-        require(msg.value >= total,"Not enough funds!");  
-
         for(uint j=0; j<samplesA.length; j++){  
             //require(msg.value >= nfts[samplesA[j]].valueSample,"Not enough funds!");
             address seller = nfts[samplesA[j]].walletOwner;
             payable(seller).transfer(msg.value);  //send the ETH to the seller
-        }
-
-        //J adiciono ao Registo;
-        nfts[newSampleId] = sample;
-        
-        //Devo dar mint direto ao comprador ou dou mint para nós, o algorithmOwner e dps _transfer para o to
-        //_safeMint(algorithmOwner, newSampleId);
-        //_transfer(algorithmOwner, to, newSampleId);
-
-        // valor de dinheiro na wallet de artista tem de ser acima ou igual ao estipulado para a taxa de mint  
-        require(msg.value >= taxArtist, "Not enough ETH sent; check price!");
-        _safeMint(to, newSampleId);
-        _setTokenURI(newSampleId, tokenURI_);
+        }*/
        
-        // Sendo o progama atómico o event será a última cena a relizar pois todas
-        // as operacoes para trás fora realizadas
-        //emit NewMusic(to, newSampleId);
-
     } 
 /*
 Equipa methods:
@@ -146,42 +141,9 @@ Equipa methods:
     function totalSupply() public view virtual returns (uint256) { //variavel privada?
         return _tokenIdCounter.current();
     }
-}
 
-/*pragma solidity ^0.6.12;
-
-import "https://github.com/OpenZeppelin/openzeppelin-solidity/contracts/token/ERC721/SafeERC721.sol";
-
-// Replace "MyNFT" with the name of your NFT.
-// Replace "MYNFT" with the symbol of your NFT.
-// Replace "1" with the number of decimals for your NFT.
-// Replace "10000" with the number of NFTs you want to create.
-// Replace "0x123456...789" with the address of the wallet you want to airdrop the NFTs to.
-contract MyNFT is SafeERC721 {
-  string public name = "TestReveals";
-  string public symbol = "TESTREVEALS";
-  uint8 public decimals = 1;
-  uint256 public totalSupply = 10000;
-  string public baseURI;
-
-  constructor() public {
-    // Set the baseURI for the collection.
-    // Replace "https://example.com/" with the base URI for your collection.
-    baseURI = "https://example.com/";
-  }
-
-  // Airdrop all NFTs to the specified wallet.
-  // Replace "0x123456...789" with the address of the wallet you want to airdrop the NFTs to.
-  function airdrop(address _to) public {
-    for (uint256 i = 0; i < totalSupply; i++) {
-      _mint(_to, i);
+    function getSamplesGenerated(uint tokenId_) public view returns (uint[] memory) {
+        return nfts[tokenId_].samples;
     }
-  }
 
-  // Set the baseURI for the collection.
-  // Replace "https://example.com/" with the base URI for your collection.
-  function setBaseURI(string memory _baseURI) public {
-    baseURI = _baseURI;
-  }
 }
-*/

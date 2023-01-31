@@ -35,3 +35,8 @@ module.exports.inserir = q => {
 module.exports.remover = function(id){
     return Sample.deleteOne({id: id})
 }
+
+// Find Sample by wallet
+module.exports.findByWallet = function(wallet){
+    return Sample.find({walletOwner: wallet}).sort({ $natural: -1 })
+}

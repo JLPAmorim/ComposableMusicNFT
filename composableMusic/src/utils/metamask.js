@@ -5,7 +5,7 @@ import contractABI from './contract-abi.json'
 
 const alchemyKey = import.meta.env.VITE_API_ALCHEMY_KEY
 const web3 = createAlchemyWeb3(alchemyKey);
-const contractAddress = "0xb66E84824Aa8aB9499dE1Be24856585F104b5316";
+const contractAddress = "0xC9ED0c135dd7d8F48374dB0600498E26Ed4cDde1";
 
 
 export const connectWallet = async () => {
@@ -110,14 +110,38 @@ export const mintArtist = async(value, metadata) => {
 
 export const mintGenerated = async(value, metadata) => {
 
+  //pinata pin request
+  const pinataMetadata = await pinJSONToIPFS(metadata);
+  if (!pinataMetadata.success) {
+      return {
+          success: false,
+          status: "😢 Something went wrong while uploading your tokenURI.",
+      }
+  } 
+
+  const tokenURI = pinataMetadata.pinataUrl;
+
   //load smart contract
   window.contract = await new web3.eth.Contract(contractABI, contractAddress);//loadContract();
+  
+  /*for(let i = 0; i<samplesUsed.length; i++){
+    samplesUsed[i] = web3.utils.toBN(web3.utils.toWei(samplesUsed[i]))
+  }*/
+
+  console.log("endereço: " + window.ethereum.selectedAddress)
+  console.log("value: " + web3.utils.toBN(web3.utils.toWei(value)))
+  console.log("name: " + metadata.name)
+  console.log("uri: " + tokenURI)
+
+  var samplesUsed = []
+  samplesUsed[0] = 12341
+  samplesUsed[1] = 22134
 
   //set up your Ethereum transaction
   const transactionParameters = {
       to: contractAddress, // Required except during contract publications.
       from: window.ethereum.selectedAddress, // must match user's active address.
-      'data': window.contract.methods.generateNFTMusic(window.ethereum.selectedAddress, web3.utils.toBN(web3.utils.toWei(value)), metadata.name, tokenURI).encodeABI() //make call to NFT smart contract 
+      'data': window.contract.methods.generateNFTMusic(window.ethereum.selectedAddress, samplesUsed, web3.utils.toBN(web3.utils.toWei(value)), metadata.name, tokenURI).encodeABI() //make call to NFT smart contract 
   };
 
   //sign transaction via Metamask

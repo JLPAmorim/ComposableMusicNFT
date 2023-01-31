@@ -291,7 +291,7 @@ import BottomBar from "../components/BottomBar.vue";
 import UploadSample from "../components/UploadSample.vue";
 import MusicPlayer from '../components/MusicPlayer.vue';
 import MusicPlayerHome from '../components/MusicPlayerHome.vue';
-import {connectWallet, getCurrentWalletConnected, mintArtist} from "../utils/metamask.js"
+import {connectWallet, getCurrentWalletConnected, mintArtist, mintGenerated} from "../utils/metamask.js"
 import axios from 'axios'
 import {pinFileToIPFS} from '../utils/pinata.js'
   
@@ -332,7 +332,6 @@ export default {
       connected: false,
       status: "",
       walletAddress: "",
-      mintable: true,
 
       //Metadata Variables
       artist: "",
@@ -342,6 +341,7 @@ export default {
         description: "",
         image: "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr",
         name: "",
+        animation_url: "https://gateway.pinata.cloud/ipfs/QmdfaYNiYc5iTYpsnZJd1LjMdFPixmrCkWHEjdNT63VKTr",
         attributes: [
             {
                 trait_type: "Artist",
@@ -369,6 +369,9 @@ export default {
       genre: "",
       mood: "",
       audio: undefined,
+      sampleUrl:"",
+      audioDuration:"",
+      audioUploaded:false,
       mintable: false,
       generateData: {
           genre: "",
@@ -385,6 +388,7 @@ export default {
         name: "",
         attributes: [],
         value: "",
+        samplesUsed: ["1","2","3","4"]
       }
     }
   },
@@ -423,21 +427,32 @@ export default {
         this.generateData.instruments = this.instruments
         
         console.log("generated")
+
+        let ids,audioBin
         //Send POST request to generate Music and handle reply
-        /*axios.post(`http://localhost:8001/generate`, this.generateData)
+        axios.post(`http://localhost:8001/generate`, this.generateData)
             .then(function(response){    
               //Handle reply  
-              this.mintable = true      
-              console.log(response)
+              audioBin = new Uint8Array(response.data.audio.data)
+              ids = response.data.ids
+              const audio = new Audio()
+              console.log(ids)
+              const fileObject = new File([audioBin],  { type: 'audio/wav' })
+              this.sampleUrl = URL.createObjectURL(fileObject)
+              this.audio = fileObject
+              
+              audio.src = this.sampleUrl
+              this.audioDuration = audio.duration
+              this.musicUploaded=true 
+
+              this.mintable = true
             },(error) =>{
                 console.log(error);
-        });*/
+        });
 
         // Abrir depois do POST feito e resposta recebida
         this.dialogMint = true
         this.mintable = true
-
-        //Receber audio do backend e repetir processo do Upload
 
       }
     },
@@ -447,9 +462,10 @@ export default {
       const {valid} = await this.$refs.form2.validate()
 
       if(valid && this.mintable == true){
-        
+        console.log(this.audio)
+
         //Upload audio file to Pinata
-        /*const pinataAudio = await pinFileToIPFS(audio);
+        const pinataAudio = await pinFileToIPFS(audio);
         if (!pinataAudio.success) {
             return {
                 success: false,
@@ -457,7 +473,7 @@ export default {
             }
         }else{
           this.metadata.animation_url = pinataAudio.pinataUrl;
-        } 
+        }
 
         // Metadata to be sent to Mint Function
         this.metadata.attributes[0].value = this.artist
@@ -481,8 +497,8 @@ export default {
         this.sampleData.attributes = this.metadata.attributes
         this.sampleData.value = this.value
 
-        /* // Call metamask mint function
-        const { success, status } = await mintArtist(this.value, this.metadata)
+        // Call metamask mint function
+        const { success, status } = await mintGenerated(this.value, this.metadata)
 
         if(success){
             axios.post(`http://localhost:8001/mintSample`, this.sampleData)
@@ -492,7 +508,7 @@ export default {
                     console.log(error);
             });
           }
-        */
+        
       }else{
         console.log("Invalid Fields")
       }

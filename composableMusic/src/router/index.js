@@ -3,7 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import Register from '../views/Register.vue'
 import UploadSample from '../views/UploadSample.vue'
 import Generate from '../views/Generate.vue'
-import Confirmpurchase from '../views/Confirmpurchase.vue'
+import UserPage from '../views/UserPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -25,13 +25,13 @@ const router = createRouter({
     },
     {
       path: '/generate',
-      name: 'Generate',
+      name: 'generate',
       component: Generate
     },
     {
-      path: '/confirmpurchase',
-      name: 'Confirmpurchase',
-      component: Confirmpurchase
+      path: '/userpage',
+      name: 'userpage',
+      component: UserPage
     }
   ]
 })

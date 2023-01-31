@@ -3,11 +3,11 @@ import os
 import sys
 import random
 import numpy as np
-import zaf
-import wave
+#import zaf
+import soundfile as sf
 
-BASE_PATH = 'Datasets/cmn-ai-generated/'        # metadata base path
-BASE_PATH_GENERATED = 'Generated/'              # file generation destination path
+BASE_PATH = 'C:\\Users\\USER\\Documents\\GitHub\\ComposableMusicNFT\\server\\AI\\Datasets\\cmn-ai-generated\\'        # metadata base path
+BASE_PATH_GENERATED = 'C:\\Users\\USER\\Documents\\GitHub\\ComposableMusicNFT\\server\AI\\Generated\\'              # file generation destination path
 
 # ---------------------------------------------- ARGUMENTS FOR THE PROGRAM ----------------------------------------------
 # check if number of arguments is correct and some debug
@@ -117,7 +117,7 @@ generated_file_name = sys.argv[1] # the file name that it should be called
 metadata = gen_metadata(2)
 
 # how many random samples we want
-num_samples = 10
+num_samples = 5
 
 # different random selections, to optimize this process
 if (len(metadata) > 1 ):
@@ -162,13 +162,16 @@ print(samples)
 #    reduced_noise = nr.reduce_noise(y=data, sr=rate)
 #    wavfile.write(sample, rate, reduced_noise)
 
+# output file path/name
+outfile = BASE_PATH_GENERATED + generated_file_name + '.wav'
 
-outfile = BASE_PATH_GENERATED + generated_file_name + '.mp3'
-
-# concatenate wav files
-with wave.open(outfile, 'wb') as wav_out:
-    for wav_path in samples:
-        with wave.open(wav_path, 'rb') as wav_in:
-            if not wav_out.getnframes():
-                wav_out.setparams(wav_in.getparams())
-            wav_out.writeframes(wav_in.readframes(wav_in.getnframes()))
+# output data
+out_data = []
+# iterate all the samples that we got randomly
+for wav_path in samples:
+    # read its data and samplerate (CNN produces float32 files, so we need to specify that)
+    data, samplerate = sf.read(wav_path, dtype='float32')
+    # concatenate to the output data
+    out_data.extend(data)
+# finally write the output file (we can also specify the PCM type we want)
+sf.write(outfile, out_data, samplerate, subtype='PCM_16')

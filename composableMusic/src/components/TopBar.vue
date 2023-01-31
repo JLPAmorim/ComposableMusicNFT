@@ -37,11 +37,11 @@
                         <v-container fill-height fluid>
 
                                 <div class="text-center"  >
-                                    <!--botão create your own:-->
                                     <div>
                                             <v-list
                                             style=" backgroundColor: #242121"
                                             >
+                                            <!--botão create your own Music:-->
                                             <v-list-item
                                                 style=" padding-bottom: 15px">
                                                 <nav>
@@ -76,6 +76,18 @@
                                                     </RouterLink>
                                                 </nav>
 
+                                            </v-list-item>
+
+                                            <!--botão user Page:-->
+                                            <v-list-item style=" padding-bottom: 15px">
+                                                <nav>
+                                                    <RouterLink style="text-decoration: none; color: inherit;" to="/userPage">
+                                                        <v-btn color=#EEEBD9 :width=250 class="noUpperCaseButton">
+                                                            <span class="style_buttons">Your catalog of NFTs</span>
+                                                        </v-btn>
+                                                    </RouterLink>
+                                                </nav>
+                                            
                                             </v-list-item>
                                         </v-list>
                                     </div>
