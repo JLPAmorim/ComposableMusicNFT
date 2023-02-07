@@ -2,6 +2,7 @@
     <div>
         <v-app-bar class="top_bar" style="backgroundColor: #1a2326 ;"> 
         
+        <!--Logo:---------------------------->
         <nav>
             <RouterLink 
                 style="text-decoration: none; color: inherit;"
@@ -9,17 +10,11 @@
                 <v-app-bar-title class="top_bar_title" :style="style_title">Composable Music NFTs </v-app-bar-title>
             </RouterLink>
         </nav>
-        <!--<v-column>
-        <v-app-bar-title class="top_bar_title" :style="style_title">
-            <v-row weight=0>Composable</v-row>
-            <v-row> Music NFTs </v-row>
-        </v-app-bar-title>
-        </v-column>-->
 
         <v-spacer></v-spacer>
         <v-column style="padding-right: 2.5%;">
             
-            <!--Resources:-->
+            <!--Resources:--------------------->
             <v-menu
                 :close-on-content-click="false"
                 :width=350
@@ -101,16 +96,12 @@
 
 
 
-            <!--Icone search-->
+            <!--Icone search---------------------------->
             <v-btn icon>
                 <v-icon style="color: #FDFDFD">mdi-magnify</v-icon>
             </v-btn>
             
-            <!--Icone e menu wallet-->
-            <!--<v-menu
-                :close-on-content-click="false"
-                v-model="showMenu"
-            >-->
+            <!--Icone e menu wallet--------------------->
             <v-menu
                 :close-on-content-click="false"
                 v-model="showMenu"
@@ -141,16 +132,6 @@
                     <!--Connect Wallet:-->
                     <v-list-item>
                         <v-container fill-height fluid>
-                            
-                                <!----<v-card-text class="text-prop mt-10" style="font-size: 3vh">
-                                    <v-row align="center" justify="center">
-                                        <p>Connect Metamask</p>
-                                    </v-row>
-                                </v-card-text>
-                                <v-row class="pt-10 pb-10" align="center" justify="center">
-                                    <v-btn v-if="!connected" @click="connect()">Connect Metamask</v-btn>
-                                    <v-btn v-else @click="mint()">Mint NFT</v-btn>
-                                </v-row>-->
 
                                 <div className="Minter" >
                                     <!--botão para conectar carteira:-->
@@ -233,12 +214,12 @@
                 </v-list>
             </v-menu>
 
-            <!--Icone notificacoes:-->
+            <!--Icone notificacoes:---------------------->
             <v-btn icon>
                 <v-icon style="color: #FDFDFD">mdi-bell-outline</v-icon>
             </v-btn>
 
-            <!--Icone e menu login:-->
+            <!--Icone e menu login (for future usage):---------------------->
             <v-menu
                 :close-on-content-click="false"
                 :width=500 
@@ -298,7 +279,7 @@
                 </v-list>
             </v-menu>
 
-            <!--Icone Carrinho:-->
+            <!--Icone Carrinho:--------------------->
             <v-btn icon>
                 <v-icon style="color: #FDFDFD">mdi-cart-minus</v-icon>
             </v-btn>

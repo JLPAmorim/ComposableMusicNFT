@@ -5,7 +5,8 @@
         v-on:click="redirectToHome">
         {{ home }}
       </v-btn>
-      <v-btn :key="aboutUs" color="white" variant="text" class="mx-2" rounded="xl">
+      <v-btn :key="aboutUs" color="white" variant="text" class="mx-2" rounded="xl"
+        v-on:click="redirectToAboutUs">
         {{ aboutUs }}
       </v-btn>
       <v-btn :key="team" color="white" variant="text" class="mx-2" rounded="xl">
@@ -14,6 +15,7 @@
       <v-btn :key="contactUs" color="white" variant="text" class="mx-2" rounded="xl">
         {{ contactUs }}
       </v-btn>
+      <!--Logo InvisibleLab rediricting to their web page:-->
       <v-col class="text-center mt-4" cols="12">
         <a href="https://www.invisiblelab.dev/" style="text-decoration: none;" target="_blank">
           <img src="https://uploads-ssl.webflow.com/60057003af6cfb7362bab247/6005a8ba64602c1ef34c244f_brand.svg"
@@ -42,6 +44,9 @@ export default {
   methods: {
     redirectToHome() {
       window.location.href = '/';
+    },
+    redirectToAboutUs() {
+      window.location.href = '/aboutus';
     },
   },
 }

@@ -4,6 +4,7 @@ import Register from '../views/Register.vue'
 import UploadSample from '../views/UploadSample.vue'
 import Generate from '../views/Generate.vue'
 import UserPage from '../views/UserPage.vue'
+import AboutUs from '../views/AboutUs.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +33,11 @@ const router = createRouter({
       path: '/userpage',
       name: 'userpage',
       component: UserPage
+    },
+    {
+      path: '/aboutus',
+      name: 'aboutus',
+      component: AboutUs
     }
   ]
 })

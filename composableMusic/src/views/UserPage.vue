@@ -1,9 +1,11 @@
 <template>
 
     <TopBar ref="TopBar_Ref"/>
-    <div style="backgroundColor: #1A2326;" >
+
+    <div style="backgroundColor: #222b2e; min-height: 100vh;" >
     <v-container class="container">
         <div >
+        <!--Tab to select all nfts, uploaded or generate:-->
         <v-tabs
             v-model="tab"
             color="#00E676"
@@ -27,7 +29,9 @@
             Generated Musics ({{generatedCount}})
             </v-tab>
         </v-tabs>
+        <!--Window to display all nfts, uploaded or generate:-->
         <v-window v-model="tab">
+            <!--Display all nfts:-->
             <v-window-item value="option-1">
                 <v-container>
                     <v-card-text>
@@ -43,6 +47,7 @@
                     </v-card-text>
                 </v-container>
             </v-window-item>
+            <!--Display uploaded samples:-->
             <v-window-item value="option-2">
                 <v-container>
                     <v-card-text>
@@ -57,6 +62,7 @@
                     </v-card-text>
                 </v-container>
             </v-window-item>
+            <!--Display generated musics:-->
             <v-window-item value="option-3">
                 <v-container>
                     <v-card-text>
@@ -113,7 +119,7 @@ export default {
         }
     },
 
-    //verificar se wallet connected:
+    //verify if wallet connected:
     async created() {
         const { address, status } = await getCurrentWalletConnected()
         this.walletAddress = address
@@ -153,6 +159,7 @@ export default {
     },
 
     computed: {
+        /*Compute the number of nfts:*/
         rowsAll() {
             let rows = [];
             for (let i = 0; i < this.allNFTS.length; i += 6) {
@@ -160,7 +167,7 @@ export default {
             }
             return rows;
         },
-
+        /*Compute the number of uploaded samples:*/
         rowsSample() {
             let rows = [];
             for (let i = 0; i < this.sampleNFTS.length; i += 6) {
@@ -169,6 +176,7 @@ export default {
             return rows;
         },
 
+        /*Compute the number of generated musics:*/
         rowsGenerated() {
             let rows = [];
             for (let i = 0; i < this.generatedNFTS.length; i += 6) {

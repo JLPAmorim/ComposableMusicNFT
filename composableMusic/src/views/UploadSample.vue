@@ -3,8 +3,9 @@
     <TopBar />
 
     <div style="backgroundColor: #222b2e; height: 100vh;" >
+      <!--Top description:-->
       <v-card-text class="d-flex justify-center align-baseline">
-        <p :style="style_description">
+        <p :style="style_description" class="title">
           Composable music NFTs is a new AI assisted platform that can create original music from yours and other featured artists music creations.
         </p>
       </v-card-text>
@@ -41,6 +42,7 @@
                     />
                   </v-col>
                 </v-row>
+                <!-------------- Music Instruments: ----------------->
                 <v-row>
                   <p class="title mt-10 ml-9">Instruments included:</p>
                 </v-row>
@@ -108,6 +110,7 @@
                 </v-row>
               </v-col>
 
+              <!--Sample Name, artist, value and description:-->
               <v-col cols="4" class="mt-16 ml-10">
                 <v-text-field
                   v-model="metadata.name"
@@ -195,6 +198,7 @@
             </v-col>
           </v-row>
 
+          <!--Music Player (only showed if already uploaded):-->
           <v-row v-if="!musicUploaded" style="padding-top:4%"/>
 
           <v-row >
@@ -233,11 +237,12 @@ export default {
   data(){
     return{
       style_description: {
-        color: "#67FFC9",
+        color: "#FFFAF0",
         fontFamily: "Poppins",
         fontWeight: "800",
       },
 
+      /*Rules to ensure the fields were correctly filled*/
       rules: {
         required: [ v => !!v || "This field is required!" ],
         select: [v => !!v || 'This is required'] ,
@@ -248,7 +253,7 @@ export default {
       },
 
       mintable: true,
-      connected: false,
+      connected: false, 
       status: "",
       walletAddress: "",
       validForm: false,
@@ -256,8 +261,8 @@ export default {
 
       artist: "",
       duration: "3:34",
-      genreList: ["Rock","Pop","Classic"],
-      moodList: ["Sad", "Happy", "Love", "Epic"],
+      genreList: ["Rock","Pop","Classic"],  /*Genres offered */
+      moodList: ["Sad", "Happy", "Love", "Epic"], /*Moods offered */
       genre: "",
       mood: "",
       instruments: [],
@@ -311,6 +316,7 @@ export default {
     }
   },
 
+  /*Ensure wallet is connected: */
   async created() {
       const {address, status} = await getCurrentWalletConnected()
       this.walletAddress = address
@@ -358,6 +364,7 @@ export default {
       this.audio = file
     },
 
+    /*When button connect wallet pressed:*/
     async connectWalletPressed(){
         const walletResponse = await connectWallet()
         this.status = walletResponse.status
@@ -366,6 +373,7 @@ export default {
             this.connected=true
     },
 
+    /*When button mint artist pressed:*/
     async mintArtistPressed() {
       const {valid} = await this.$refs.form.validate()
 

@@ -9,7 +9,7 @@
             </audio>
             <v-row justify="space-around" >
                 <!--<v-container style="padding-left: 7.5%; padding-top: 7.5%;"></v-container>-->
-                <v-container style="padding-left: 7.5%; padding-top: 7.5%;"> <!--padding bonito, mas quando minimizo estraga!!!-->
+                <v-container style="padding-left: 7.5%; padding-top: 7.5%;"> 
                     <!--botão play:-->
                     <v-hover
                     v-slot="{ isHovering, props }"
@@ -46,7 +46,6 @@
 
                     <!--preço da música-->
                     <div class="font-weight-medium text-white bg-dark " style="display:inline">
-                        <!--Price: {{ getMusicPrice(0) }} ETH --> 
                         Price: {{priceParent}} ETH
                     </div>
             </v-container>

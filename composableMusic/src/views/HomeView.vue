@@ -2,7 +2,7 @@
   <div>
     <TopBar ref="TopBar_Ref"/>
     <!--------------------------------------------------------------->
-    <div style="backgroundColor: #1A2326" >
+    <div style="backgroundColor: #222b2e" >
       <v-container>
         <v-row
           align="start"
@@ -10,11 +10,9 @@
           :height = "pageHeight"
         >
         
-        
+        <!--CMN Description:-->
         <v-card-text class="d-flex justify-center align-baseline">
-          <p style="color: #67FFC9;
-             fontFamily: Poppins;
-             fontWeight: 800;">
+          <p  :style="style_description" class="title">
             Composable music NFTs is a new AI assisted platform that can create original music from yours and other featured artists music creations.
           </p>
         </v-card-text>
@@ -28,8 +26,6 @@
           <v-container fluid>
           <v-row>
             <v-col cols="12" sm="6">
-              <!--<MusicPlayerHome musicLink = "./music/doraemon.mp3"></MusicPlayerHome>
-              <MusicPlayerHome musicLink = "./music/doraemon.mp3"></MusicPlayerHome>-->
               <MusicPlayerHome playerid="audio-player1" priceParent=0.025  musicLink = "https://assets.mixkit.co/music/preview/mixkit-secret-garden-595.mp3"></MusicPlayerHome>
               <MusicPlayerHome playerid="audio-player2" priceParent=0.035  musicLink = "https:\/\/files.freemusicarchive.org\/storage-freemusicarchive-org\/tracks\/Jjo9UAzIZMO6ln67OwObKSAEFlp98yCdhK6XxYL0.mp3"></MusicPlayerHome>
               <MusicPlayerHome playerid="audio-player3" priceParent=0.045  musicLink = "https:\/\/files.freemusicarchive.org\/storage-freemusicarchive-org\/tracks\/4xfPGu79rqI17kEhcFz9cD04qgVIYgrR4FiaRXdr.mp3"></MusicPlayerHome>
@@ -60,9 +56,10 @@
             no-gutters
             :height = "pageHeight"
           >
-          <!--<Style_MetaData/>-->
+          <!--Included component with the style, mood and instruments checkboxes
+          and carousel with feature artists:-->
           <Style_MetaData ref="Style_MetaData_Ref" @event_SendStyle="getStyles"/>
-          <!-----Botão Create Your Own:----->
+          <!-----Button Create Your Own:----->
           <v-container class="d-flex justify-center align-baseline">
             
                 <v-btn 
@@ -79,13 +76,14 @@
         </v-container>
     </div>
   <!--------------------------------------------------------------->    
-    <div style="backgroundColor: #1A2326">
+    <div style="backgroundColor: #222b2e">
         <v-container >
           <v-row
             align="start"
             no-gutters
             :height = "pageHeight"
           >
+          <!--"Your NFT journey starts here":-->
           <v-card-text class="d-flex justify-center align-baseline">
             <p style="color: #EEEBD9; font-family: 'Poppins'; font-style: normal; font-weight: 700; font-size: 20px;">
               Your NFT journey starts here
@@ -99,7 +97,7 @@
                 cols="12"
                 sm="6"
               >
-                <!--Botão Conect Wallet:--->
+                <!--Button Conect Wallet (open tab in the header):--->
                 <v-hover
                   v-slot="{ isHovering, props }"
                   open-delay="200"
@@ -125,7 +123,7 @@
                 cols="12"
                 sm="6"
               >
-                <!--Botão Sell your Music:--->
+                <!--Button Sell your Music (redirects to page upload sample):--->
                 <v-hover
                   v-slot="{ isHovering, props }"
                   close-delay="200"
@@ -213,40 +211,6 @@ export default defineComponent({
     },
 
   },
-  
-  setupPageHeight() {
-      const { name } = useDisplay()
-
-      const pageHeight = computed(() => {
-        // name is reactive and
-        // must use .value
-        switch (name.value) {
-          case 'xs': return 1250
-          case 'sm': return 1000
-          case 'md': return 800
-          case 'lg': return 650
-          case 'xl': return 500
-          case 'xxl': return 450
-        }
-
-        return undefined
-      })
-
-      return { pageHeight }
-    },
-
-    computed: {
-      height () {
-        switch (this.$vuetify.breakpoint.name) {
-          case 'xs': return 1250
-          case 'sm': return 1000
-          case 'md': return 800
-          case 'lg': return 650
-          case 'xl': return 1000
-          case 'xxl': return 1000
-        }
-      },
-    },
 })
 </script>
 
