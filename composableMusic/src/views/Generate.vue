@@ -2,14 +2,14 @@
   <div>
     <TopBar />
 
-    <div style="backgroundColor: #1A2326;" >
+    <div style="backgroundColor: #222b2e; height: 82.7vh;" >
       <v-card-text class="d-flex justify-center align-baseline">
         <p :style="style_description" class="title">
           Composable music NFTs is a new AI assisted platform that can create original music from yours and other featured artists music creations.
         </p>
       </v-card-text>
         
-          <v-container fluid>
+          <v-container f luid>
             <v-row dense="6">
               <v-col cols="6">
                 <v-form v-model="valid" ref="form">
@@ -427,19 +427,18 @@ export default {
       if(valid){
         console.log("Validated: " + this.$refs.form.validate())
         
-        console.log("Genre: " + this.genre)
         this.generating = true
-
         // Adicionar Genre/Mood/Instruments ao objeto a mandar para o Backend
-        this.generateData.genre = this.genre
+        this.generateData.genre = 'Blues'
         this.generateData.mood = this.mood
         this.generateData.instruments = this.instruments
-
+        
+        
         let ids,audioBin
         //Send POST request to generate Music and handle reply
         console.log("Generate data: ", this.generateData)
         axios.post(`http://localhost:8001/generate`, this.generateData)
-            .then(function(response){    
+            .then(response => {    
               //Handle reply  
               //vou receber o audio e os ids 
 
@@ -476,7 +475,7 @@ export default {
         console.log(this.audio)
 
         //Upload audio file to Pinata
-        const pinataAudio = await pinFileToIPFS(audio);
+        const pinataAudio = await pinFileToIPFS(this.audio);
         if (!pinataAudio.success) {
             return {
                 success: false,
@@ -513,7 +512,8 @@ export default {
         const { success, status } = await mintGenerated(this.value, this.metadata)
 
         if(success){
-            axios.post(`http://localhost:8001/mintSample`, this.sampleData)
+            const data = {objects: [this.sampleData, this.newID]};
+            axios.post(`http://localhost:8001/mintSample`, data)
                 .then(function(response){
                     console.log(response)
                 },(error) =>{

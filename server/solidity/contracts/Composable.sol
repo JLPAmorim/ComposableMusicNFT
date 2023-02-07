@@ -18,6 +18,7 @@ contract Composable is Ownable, ERC721URIStorage, ReentrancyGuard{
     uint256 taxArtist = 0.025 ether;
     address public algorithmOwner;
     bool public isMintEnabled = true;
+    uint256 royaltiesValue = 0.001 ether;
     
     struct Sample { 
         uint idToken;
@@ -85,10 +86,12 @@ contract Composable is Ownable, ERC721URIStorage, ReentrancyGuard{
     { //public payable virtual means that you are allowed to pay the contract to execute this function. 
         // Mint value has to be equal or lower than wallet balance 
         require(isMintEnabled, "Mint is not active!");
+        //require(msg.value >= 0.00000000000001 ether, "Not enough ETH sent: check price.");
 
         //Increment _tokenIdCounter
         _tokenIdCounter.increment();
         uint256 newSampleId = _tokenIdCounter.current();
+        //address defaultAddy = 0x1c842cB66B736c74Eb3fF65DcA58E2B2628Db139;
 
         //New sample
         Sample memory sample;
@@ -104,24 +107,24 @@ contract Composable is Ownable, ERC721URIStorage, ReentrancyGuard{
         //adiciono ao registo
         nfts[newSampleId]=sample;
 
+        /*//Royalties Transfer
+        for(uint i=0; i<samplesUsed.length; i++){
+                payable(defaultAddy).transfer(royaltiesValue);
+        }*/
+
+        /*
+        for(uint j=0; j<samplesUsed.length; j++){  
+            //require(msg.value >= nfts[samplesUsed[j]].valueSample,"Not enough funds!");
+            address seller = nfts[samplesUsed[j]].walletOwner;
+            payable(seller).transfer(msg.value);  //send the ETH to the seller
+        }*/
+
         _safeMint(to, newSampleId);
         _setTokenURI(newSampleId, tokenURI_);
 
-        //emit NewSample(to, newSampleId, nameSample);
         return newSampleId;
                      
-        /*
-        //transfer de value de sample para cada artista // se falhar numa das iteracoes, falha tudo?
-        uint total = 0; //somatorio de 
-        for(uint j=0; j<samplesA.length; j++){
-                total += nfts[samplesA[j]].valueSample;
-        }
-
-        for(uint j=0; j<samplesA.length; j++){  
-            //require(msg.value >= nfts[samplesA[j]].valueSample,"Not enough funds!");
-            address seller = nfts[samplesA[j]].walletOwner;
-            payable(seller).transfer(msg.value);  //send the ETH to the seller
-        }*/
+        
        
     } 
 /*

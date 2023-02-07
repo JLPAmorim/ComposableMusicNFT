@@ -1,8 +1,9 @@
 //Roteador do servico API
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
 module.exports = router;
+
 
 const User = require('../controllers/sampleController')
 const Sample = require('../controllers/sampleController')
@@ -13,7 +14,9 @@ const path = require('path')
 const fs = require('fs');
 const sample = require('../models/sample');
 
-var idcounter = 0;
+let idcounter = 0;
+
+
 
 // -------------------------- USER ------------------------------
 
@@ -83,7 +86,7 @@ var idcounter = 0;
 
   /**
    * Login de User
-   * O login é feito normal com o wallet address (é igual a um email)?
+   * O login é feito normal com o wallet address
    */
 
   router.post('/login', (req,res) =>{
@@ -121,7 +124,8 @@ var idcounter = 0;
 // -------------------------- NFT ------------------------------
 
   /**
-   * Mint de um Sample
+   * Mint de um Sample. 
+   *  
    */
 
   router.post('/mintSample', function(req,res){
@@ -174,6 +178,8 @@ var idcounter = 0;
             .then(dados => res.status(201).jsonp({dados: dados}))
             .catch(e => res.status(500).jsonp({error: 'erro'}))
     }
+
+
   });
 
 
@@ -240,31 +246,34 @@ var idcounter = 0;
             res.send({ audio, ids })  
                     
         }
-      })
+      });
     })
-  })
+  });
 
   /** Função auxiliar generatedAudioFile - Promise
-   * Necessário identificar localização do ficheiro
    * 
+   *  -Adicionar futuramente o path especifico
    */
-  function generateAudioFile(path,idcounter,generated_type){  
+  function generateAudioFile(idcounter,generated_type){  
     
     const generatePromise = new Promise((resolve, reject) => {
       //Processo filho que processa o script para geração com os componentes necessários 
-      //C:\\Users\\USER\\Documents\\GitHub\\ComposableMusicNFT\\server\\AI\\generate_music.py
-      process.chdir('C:\Users\Joao\Desktop\ComposableMusicNFT\server\AI\\');
-      const pythonProcess = spawn('python',['generate_music.py', idcounter.toString(), generated_type]);
+      //C:\\Users\\USER\\Documents\\GitHub\\ComposableMusicNFT\\server\\AI\\ generate_music.py
+      process.chdir('AI/')
+      const pythonProcess = spawn('python',['generate_music.py', idcounter.toString(), generated_type])
     
       pythonProcess.on('exit', function (code) {
         if (code === 0) {
-          console.log("Child process exited successfully");
+          console.log("Child process exited successfully")
           resolve("File Created and ready to send")
         } else {
-          console.log("Child process exited with code: " + code);
-          reject(new Error('Erro, file was not created'));
+          console.log("Child process exited with code: " + code)
+          reject(new Error('Erro, file was not created'))
         }
-      });  
+      });
+     
+      
+        
     });      
     return generatePromise;
   }

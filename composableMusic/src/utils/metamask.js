@@ -5,7 +5,7 @@ import contractABI from './contract-abi.json'
 
 const alchemyKey = import.meta.env.VITE_API_ALCHEMY_KEY
 const web3 = createAlchemyWeb3(alchemyKey);
-const contractAddress = "0xC9ED0c135dd7d8F48374dB0600498E26Ed4cDde1";
+const contractAddress = "0xe31C4400fb4477d3acCDCcA33EB4ee1cA8950858";
 
 
 export const connectWallet = async () => {
@@ -129,19 +129,19 @@ export const mintGenerated = async(value, metadata) => {
     samplesUsed[i] = web3.utils.toBN(web3.utils.toWei(samplesUsed[i]))
   }*/
 
-  console.log("endereço: " + window.ethereum.selectedAddress)
-  console.log("value: " + web3.utils.toBN(web3.utils.toWei(value)))
-  console.log("name: " + metadata.name)
-  console.log("uri: " + tokenURI)
 
   var samplesUsed = []
   samplesUsed[0] = 12341
   samplesUsed[1] = 22134
 
+  /*const amount = web3.utils.toWei('0.01');
+  console.log("Amount: " + amount)*/
+
   //set up your Ethereum transaction
   const transactionParameters = {
       to: contractAddress, // Required except during contract publications.
       from: window.ethereum.selectedAddress, // must match user's active address.
+      //value: amount,
       'data': window.contract.methods.generateNFTMusic(window.ethereum.selectedAddress, samplesUsed, web3.utils.toBN(web3.utils.toWei(value)), metadata.name, tokenURI).encodeABI() //make call to NFT smart contract 
   };
 

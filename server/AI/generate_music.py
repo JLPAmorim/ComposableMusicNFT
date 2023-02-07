@@ -6,8 +6,8 @@ import numpy as np
 #import zaf
 import soundfile as sf
 
-BASE_PATH = 'C:\\Users\\USER\\Documents\\GitHub\\ComposableMusicNFT\\server\\AI\\Datasets\\cmn-ai-generated\\'        # metadata base path
-BASE_PATH_GENERATED = 'C:\\Users\\USER\\Documents\\GitHub\\ComposableMusicNFT\\server\AI\\Generated\\'              # file generation destination path
+BASE_PATH = 'C:\\Users\\Joao\\Desktop\\ComposableMusicNFT\\server\AI\\Datasets\\cmn-ai-generated\\'        # metadata base path
+BASE_PATH_GENERATED = 'C:\\Users\\Joao\\Desktop\\ComposableMusicNFT\\server\AI\\Generated\\'              # file generation destination path
 
 # ---------------------------------------------- ARGUMENTS FOR THE PROGRAM ----------------------------------------------
 # check if number of arguments is correct and some debug
