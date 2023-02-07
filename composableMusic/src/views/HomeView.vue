@@ -27,9 +27,7 @@
           </p>
           <v-container fluid>
           <v-row>
-            <v-col   
-                cols="12"
-                sm="6">
+            <v-col cols="12" sm="6">
               <!--<MusicPlayerHome musicLink = "./music/doraemon.mp3"></MusicPlayerHome>
               <MusicPlayerHome musicLink = "./music/doraemon.mp3"></MusicPlayerHome>-->
               <MusicPlayerHome playerid="audio-player1" priceParent=0.025  musicLink = "https://assets.mixkit.co/music/preview/mixkit-secret-garden-595.mp3"></MusicPlayerHome>
@@ -172,7 +170,7 @@ import Bt_AddCart from '../components/Bt_AddCart.vue';
 import Style_MetaData from '../components/Style_MetaData.vue';
 import MusicPlayer from '../components/MusicPlayer.vue';
 import MusicPlayerHome from '../components/MusicPlayerHome.vue';
-
+import axios from 'axios'
 import { ref } from 'vue'
 
 // Components
@@ -192,15 +190,21 @@ export default defineComponent({
   data: () => ({        
         icons: ['mdi-rewind', 'mdi-play', 'mdi-fast-forward'],
         //music1Props: {priceParent:0.03, musicLink: "./music/doraemon.mp3"},
-        
-        
         transparent: 'rgba(255, 255, 255, 0)',
-
         isMobile: false,
+        nftsList: []
 
 
         
   }),
+
+  async created() {
+    axios.get('http://localhost:8001/getHomepage')
+      .then(res => {
+        this.nftList = res.data.samples
+        console.log(this.nftList)
+    }) 
+  },
   
   methods:{
     //recebe styles do filho:

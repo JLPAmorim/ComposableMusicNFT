@@ -47,14 +47,59 @@
         </v-img>
 
         <!--Nome da música:-->
+        
         <v-card-title class="text-left" 
-            style="font-family: 'Poppins'; text-color:'#FAFAFA'; padding-top: 5%;">
-            {{ name }}
+            style="font-family: 'Poppins'; text-color:'#FAFAFA'; padding-top: 10%;">
+            <v-row v-if="collection" class="collection">
+                <v-col v-if="name.length<17">
+                    {{ collection }} 
+                </v-col>
+                <v-col v-else>
+                    {{ collection.substring(0,17)+"..."}} 
+                </v-col>
+            </v-row>
+            <v-row v-else class="collection">
+                <v-col v-if="name.length<17">
+                    By {{ artist }} 
+                </v-col>
+                <v-col v-else>
+                    {{ artist.substring(0,17)+"..."}} 
+                </v-col>
+            </v-row>
+            <v-row> 
+                <v-col v-if="name.length<17">
+                    {{ name}} 
+                </v-col>
+                <v-col v-else>
+                    {{ name.substring(0,17)+"..."}} 
+                </v-col>
+                
+            </v-row>
+            
+            
+            
         </v-card-title>
 
         <!--Preço da música:-->
         <v-card-subtitle  v-if="price" style="font-family: 'Poppins'; padding-bottom: 1.5%;">
-            {{ price }} ETH
+            <v-row>
+                <v-col cols="8">
+                    {{ price }} ETH
+                </v-col>
+            </v-row>            
+        </v-card-subtitle>
+
+        <v-card-subtitle  v-if="permalink" style="font-family: 'Poppins'; padding-bottom: 1.5%;">
+            <v-row>
+                <v-col cols="8">
+                    Not Listed
+                </v-col>
+                <v-col cols="4">
+                    <v-btn class="" color="#2081e2" :href="permalink">
+                        <v-icon color="white">mdi-sail-boat</v-icon>
+                    </v-btn>
+                </v-col>
+            </v-row>            
         </v-card-subtitle>
 
 
@@ -68,6 +113,10 @@ import { useDisplay } from 'vuetify'
 export default {
     //O que recebemos da userPage (nome, urlImagem, preço, urlMusica):
     props: {
+        artist: {
+            type: String,
+            required: true
+        },
         name: {
             type: String,
             required: true
@@ -81,6 +130,14 @@ export default {
             default: ''
         },
         musicUrl:{
+            type: String,
+            required: true
+        },
+        permalink:{
+            type: String,
+            required: true
+        },
+        collection:{
             type: String,
             required: true
         }
@@ -241,5 +298,9 @@ export default {
         top: 50%;
         left: 65%;
         transform: translate(-50%, -50%);
+    }
+
+    .collection {
+        font-size: 0.8em;
     }
 </style>

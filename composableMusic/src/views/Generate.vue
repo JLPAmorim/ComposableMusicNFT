@@ -337,7 +337,7 @@ export default {
       //Metadata Variables
       artist: "",
       value: "",
-      duration: "25.4",
+      duration: "",
       metadata: {
         description: "",
         image: "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr",
@@ -374,6 +374,7 @@ export default {
       audioDuration:"",
       audioUploaded:false,
       mintable: false,
+      newID: 0,
       generateData: {
           genre: "",
           mood: "",
@@ -387,6 +388,7 @@ export default {
         description: "",
         image: "https://gateway.pinata.cloud/ipfs/QmUmXJLWKhxSHtPdQvy8aYnMkGRXbgbkqFJmtQAMoq8Ukr",
         name: "",
+        animation_url: "",
         attributes: [],
         value: "",
         samplesUsed: ["1","2","3","4"]
@@ -400,9 +402,14 @@ export default {
     this.status = status
     if(this.walletAddress!="")
         this.connected=true
-    
-    console.log(this.connected)
-    console.log(this.walletAddress)
+    console.log("Is connected? ",this.connected)
+    console.log("Wallet connected: ", this.walletAddress)
+
+    axios.get('http://localhost:8001/getSupply')
+        .then(res => {
+          this.newID = res.data.samples + 1
+          console.log(this.newID)
+      }) 
   },
   
   methods:{
@@ -427,14 +434,15 @@ export default {
         this.generateData.genre = this.genre
         this.generateData.mood = this.mood
         this.generateData.instruments = this.instruments
-        
-        console.log("generated")
 
         let ids,audioBin
         //Send POST request to generate Music and handle reply
+        console.log("Generate data: ", this.generateData)
         axios.post(`http://localhost:8001/generate`, this.generateData)
             .then(function(response){    
               //Handle reply  
+              //vou receber o audio e os ids 
+
               audioBin = new Uint8Array(response.data.audio.data)
               ids = response.data.ids
               const audio = new Audio()
@@ -447,16 +455,17 @@ export default {
               this.audioDuration = audio.duration
               this.musicUploaded=true 
 
-              this.mintable = true
+              console.log("----Music Generated----")
+              
             },(error) =>{
-                console.log(error);
-        });
-
-        // Abrir depois do POST feito e resposta recebida
-        this.dialogMint = true
-        this.mintable = true
-
-      }
+                console.log(error)
+            })
+          
+            // Abrir a caixa de mint da música depois do POST feito e resposta recebida
+            this.dialogMint = true
+            this.mintable = true
+            
+        }
     },
 
     async mintGeneratedPressed() {
@@ -475,6 +484,7 @@ export default {
             }
         }else{
           this.metadata.animation_url = pinataAudio.pinataUrl;
+          this.sampleData.animation_url = pinataAudio.pinataUrl
         }
 
         // Metadata to be sent to Mint Function

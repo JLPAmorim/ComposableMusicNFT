@@ -2,7 +2,7 @@
   <div>
     <TopBar />
 
-    <div style="backgroundColor: #1A2326;" >
+    <div style="backgroundColor: #222b2e; height: 100vh;" >
       <v-card-text class="d-flex justify-center align-baseline">
         <p :style="style_description">
           Composable music NFTs is a new AI assisted platform that can create original music from yours and other featured artists music creations.
@@ -264,6 +264,7 @@ export default {
       sampleFile: "",
       sampleUrl: "",
       value: "",
+      audio: [],
       musicUploaded:false,
       newID: 0,
 
@@ -304,7 +305,8 @@ export default {
         animation_url: "",
         attributes: [],
         value: "",
-        samplesUsed: ["2932","232","9823","4"]
+        samplesUsed: [],
+        audio: []
       }
     }
   },
@@ -325,8 +327,18 @@ export default {
 
   methods:{
 
+
+    // Type of variable help
+    type(value) {
+      var regex = /^[object (S+?)]$/;
+      var matches = Object.prototype.toString.call(value).match(regex) || [];
+  
+      return (matches[1] || 'undefined').toLowerCase();
+    },
+
+
+      // Cria um novo audio element
     uploadAudio() {
-      // Create a new audio element
       const audio = new Audio()
 
       const file = this.$refs.sampleInput.files[0]
@@ -335,7 +347,6 @@ export default {
 
       // Set the source of the audio file to the selected file
       audio.src = this.sampleUrl
-
       // Listen for the "loadedmetadata" event, which is triggered when
       // the duration of the audio file is available
       audio.addEventListener("loadedmetadata", () => {
@@ -344,6 +355,7 @@ export default {
         console.log(this.duration)
       })
       this.musicUploaded=true
+      this.audio = file
     },
 
     async connectWalletPressed(){
@@ -395,14 +407,33 @@ export default {
 
     
         const { success, status } = await mintArtist(this.value, this.metadata)
-        
         if(success){
-          axios.post(`http://localhost:8001/mintSample`, this.sampleData)
-              .then(function(response){
-                  console.log(response)
-              },(error) =>{
-                  console.log(error);
-          });
+            /*
+            O objetivo é agora que temos o newID, com o id que vamos usar no nome, quando fizermos o post em /mintSample usando o this.sampleData, enviamos 
+            também o newID e do lado do backend é usado para nome. 
+            É também enviado o audio. Temos o audio dentro do objeto sampleData e do lado do backend guardamos a música no Path dele
+           
+            */
+            const fileReader = new FileReader()
+            fileReader.readAsArrayBuffer(this.audio)
+            fileReader.onload = (event) => {
+              //this.sampleData.audio = new Uint8Array(event.target.result)
+                  if (event.target.readyState == FileReader.DONE){
+                    const arrayBuffer = event.target.result
+                    let array = new Uint8Array(arrayBuffer)
+                    for (const element of array) {
+                        this.sampleData.audio.push(element);
+                      }
+            
+                      const data = {objects: [this.sampleData, this.newID]};
+                      axios.post(`http://localhost:8001/mintSample`, data)
+                          .then(function(response){
+                              console.log(response)
+                          },(error) =>{
+                              console.log(error);
+                      });
+                  }
+            }   
         }
       }else{
         console.log("Invalid Fields")

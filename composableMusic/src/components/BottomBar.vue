@@ -1,5 +1,5 @@
 <template>
-  <v-footer style="background-color: #232424;" height="100%">
+  <v-footer style="background-color: #232424;" height="100%" absolute class="footerr">
     <v-row justify="center" no-gutters>
       <v-btn :key="home" color="white" variant="text" class="mx-2" rounded="xl"
         v-on:click="redirectToHome">
@@ -51,4 +51,5 @@ export default {
 .ft_style {
   background-color: #232424;
 }
+
 </style>

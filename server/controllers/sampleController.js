@@ -45,3 +45,8 @@ module.exports.findByWallet = function(wallet){
 module.exports.getSupply = function(){
     return Sample.countDocuments()
 }
+
+// Get how many documents are in a collection (Total Supply of NFT's)
+module.exports.getHomepage = function(){
+    return Sample.find().limit(6).sort({$natural:-1})
+}

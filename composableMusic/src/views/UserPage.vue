@@ -1,79 +1,81 @@
 <template>
-    <div>
-        <TopBar ref="TopBar_Ref"/>
 
-        <div style="backgroundColor: #1A2326;">
-
-            <!--Últimas músicas compradas pelo utilizador:-->
-            <v-container fluid>
-                <p style="color: #EEEBD9;
-                        fontFamily: Poppins;
-                        fontWeight: 800;
-                        fontSize: 20px;">
-                    Your Latest Purchases:
-                </p>
-
-                <!--Mensagem se wallet não conectada:-->
-                <v-card-text v-if="!this.connected" class="d-flex justify-center align-baseline">
-                    <p class="notConectedMessage">
-                        We would love to show you your lastest purchases, but
-                        <button class="connect-button" v-bind="props" @click="$refs.TopBar_Ref.showMenuWallet()">
-                            <span style="color: #00E676; padding-left: 5px; padding-right: 5px;">
-                                you need to connect your wallet first!
-                            </span>
-                        </button>
-                    </p>
-                </v-card-text>
-
-                <!--NFTs:-->
-                <v-row >
-                    <v-col v-for="gennft in generatedNFTS" :key="gennft._id" cols="4" sm="3" xs="6">
-                        <!--Se a wallet conectada:-->
-                        <NFTDisplay v-if="this.connected" :name="gennft.name" :imageUrl="gennft.image" :musicUrl="gennft.animation_url" :price="gennft.value"/>
-                        <!--Se a wallet não conectada:-->
-                        <NFTDisplay v-else>name="" imageUrl="" musicUrl="" price=""</NFTDisplay>
-                    </v-col>
-                </v-row>
-            </v-container>
-
-            <!----------------------------------------->
-
-            <!--Últimas samples adicionadas pelo utilizador:-->
-            <v-container fluid>
-                <p style="color: #EEEBD9;
-                fontFamily: Poppins;
-                fontWeight: 800;
-                fontSize: 20px;">
-                    The Latest Samples You Uploaded:
-                </p>
-
-                <!--Mensagem se wallet não conectada:-->
-                <v-card-text v-if="!this.connected" class="d-flex justify-center align-baseline" >
-                    <p class="notConectedMessage">
-                        We would love to show you your lastest purchases, but
-                        <button class="connect-button" v-bind="props" @click="$refs.TopBar_Ref.showMenuWallet()">
-                            <span style="color: #00E676; padding-left: 5px; padding-right: 5px;">
-                                you need to connect your wallet first!
-                            </span>
-                        </button>
-                    </p>
-                </v-card-text>
-
-                <!--NFTs:-->
-                <v-row >
-                    <v-col v-for="samplenft in sampleNFTS" :key="samplenft._id" cols="4" sm="3" xs="6">
-                        <!--Se a wallet conectada:-->
-                        <NFTDisplay v-if="this.connected" :name="samplenft.name" :imageUrl="samplenft.image" :musicUrl="samplenft.animation_url" :price="samplenft.value"/>
-                        <!--Se a wallet não conectada:-->
-                        <NFTDisplay v-else>name="" imageUrl="" musicUrl="" price=""</NFTDisplay>
-                    </v-col>
-                </v-row>
-            </v-container>
-
-
+    <TopBar ref="TopBar_Ref"/>
+    <div style="backgroundColor: #1A2326;" >
+    <v-container class="container">
+        <div >
+        <v-tabs
+            v-model="tab"
+            color="#00E676"
+        >
+            <v-tab value="option-1">
+            <v-icon start>
+                mdi-view-list
+            </v-icon>
+            ALL NFT'S ({{allCount}})
+            </v-tab>
+            <v-tab value="option-2">
+            <v-icon start>
+                mdi-account-music
+            </v-icon>
+            Uploaded Samples ({{sampleCount}})
+            </v-tab>
+            <v-tab value="option-3">
+            <v-icon start>
+                mdi-music
+            </v-icon>
+            Generated Musics ({{generatedCount}})
+            </v-tab>
+        </v-tabs>
+        <v-window v-model="tab">
+            <v-window-item value="option-1">
+                <v-container>
+                    <v-card-text>
+                        <v-row v-for="row in rowsAll" :key="row">
+                            <v-col v-for="nft in row" :key="nft" cols="2" sm="2" xs="6">
+                                <NFTDisplay :name="nft.name" :imageUrl="nft.image_url" :musicUrl="nft.animation_url" :price="nft.value" :permalink="nft.permalink" :collection="nft.collection.name"/>
+                            </v-col>
+                        </v-row>
+                        
+                        <!--<v-row >
+                            <h1>Wallet Not Connected</h1>
+                        </v-row>-->
+                    </v-card-text>
+                </v-container>
+            </v-window-item>
+            <v-window-item value="option-2">
+                <v-container>
+                    <v-card-text>
+                        <v-row v-for="row in rowsSample" :key="row">
+                            <v-col v-for="nft in row" :key="nft" cols="2" sm="2" xs="6">
+                                <NFTDisplay :artist="nft.attributes[0].value" :name="nft.name" :imageUrl="nft.image" :musicUrl="nft.animation_url" :price="nft.value"/>
+                            </v-col>
+                        </v-row>
+                        <!--<v-row >
+                            <h1>Wallet Not Connected</h1>
+                        </v-row>-->
+                    </v-card-text>
+                </v-container>
+            </v-window-item>
+            <v-window-item value="option-3">
+                <v-container>
+                    <v-card-text>
+                        <v-row v-for="row in rowsGenerated" :key="row">
+                            <v-col v-for="nft in row" :key="nft" cols="2" sm="2" xs="6">
+                                <NFTDisplay :artist="nft.attributes[0].value" :name="nft.name" :imageUrl="this.image" :musicUrl="nft.animation_url" :price="nft.value" />
+                            </v-col>
+                        </v-row>
+                        <!--<v-row v-else>
+                            <h1>Wallet Not Connected</h1>
+                        </v-row>-->
+                    </v-card-text>
+                </v-container>
+            </v-window-item>
+        </v-window>
         </div>
-        <BottomBar />
+    </v-container>
     </div>
+    <BottomBar />
 </template>
 
   
@@ -96,14 +98,18 @@ export default {
     data() {
         return {
             //Wallet variables
+            tab: 'option-1',
             connected: false,
             status: "",
             walletAddress: "",
+            allNFTS: [],
+            allCount: 0,
             sampleNFTS: [],
-            
+            sampleCount: 0,
+            rowsSample: 0,
             generatedNFTS: [],
-            generatedCount: 0
-           
+            generatedCount: 0,
+            image: "https://i.seadn.io/gcs/files/b59d885a2723a66df5f1d2330e4c8a17.png?w=500&auto=format"
         }
     },
 
@@ -117,21 +123,25 @@ export default {
             this.connected = true
         }
 
+        axios.get(`https://api.opensea.io/api/v1/assets?owner=0xD9c00b9cDB1d45CF265d1925eb1d004ee04D9f69`)
+            .then(res => {
+                this.allNFTS = res.data.assets
+                this.allCount = this.allNFTS.length
+                console.log(this.allNFTS)
+            })
+
         axios.get('http://localhost:8001/samplesByWallet', {headers: {wallet: this.walletAddress}})
             .then(res => {
-                var sampleCount = 0
-                var generatedCount = 0
-                for(let i = 0; i<res.data.samples.length && (sampleCount<=4 || generatedCount<=4);i++){
+                for(let i = 0; i<res.data.samples.length;i++){
                     if(res.data.samples[i].samplesUsed.length==0){
-                        this.sampleNFTS[sampleCount] = res.data.samples[i]
-                        sampleCount++
-                    }else{
-                        this.generatedNFTS[generatedCount] = res.data.samples[i]
-                        generatedCount++
+                        this.sampleNFTS[this.sampleCount] = res.data.samples[i]
+                        this.sampleCount++
+                    }
+                    if(res.data.samples[i].samplesUsed.length!=0){
+                        this.generatedNFTS[this.generatedCount] = res.data.samples[i]
+                        this.generatedCount++
                     }
                 }
-                
-                console.log(res)
         })    
     },
 
@@ -140,7 +150,33 @@ export default {
             console.log("Samples: " + this.sampleNFTS)
         console.log("Generated: " + this.generatedNFTS)
         }
-    }
+    },
+
+    computed: {
+        rowsAll() {
+            let rows = [];
+            for (let i = 0; i < this.allNFTS.length; i += 6) {
+                rows.push(this.allNFTS.slice(i, i + 6));
+            }
+            return rows;
+        },
+
+        rowsSample() {
+            let rows = [];
+            for (let i = 0; i < this.sampleNFTS.length; i += 6) {
+                rows.push(this.sampleNFTS.slice(i, i + 6));
+            }
+            return rows;
+        },
+
+        rowsGenerated() {
+            let rows = [];
+            for (let i = 0; i < this.generatedNFTS.length; i += 6) {
+                rows.push(this.generatedNFTS.slice(i, i + 6));
+            }
+            return rows;
+        }
+  }
 
     
 }
@@ -195,4 +231,9 @@ export default {
     max-height: 46px;
     background-color: #eee;
 }
+
+.v-container{
+    color: #ffffff;
+}
+
 </style>
