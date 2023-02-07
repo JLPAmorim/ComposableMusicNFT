@@ -590,6 +590,7 @@ export default {
       box-shadow: none;
       max-height: 46px;
       background-color: #eee;
+      color: black
     }
       
 </style>
