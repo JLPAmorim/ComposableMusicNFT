@@ -1,7 +1,7 @@
 <template>
 
     <TopBar ref="TopBar_Ref"/>
-    <div style="backgroundColor: #1A2326;" >
+    <div style="backgroundColor: #1A2326; min-height: 82.7vh;" >
     <v-container class="container">
         <div >
         <v-tabs
@@ -30,44 +30,89 @@
         <v-window v-model="tab">
             <v-window-item value="option-1">
                 <v-container>
-                    <v-card-text>
+                    <v-card-text v-if="this.connected">
                         <v-row v-for="row in rowsAll" :key="row">
                             <v-col v-for="nft in row" :key="nft" cols="2" sm="2" xs="6">
                                 <NFTDisplay :name="nft.name" :imageUrl="nft.image_url" :musicUrl="nft.animation_url" :price="nft.value" :permalink="nft.permalink" :collection="nft.collection.name"/>
                             </v-col>
                         </v-row>
                         
-                        <!--<v-row >
+                        <v-row>
                             <h1>Wallet Not Connected</h1>
-                        </v-row>-->
+                        </v-row>
+                    </v-card-text>
+                    <v-card-text v-else>                        
+                        <v-row>
+                            <v-col cols="5"/>
+                            <h1 justify-center>Wallet Not Connected</h1>
+                        </v-row>
+                        <v-row class="">
+                            <v-col cols="5"/>
+                            <v-btn 
+                                :width="290" 
+                                :height="55" 
+                                color=#00E676
+                                class="mt-16 mr- white--text" 
+                                @click="connectWalletPressed()">
+                                Connect Wallet
+                            </v-btn>
+                        </v-row>
                     </v-card-text>
                 </v-container>
             </v-window-item>
             <v-window-item value="option-2">
                 <v-container>
-                    <v-card-text>
+                    <v-card-text v-if="this.connected">
                         <v-row v-for="row in rowsSample" :key="row">
                             <v-col v-for="nft in row" :key="nft" cols="2" sm="2" xs="6">
                                 <NFTDisplay :artist="nft.attributes[0].value" :name="nft.name" :imageUrl="nft.image" :musicUrl="nft.animation_url" :price="nft.value"/>
                             </v-col>
                         </v-row>
-                        <!--<v-row >
-                            <h1>Wallet Not Connected</h1>
-                        </v-row>-->
+                    </v-card-text>
+                    <v-card-text v-else>                        
+                        <v-row>
+                            <v-col cols="5"/>
+                            <h1 justify-center>Wallet Not Connected</h1>
+                        </v-row>
+                        <v-row class="">
+                            <v-col cols="5"/>
+                            <v-btn 
+                                :width="290" 
+                                :height="55" 
+                                color=#00E676
+                                class="mt-16 mr- white--text" 
+                                @click="connectWalletPressed()">
+                                Connect Wallet
+                            </v-btn>
+                        </v-row>
                     </v-card-text>
                 </v-container>
             </v-window-item>
             <v-window-item value="option-3">
                 <v-container>
-                    <v-card-text>
+                    <v-card-text v-if="this.connected">
                         <v-row v-for="row in rowsGenerated" :key="row">
                             <v-col v-for="nft in row" :key="nft" cols="2" sm="2" xs="6">
-                                <NFTDisplay :artist="nft.attributes[0].value" :name="nft.name" :imageUrl="this.image" :musicUrl="nft.animation_url" :price="nft.value" />
+                                <NFTDisplay :artist="nft.attributes[0].value" :name="nft.name" :imageUrl="nft.image" :musicUrl="nft.animation_url" :price="nft.value" />
                             </v-col>
                         </v-row>
-                        <!--<v-row v-else>
-                            <h1>Wallet Not Connected</h1>
-                        </v-row>-->
+                    </v-card-text>
+                    <v-card-text v-else>                        
+                        <v-row>
+                            <v-col cols="5"/>
+                            <h1 justify-center>Wallet Not Connected</h1>
+                        </v-row>
+                        <v-row class="">
+                            <v-col cols="5"/>
+                            <v-btn 
+                                :width="290" 
+                                :height="55" 
+                                color=#00E676
+                                class="mt-16 mr- white--text" 
+                                @click="connectWalletPressed()">
+                                Connect Wallet
+                            </v-btn>
+                        </v-row>
                     </v-card-text>
                 </v-container>
             </v-window-item>
@@ -84,7 +129,7 @@
 import TopBar from "../components/TopBar.vue";
 import BottomBar from "../components/BottomBar.vue";
 import NFTDisplay from "../components/NFTDisplay.vue";
-import {getCurrentWalletConnected} from "../utils/metamask.js"
+import {connectWallet, getCurrentWalletConnected} from "../utils/metamask.js"
 import axios from 'axios'
 
 export default {
@@ -146,13 +191,15 @@ export default {
     },
 
     methods: {
-        clickme(){
-            console.log("Samples: " + this.sampleNFTS)
-        console.log("Generated: " + this.generatedNFTS)
-        }
+        /*When button connect wallet pressed:*/
+        async connectWalletPressed(){
+            const walletResponse = await connectWallet()
+            location.reload()
+        },
     },
 
     computed: {
+        /*Compute the number of nfts:*/
         rowsAll() {
             let rows = [];
             for (let i = 0; i < this.allNFTS.length; i += 6) {
@@ -160,7 +207,7 @@ export default {
             }
             return rows;
         },
-
+        /*Compute the number of uploaded samples:*/
         rowsSample() {
             let rows = [];
             for (let i = 0; i < this.sampleNFTS.length; i += 6) {
@@ -168,7 +215,7 @@ export default {
             }
             return rows;
         },
-
+        /*Compute the number of generated musics:*/
         rowsGenerated() {
             let rows = [];
             for (let i = 0; i < this.generatedNFTS.length; i += 6) {

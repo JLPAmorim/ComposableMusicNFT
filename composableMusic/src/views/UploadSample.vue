@@ -3,8 +3,9 @@
     <TopBar />
 
     <div style="backgroundColor: #222b2e; height: 100vh;" >
+      <!--Top description:-->
       <v-card-text class="d-flex justify-center align-baseline">
-        <p :style="style_description">
+        <p :style="style_description" class="title">
           Composable music NFTs is a new AI assisted platform that can create original music from yours and other featured artists music creations.
         </p>
       </v-card-text>
@@ -41,6 +42,7 @@
                     />
                   </v-col>
                 </v-row>
+                <!-------------- Music Instruments: ----------------->
                 <v-row>
                   <p class="title mt-10 ml-9">Instruments included:</p>
                 </v-row>
@@ -54,7 +56,6 @@
                       :rules="validateInstruments"
                     ></v-checkbox>
                   </v-col>
-
                   <v-col cols="4">
                     <v-checkbox
                       class="style_boxs mt-7 ml-16"
@@ -64,7 +65,6 @@
                       :rules="validateInstruments"
                     ></v-checkbox>
                   </v-col>
-
                   <v-col cols="4">
                     <v-checkbox
                       class="style_boxs mt-7 ml-16"
@@ -85,7 +85,6 @@
                       :rules="validateInstruments"
                     ></v-checkbox>
                   </v-col>
-
                   <v-col cols="4">
                     <v-checkbox
                       class="style_boxs ml-16"
@@ -95,7 +94,6 @@
                       :rules="validateInstruments"
                     ></v-checkbox>
                   </v-col>
-
                   <v-col cols="4">
                     <v-checkbox
                       class="style_boxs ml-16"
@@ -107,7 +105,7 @@
                   </v-col>
                 </v-row>
               </v-col>
-
+              <!--Sample Name, artist, value and description:-->
               <v-col cols="4" class="mt-16 ml-10">
                 <v-text-field
                   v-model="metadata.name"
@@ -127,7 +125,6 @@
                   class="custom-label-color"
                   type="text"
                 />
-
                 <v-text-field
                   v-model="value"
                   :rules="rules.value"
@@ -136,7 +133,6 @@
                   color=#00E676
                   class="custom-label-color"
                 />
-
                 <v-textarea
                   v-model="metadata.description"
                   :rules=[...rules.required,...rules.length150]
@@ -150,16 +146,11 @@
                 ></v-textarea>
               </v-col>
             </v-row>
-
           <!--Linha upload sample, botão mint e preview-->
-
           <v-row>
             <p class="title mt-10 ml-9">Upload Sample</p>
           </v-row>
-
           <v-row style="padding-top:1.45%">
-
-
             <v-col cols="5" style="padding-left:4.45%" >
               <v-file-input
                 v-model="sampleFile"
@@ -176,7 +167,6 @@
             </v-col>
             
             <v-col cols="1"></v-col>
-
             <v-col cols="4" style="padding-left:2%">
               <!--Botão de mint, caso wallet conectada-->
                 <v-btn v-if="this.connected" :width="500" :height="55" color=#00E676
@@ -194,22 +184,19 @@
                   </v-btn>
             </v-col>
           </v-row>
-
+          <!--Music Player (only showed if already uploaded):-->
           <v-row v-if="!musicUploaded" style="padding-top:4%"/>
-
           <v-row >
                 <v-col cols="6" style="padding-left:5.45%">
                   <MusicPlayer v-if="sampleUrl!=''" :musicLink="sampleUrl"/>
                 </v-col>
           </v-row>
-
         </v-container>
       </v-form>
     </div>
     <BottomBar />
   </div>
 </template>
-
 <script>
 import TopBar from "../components/TopBar.vue";
 import BottomBar from "../components/BottomBar.vue";
@@ -219,10 +206,7 @@ import MusicPlayerHome from '../components/MusicPlayerHome.vue';
 import {connectWallet, getCurrentWalletConnected, mintArtist} from "../utils/metamask.js"
 import axios from 'axios'
 import {pinFileToIPFS} from '../utils/pinata.js'
-
-
 export default {
-
   components: {
     TopBar,
     UploadSample,
@@ -233,11 +217,11 @@ export default {
   data(){
     return{
       style_description: {
-        color: "#67FFC9",
+        color: "#FFFAF0",
         fontFamily: "Poppins",
         fontWeight: "800",
       },
-
+      /*Rules to ensure the fields were correctly filled*/
       rules: {
         required: [ v => !!v || "This field is required!" ],
         select: [v => !!v || 'This is required'] ,
@@ -246,18 +230,16 @@ export default {
         length150: [v => (v && v.length <= 150) || "Field must be less or equal than 45 characters!"],
         value: [v => /^[0-9]\d*(\.\d+)?$/.test(v) || "Value isn\'t valid!"],
       },
-
       mintable: true,
-      connected: false,
+      connected: false, 
       status: "",
       walletAddress: "",
       validForm: false,
       
-
       artist: "",
       duration: "3:34",
-      genreList: ["Rock","Pop","Classic"],
-      moodList: ["Sad", "Happy", "Love", "Epic"],
+      genreList: ["Rock","Pop","Classic"],  /*Genres offered */
+      moodList: ["Sad", "Happy", "Love", "Epic"], /*Moods offered */
       genre: "",
       mood: "",
       instruments: [],
@@ -267,7 +249,6 @@ export default {
       audio: [],
       musicUploaded:false,
       newID: 0,
-
       //Metadata Object sent to IPFS
       metadata: {
           description: "",
@@ -293,9 +274,7 @@ export default {
               }
           ],
       },
-
       //Sample Data sent to DB
-
       sampleData:{
         walletOwner: "",
         countMinted: "0",
@@ -310,24 +289,20 @@ export default {
       }
     }
   },
-
+  /*Ensure wallet is connected: */
   async created() {
       const {address, status} = await getCurrentWalletConnected()
       this.walletAddress = address
       this.status = status
       if(this.walletAddress!="")
           this.connected=true
-
       axios.get('http://localhost:8001/getSupply')
         .then(res => {
           this.newID = res.data.samples + 1
           console.log(this.newID)
       }) 
   },
-
   methods:{
-
-
     // Type of variable help
     type(value) {
       var regex = /^[object (S+?)]$/;
@@ -335,16 +310,12 @@ export default {
   
       return (matches[1] || 'undefined').toLowerCase();
     },
-
-
       // Cria um novo audio element
     uploadAudio() {
       const audio = new Audio()
-
       const file = this.$refs.sampleInput.files[0]
       const fileObject = new File([file], file.name)
       this.sampleUrl = URL.createObjectURL(fileObject)
-
       // Set the source of the audio file to the selected file
       audio.src = this.sampleUrl
       // Listen for the "loadedmetadata" event, which is triggered when
@@ -357,7 +328,7 @@ export default {
       this.musicUploaded=true
       this.audio = file
     },
-
+    /*When button connect wallet pressed:*/
     async connectWalletPressed(){
         const walletResponse = await connectWallet()
         this.status = walletResponse.status
@@ -365,14 +336,12 @@ export default {
         if(this.walletAddress!="")
             this.connected=true
     },
-
+    /*When button mint artist pressed:*/
     async mintArtistPressed() {
       const {valid} = await this.$refs.form.validate()
-
       if(valid && this.musicUploaded){
         console.log("im in")
         const audio = this.$refs.sampleInput.files[0]
-
         const pinataAudio = await pinFileToIPFS(audio);
         if (!pinataAudio.success) {
             return {
@@ -398,13 +367,11 @@ export default {
           newTrait.value = this.instruments[i]
           this.metadata.attributes[i+4] = newTrait
         }
-
         this.sampleData.walletOwner = this.walletAddress
         this.sampleData.description = this.metadata.description
         this.sampleData.name = this.metadata.name
         this.sampleData.attributes = this.metadata.attributes
         this.sampleData.value = this.value
-
     
         const { success, status } = await mintArtist(this.value, this.metadata)
         if(success){
@@ -442,19 +409,16 @@ export default {
   },
   
   computed: {
-
     validateGenres () {
       return [
         this.genre!="" || "Select a Genre"
       ]
     },
-
     validateMoods () {
       return [
         this.mood!="" || "Select a Mood"
       ]
     },
-
     validateInstruments () {
       return [
         this.instruments.length > 0 || "Select at least one Instrument"
@@ -463,7 +427,6 @@ export default {
   },
 }
 </script>
-
 <style>
   .custom-label-color {
     color: #FAFAFA;

@@ -28,8 +28,6 @@
           <v-container fluid>
           <v-row>
             <v-col cols="12" sm="6">
-              <!--<MusicPlayerHome musicLink = "./music/doraemon.mp3"></MusicPlayerHome>
-              <MusicPlayerHome musicLink = "./music/doraemon.mp3"></MusicPlayerHome>-->
               <MusicPlayerHome playerid="audio-player1" priceParent=0.025  musicLink = "https://assets.mixkit.co/music/preview/mixkit-secret-garden-595.mp3"></MusicPlayerHome>
               <MusicPlayerHome playerid="audio-player2" priceParent=0.035  musicLink = "https:\/\/files.freemusicarchive.org\/storage-freemusicarchive-org\/tracks\/Jjo9UAzIZMO6ln67OwObKSAEFlp98yCdhK6XxYL0.mp3"></MusicPlayerHome>
               <MusicPlayerHome playerid="audio-player3" priceParent=0.045  musicLink = "https:\/\/files.freemusicarchive.org\/storage-freemusicarchive-org\/tracks\/4xfPGu79rqI17kEhcFz9cD04qgVIYgrR4FiaRXdr.mp3"></MusicPlayerHome>
@@ -246,6 +244,7 @@ export default defineComponent({
           case 'xxl': return 1000
         }
       },
+      
     },
 })
 </script>
