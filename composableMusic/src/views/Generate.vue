@@ -2,19 +2,19 @@
   <div>
     <TopBar />
 
-    <div style="backgroundColor: #222b2e; height: 82.7vh;" >
+    <div style="backgroundColor: #222b2e; height: 85vh;" >
       <v-card-text class="d-flex justify-center align-baseline">
         <p :style="style_description" class="title">
           Composable music NFTs is a new AI assisted platform that can create original music from yours and other featured artists music creations.
         </p>
       </v-card-text>
         
-          <v-container f luid>
+          <v-container fluid>
             <v-row dense="6">
               <v-col cols="6">
                 <v-form v-model="valid" ref="form">
                   <v-row>
-                    <!-------------- Music Genre ----------------->
+                    <!-------------- Music Genre: ----------------->
                     <v-col cols="6" class="mt-16">
                       <p class="title ml-6">Choose your music genre:</p>
                       <v-select
@@ -26,7 +26,7 @@
                         class="ml-6 mt-10"
                       />
                     </v-col>
-                    <!-------------- Music Mood ----------------->
+                    <!-------------- Music Mood: ----------------->
                     <v-col cols="6" class="mt-16">
                       <p class="title ml-6">Choose your music mood:</p>
                       <v-select
@@ -39,6 +39,7 @@
                       />
                     </v-col>
                   </v-row>
+                  <!-------------- Music Instruments: ----------------->
                   <v-row>
                     <p class="title mt-10 ml-9">Instruments included:</p>
                   </v-row>
@@ -107,7 +108,7 @@
                 </v-form>
                 <v-row>
                   <v-col cols="3"/>
-                    <!--Botão de generate, caso wallet conectada-->
+                    <!--Generated button, if wallet connected:-->
                     <v-btn v-if="this.connected" :width="450" :height="55" color=#00E676 class="mt-10 white--text"
                       @click="generate()">
                       Generate
@@ -115,7 +116,7 @@
                         <v-progress-circular v-if="this.generating" indeterminate color="white"></v-progress-circular>
                       </div>
                     </v-btn>
-                    <!--Botão conect Wallet, caso não esteja conectada:-->
+                    <!--Conect wallet button, if not connected yet:-->
                     <v-btn v-else :width="450" :height="55" color=#00E676 class="mb-6 ml-16 white--text" @click="connectWalletPressed()">
                       Connect Wallet
                     </v-btn>     
@@ -131,6 +132,7 @@
                     fontFamily: Poppins;
                     fontWeight: 800; 
                     maxWidth: 600px">
+                    <!--Title:-->
                     <v-expansion-panel-title>
                         <v-row no-gutters>
                           <v-col cols="12" class="d-flex justify-center" style="color: #FAFAFA">
@@ -143,13 +145,14 @@
                           </v-col>
                         </v-row>
                     </v-expansion-panel-title>
+                    <!--Text:-->
                     <v-expansion-panel-text>
                       <v-row no-gutters>
                           <v-col cols="12" class="d-flex justify-left" style="color: #FAFAFA">
                             <v-row no-gutters>
                               1) Make sure you have your <span style="color: #00E676; padding-left: 5px; padding-right: 5px;">Metamask Wallet</span>connected; 
                               
-
+                              <!--Dialog Help Metamask:-->
                               <v-dialog v-model="dialogHelp">
                                 <template v-slot:activator="{ props}">
                               
@@ -175,6 +178,7 @@
                                   </v-card-actions>
                                   </v-card>
                                   </v-dialog>
+                                <!---end dialog help----->
                             </v-row>
                           </v-col>
                       </v-row>
@@ -284,7 +288,7 @@
   </div>
 </template>
   
-  <script>
+<script>
 
 import TopBar from "../components/TopBar.vue";
 import BottomBar from "../components/BottomBar.vue";
@@ -309,7 +313,7 @@ export default {
   data(){
     return{
       style_description: {
-        color: "#67FFC9",
+        color: "#FFFAF0",
         fontFamily: "Poppins",
         fontWeight: "800",
       },
