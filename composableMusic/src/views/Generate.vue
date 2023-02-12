@@ -249,7 +249,7 @@
                           <v-text-field v-model="artist" label="What's your Artist Name?" :rules=[...rules.required,...rules.length30]
                             color="#00E676" class="custom-label-color" type="text" />
                         
-                          <v-text-field v-model="value" label="Sample Value" :rules="rules.value" type="text" color=#00E676
+                          <v-text-field v-model="value" label="Sample Value" :rules=[...rules.required,...rules.length7,...rules.value,...rules.zeroLimit] type="text" color=#00E676
                             class="custom-label-color" />
                         
                           <v-textarea v-model="metadata.description" auto-grow variant="filled" :rules=[...rules.required,...rules.length150]
@@ -320,10 +320,13 @@ export default {
 
       rules: {
         required: [ v => !!v || 'This field is required!' ],
+        length7: [v => (v && v.length <= 7) || "Field must be less or equal than 7 characters!"],
+        zeroLimit: [v => ( v && v > 0 ) || "Sample Value must be HIGHER than 0",],
+        length30: [v => (v && v.length <= 30) || "Field must be less or equal than 30 characters!"],
         length30: [v => (v && v.length <= 30) || "Field must be less or equal than 30 characters!"],
         length45: [v => (v && v.length <= 45) || "Field must be less or equal than 45 characters!"],
         length150: [v => (v && v.length <= 150) || "Field must be less or equal than 45 characters!"],
-        value: [v => /^[0-9]\d*(\.\d+)?$/.test(v) || 'Value isn\'t valid!'],
+        value: [v => /^(0|[1-9]\d*)(\.\d+)?$/.test(v) || "Value isn\'t valid!"],
       },
       props: false,
 

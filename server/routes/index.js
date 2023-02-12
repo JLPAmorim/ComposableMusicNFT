@@ -168,8 +168,9 @@ let idcounter = 0;
           }else{
             console.log("Sample " + newID + " from user " + sampleData.walletOwner + "saved locally")
           }
-
         });
+        process.chdir('..')
+        console.log(`After upload directory: ${process.cwd()}`) 
         Sample.inserir(newSample)
             .then(dados => res.status(201).jsonp({dados: dados}))
             .catch(e => res.status(500).jsonp({e: 'erro'}))
@@ -189,25 +190,8 @@ let idcounter = 0;
    */
 
   router.post('/generate', function(req,res){
-    const today = new Date();
-    const date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-    const time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-    const dateTime = date+' '+time;
-    idcounter++;
 
-    // Nova música, nova sample
-    const newSample={
-        body: req.body,
-        date: dateTime,
-        mintDate: dateTime, 
-        description: req.body.description,
-        image: req.body.image,
-        name: req.body.name,
-        animation_url: req.body.animation_url,
-        attributes: req.body.attributes
-       
-    }
-    console.log(newSample.attributes)
+    idcounter++;
     const generated_type = "Blues/All/All" // TO DO: 
 
     /*
@@ -242,12 +226,14 @@ let idcounter = 0;
         } else {
             // Envia o .mp3 file e correspondentes ids para o frontend
             //Ids hardcoded para já
+            process.chdir('..')
             res.set('Content-Type', 'audio/mpeg')
             res.send({ audio, ids })  
                     
         }
       });
     })
+    
   });
 
   /** Função auxiliar generatedAudioFile - Promise
@@ -259,9 +245,8 @@ let idcounter = 0;
     const generatePromise = new Promise((resolve, reject) => {
       //Processo filho que processa o script para geração com os componentes necessários 
       //C:\\Users\\USER\\Documents\\GitHub\\ComposableMusicNFT\\server\\AI\\ generate_music.py
-      process.chdir('AI/')
+      process.chdir('AI')
       const pythonProcess = spawn('python',['generate_music.py', idcounter.toString(), generated_type])
-    
       pythonProcess.on('exit', function (code) {
         if (code === 0) {
           console.log("Child process exited successfully")
@@ -270,11 +255,8 @@ let idcounter = 0;
           console.log("Child process exited with code: " + code)
           reject(new Error('Erro, file was not created'))
         }
-      });
-     
-      
-        
-    });      
+      });  
+    });     
     return generatePromise;
   }
 
