@@ -165,9 +165,9 @@
                 class="custom-label-color ml-1"
                 @change="uploadAudio()"
                 @drop.prevent="dragover = false"
-      @dragover.prevent="dragover = false"
-      @dragenter.prevent="dragover = false"
-      @dragleave.prevent="dragover = false"
+                @dragover.prevent="dragover = false"
+                @dragenter.prevent="dragover = false"
+                @dragleave.prevent="dragover = false"
               ></v-file-input>       
             </v-col>
             
