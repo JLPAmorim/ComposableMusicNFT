@@ -4,10 +4,10 @@ import contractABI from './contract-abi.json'
 
 
 const alchemyKey = import.meta.env.VITE_API_ALCHEMY_KEY
-const web3 = createAlchemyWeb3(alchemyKey);
-const contractAddress = "0xe31C4400fb4477d3acCDCcA33EB4ee1cA8950858";
+const web3 = createAlchemyWeb3(alchemyKey)
+const contractAddress = "0x709D585b869B6d709a34F2A6033c6FFfc3a3868b"
 
-
+// Connect Wallet to Metamask
 export const connectWallet = async () => {
   if (window.ethereum) {
     try {
@@ -34,6 +34,7 @@ export const connectWallet = async () => {
   }
 };
 
+// Get Current Wallet Connected to Metamask
 export const getCurrentWalletConnected = async () => {
   if (window.ethereum) {
     try {
@@ -66,7 +67,7 @@ export const getCurrentWalletConnected = async () => {
   }
 };
 
-
+// Function for the Minting of a Sample from an Artist
 export const mintArtist = async(value, metadata) => {
 
   //pinata pin request
@@ -109,7 +110,8 @@ export const mintArtist = async(value, metadata) => {
   }
 }
 
-export const mintGenerated = async(value, metadata) => {
+// Function for the Minting of an AI Generated Music
+export const mintGenerated = async(sampleValue, metadata) => {
 
   //pinata pin request
   const pinataMetadata = await pinJSONToIPFS(metadata);
@@ -122,36 +124,30 @@ export const mintGenerated = async(value, metadata) => {
 
   const tokenURI = pinataMetadata.pinataUrl;
 
-  //load smart contract
-  window.contract = await new web3.eth.Contract(contractABI, contractAddress);//loadContract();
-  
-  /*for(let i = 0; i<samplesUsed.length; i++){
-    samplesUsed[i] = web3.utils.toBN(web3.utils.toWei(samplesUsed[i]))
-  }*/
-
+  //Load smart contract
+  window.contract = await new web3.eth.Contract(contractABI, contractAddress);
 
   var samplesUsed = []
   samplesUsed[0] = 12341
   samplesUsed[1] = 22134
 
-  /*const amount = web3.utils.toWei('0.01');
-  console.log("Amount: " + amount)*/
+  //Fixed Mint Value for a Generated Music
+  const mintValue = web3.utils.toWei('0.01', 'ether');
 
-  //set up your Ethereum transaction
-  const transactionParameters = {
-      to: contractAddress, // Required except during contract publications.
-      from: window.ethereum.selectedAddress, // must match user's active address.
-      //value: amount,
-      'data': window.contract.methods.generateNFTMusic(window.ethereum.selectedAddress, samplesUsed, web3.utils.toBN(web3.utils.toWei(value)), metadata.name, tokenURI).encodeABI() //make call to NFT smart contract 
-  };
+  //Create transaction based on the generateNFTMusic data 
+  const transaction = window.contract.methods.generateNFTMusic(window.ethereum.selectedAddress, samplesUsed, web3.utils.toBN(web3.utils.toWei(sampleValue)), metadata.name, tokenURI);
 
-  //sign transaction via Metamask
+  //Send Transaction
   try {
-    const txHash = await window.ethereum
-        .request({
-            method: 'eth_sendTransaction',
-            params: [transactionParameters],
-        });
+    const txHash = await web3.eth.sendTransaction({
+      from: window.ethereum.selectedAddress,
+      to: contractAddress,
+      data: transaction.encodeABI(),
+      value: mintValue
+    });
+
+    console.log(txHash);
+
     return {
         success: true,
         status: "✅ Check out your transaction on Etherscan: https://goerli.etherscan.io/tx/" + txHash
